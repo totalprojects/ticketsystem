@@ -3,7 +3,7 @@
 /public/storage
 /storage/*.key
 !*/*/master.blade.php
-/vendor/*
+/vendor/
 .env
 .env.backup
 .phpunit.result.cache

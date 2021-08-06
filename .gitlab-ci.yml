@@ -1,12 +1,12 @@
 before_script:
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
   - eval $(ssh-agent -s)
-  - echo "$DEV_KEY_STAGING" | tr -d '\r' | ssh-add -
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
+  - echo "$DEV_KEY_UAT" | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
   - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
-    
+  - chmod 700 ~/.ssh
+      
 deploy_staging:
   type: deploy
   environment:

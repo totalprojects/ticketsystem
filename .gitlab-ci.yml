@@ -1,0 +1,21 @@
+before_script:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  - echo "$DEV_KEY_UAT" | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
+  - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+  - chmod 700 ~/.ssh
+      
+deploy_staging:
+  type: deploy
+  environment:
+    name: staging
+    url: 125.22.105.181
+  script:
+    - ssh it-crm2@192.168.28.174 "cd /var/www/html/audit_compliance2/ && git checkout master && git pull origin master && php artisan migrate && php  artisan config:clear && php artisan cache:clear"
+    - exit
+  only:
+    - master
+  tags:
+  - auditapp

@@ -280,7 +280,12 @@ class EmployeeController extends Controller {
                         'report_to'   => $request->reporting_to1
                     ];
                     // add report_to information
-                    EmployeeMappings::where('employee_id', $id)->update($employeeMappingArray);
+                    $emp = EmployeeMappings::where('employee_id', $id)->first();
+                    if ($emp) {
+                        EmployeeMappings::where('employee_id', $id)->update($employeeMappingArray);
+                    } else {
+                        EmployeeMappings::create($employeeMappingArray);
+                    }
                 }
 
                 return response(['message' => 'Employee Edited Successfully', 'status' => 200], 200);

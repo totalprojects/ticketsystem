@@ -43,7 +43,7 @@
 
           <div id="permissions-block"></div>
 
-          <div id="menus-block"></div>
+        <div id="menus-block" @if(\Auth::user()->id !== 1 ) class="d-none" @endif></div>
           
         </div>
         <div class="modal-footer">
@@ -65,8 +65,7 @@
 
     <script> 
     
-   // console.log('Hi!');
-    
+        const USERID = "{{ Auth::user()->id }}"
         fetch_users();
 
     function fetch_users() {
@@ -147,6 +146,7 @@
             {
                 dataField:"his_menu",
                 caption:"Menus",
+                visible:(USERID==1) ? true : false,
                 cellTemplate: function (container, options) {
                     var data = options.data;
                     var menus = [];

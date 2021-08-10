@@ -99,7 +99,7 @@ class PermissionController extends Controller {
             $dup = Permission::where('code', 'like', '%' . $permission_code . '%')->get();
 
             if ($dup->Count() > 0) {
-                return response(['message' => 'Duplicate Permission Name', 'data' => []], 409);
+                return response(['message' => 'Duplicate Permission Code', 'data' => []], 409);
             }
 
             $update = Permission::insert($insertArray);

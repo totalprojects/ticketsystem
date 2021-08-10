@@ -366,8 +366,9 @@ $("#add-permission-frm").validate({
                 $("#add-permission-btn").prop('disabled',true);
             },
             error:(r) => {
+                console.log(r.responseJSON)
                 $("#add-permission-btn").prop('disabled',false);
-                toastr.error('Something went wrong');
+                toastr.error(r.responseJSON.message);
             },
             success:(r) => {
                 $("#add-permission-btn").prop('disabled',false);

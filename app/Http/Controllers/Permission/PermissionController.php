@@ -96,7 +96,7 @@ class PermissionController extends Controller {
         ];
         try {
             # dup check
-            $dup = Permission::where('name', 'like', '%' . $permission_name . '%')->get();
+            $dup = Permission::where('code', 'like', '%' . $permission_code . '%')->get();
 
             if ($dup->Count() > 0) {
                 return response(['message' => 'Duplicate Permission Name', 'data' => []], 409);

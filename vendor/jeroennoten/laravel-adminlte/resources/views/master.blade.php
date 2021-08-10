@@ -48,7 +48,7 @@
         }
         .btn-primary, .modal-header {
             /* background-color:#25396f !important; */
-            background-color:#571b4a !important;
+            background-color:#25396f !important;
             border:none !important;
             padding:0.44rem !important;
             color:cornsilk !important;

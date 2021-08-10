@@ -80,7 +80,7 @@ class PermissionController extends Controller {
     public function addPermission(Request $request) {
 
         //return $request->all();
-        $permission_name = $request->module;
+        $permission_name = $request->permission_name;
         $permission_code = $request->permission_code;
         $permission_type = $request->permission_type;
 

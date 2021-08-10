@@ -3,7 +3,7 @@
 /public/storage
 /storage/*.key
 /vendor/*
-!*/jeroennoten/*
+!vendor/jeroennoten/laravel-adminlte/resources/views/*.php
 .env
 .env.backup
 .phpunit.result.cache

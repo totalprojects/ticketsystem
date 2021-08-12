@@ -242,7 +242,7 @@
     @else
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
     @endif
-        
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- Livewire Script --}}
     @if(config('adminlte.livewire'))
         @if(app()->version() >= 7)

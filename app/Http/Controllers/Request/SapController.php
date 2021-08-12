@@ -175,8 +175,14 @@ class SapController extends Controller {
                     'created_at'      => NOW(),
                     'updated_at'      => NOW()
                 ];
+                try {
 
-                SAPRequest::create($array);
+                    SAPRequest::create($array);
+
+                } catch (\Exception $e) {
+
+                    return response(['message' => $e->getMessage()], 500);
+                }
 
             }
 
@@ -211,25 +217,29 @@ class SapController extends Controller {
                 }
             }
 
-            if ($flag == 1) {
+            // if ($flag == 1) {
 
-                $dataArray[] = [
-                    'id'               => $each->module_id,
-                    'sl_no'            => $i,
-                    'company_name'     => json_encode($each->company),
-                    'plant_name'       => json_encode($each->plant),
-                    'storage_location' => json_encode($each->storage),
-                    'business_area'    => json_encode($each->business),
-                    'sales_org'        => json_encode($each->sales_org),
-                    'purchase_org'     => json_encode($each->purchase_org),
-                    'division'         => json_encode($each->division),
-                    'distribution'     => json_encode($each->distributions),
-                    'sales_office'     => json_encode($each->sales_office),
-                    'po_release'       => json_encode($each->po_release)
-                ];
+            $dataArray[] = [
+                'id'               => $each->module_id,
+                'sl_no'            => $i,
+                'company_name'     => json_encode($each->company),
+                'plant_name'       => json_encode($each->plant),
+                'storage_location' => json_encode($each->storage),
+                'business_area'    => json_encode($each->business),
+                'sales_org'        => json_encode($each->sales_org),
+                'purchase_org'     => json_encode($each->purchase_org),
+                'division'         => json_encode($each->division),
+                'distribution'     => json_encode($each->distributions),
+                'sales_office'     => json_encode($each->sales_office),
+                'po_release'       => json_encode($each->po_release),
+                'module'           => json_encode($each->modules),
+                'tcode'            => json_encode($each->tcodes),
+                'action'           => json_encode($each->action),
+                'status'           => $each->status
+            ];
 
-                $i++;
-            }
+            $i++;
+            // }
 
             $subArray[] = [
                 'id'     => $each->module_id,

@@ -555,7 +555,7 @@
         }
 
 
-        loadTcodes();
+       loadTcodes();
         function loadTcodes(dependencies = []){
             $.ajax({
                 url:"{{ route('tcodes.for.user') }}",
@@ -567,7 +567,7 @@
                 },
                 success:(r) => {
                     if(r) {
-                        toastr.success('Tcodes found');
+                        //toastr.success('Tcodes found');
                         console.log(r)
                         pickerTreeRender(r.data)
                     }
@@ -606,13 +606,36 @@
 
             current_fs = $(this).parent();
             next_fs = $(this).parent().next();
-            if(current == 4) {
-                return false;
-            }
+            
             /** Data validation for all steps */
             if(!stepValidation(current)) {
                 return false;
             }
+
+            if(current==4) {
+                if(!swal1()) {
+                    flag = false
+                }
+            }
+            
+
+            // if(current == 4) {
+            // Swal.fire({
+            //     title: 'Do you want to save the changes?',
+            //     showDenyButton: true,
+            //     showCancelButton: true,
+            //     confirmButtonText: `Save`,
+            //     denyButtonText: `Don't save`,
+            //     }).then((result) => {
+            //     /* Read more about isConfirmed, isDenied below */
+            //     if (result.isConfirmed) {
+            //         Swal.fire('Saved!', '', 'success')
+            //     } else if (result.isDenied) {
+            //         Swal.fire('Changes are not saved', '', 'info')
+            //     }
+            //     })
+            //     return false;
+            // }
 
            
 
@@ -923,29 +946,7 @@
                     container.append(html)
                 }
             },
-            
-            ],
-            masterDetail: {
-                enabled: true,
-                template: function(container, options) {
-                    $("<div>")
-                        .dxDataGrid({
-                            showBorders: true,
-                            allowColumnResizing: true,
-                            paging: false,
-                            // filterRow: {
-                            //     visible: true,
-                            //     applyFilter: "auto"
-                            // },
-                            scrolling: {
-                                mode: "virtual"
-                            },
-                            columnChooser: {
-                                enabled: true,
-                                mode: "select" // or "select"
-                            },
-                            columns: [
-                                {
+            {
                                 caption: 'Module',
                                 dataField:"module",
                                 cellTemplate:(container, options) => {
@@ -1008,17 +1009,101 @@
                                     container.append(html)
                                 }
                             },
-                            ],
-                            dataSource: new DevExpress.data.DataSource({
-                                store: new DevExpress.data.ArrayStore({
-                                    key: "id",
-                                    data: window.subData
-                                }),
-                                 filter: ["id", "=", options.key]
-                            })
-                        }).appendTo(container);
-                }
-            }
+            ],
+            // masterDetail: {
+            //     enabled: true,
+            //     template: function(container, options) {
+            //         $("<div>")
+            //             .dxDataGrid({
+            //                 showBorders: true,
+            //                 allowColumnResizing: true,
+            //                 paging: false,
+            //                 // filterRow: {
+            //                 //     visible: true,
+            //                 //     applyFilter: "auto"
+            //                 // },
+            //                 scrolling: {
+            //                     mode: "virtual"
+            //                 },
+            //                 columnChooser: {
+            //                     enabled: true,
+            //                     mode: "select" // or "select"
+            //                 },
+            //                 columns: [
+            //                     {
+            //                     caption: 'Module',
+            //                     dataField:"module",
+            //                     cellTemplate:(container, options) => {
+            //                         //console.log(options.data.module)
+            //                         var modules = JSON.parse(options.data.module);
+            //                         console.log(modules)
+            //                         var html = ``;
+            //                         html += `<span class='badge badge-primary'>${modules.name}</span>`;
+            //                         container.append(html)
+            //                     }
+            //                 },
+            //                 {
+            //                     caption: 'TCode',
+            //                     dataField:"tcode",
+            //                     cellTemplate:(container, options) => {
+            //                         //console.log(options.data.module)
+            //                         var tcode = JSON.parse(options.data.tcode);
+            //                         console.log(tcode)
+            //                         var html = ``;
+            //                         $.each(tcode, (i) => {
+            //                             html += `<span class='badge badge-primary'>${tcode[i].description} (${tcode[i].t_code})</span>`;
+            //                         })
+                                   
+            //                         container.append(html)
+            //                     }
+            //                 },
+            //                 {
+            //                     caption: 'Actions',
+            //                     dataField:"action",
+            //                     cellTemplate:(container, options) => {
+            //                         //console.log(options.data.module)
+            //                         var action = JSON.parse(options.data.action);
+            //                         console.log(action)
+            //                         var html = ``;
+            //                         $.each(action, (i) => {
+            //                             html += `<span class='badge badge-primary'>${action[i].name}</span> `;
+            //                         })
+                                   
+            //                         container.append(html)
+            //                     }
+            //                 },
+            //                 {
+            //                     caption: 'Status',
+            //                     dataField:"status",
+            //                     cellTemplate:(container, options) => {
+            //                         //console.log(options.data.module)
+            //                         var status = JSON.parse(options.data.status);
+            //                         console.log(status)
+            //                         var html = ``;
+            //                         if(status ==0) {
+            //                             html = `<span class='badge badge-warning'>Not Approved</span>`;
+            //                         } else if(status == 1) {
+            //                             html = `<span class='badge badge-success'>Approved</span>`;
+            //                         } else {
+            //                             html = `<span class='badge badge-danger'>Rejected</span>`;
+            //                         }
+                                       
+                                    
+                                   
+            //                         container.append(html)
+            //                     }
+            //                 },
+            //                 ],
+            //                 dataSource: new DevExpress.data.DataSource({
+            //                     store: new DevExpress.data.ArrayStore({
+            //                         key: "id",
+            //                         data: window.subData
+            //                     }),
+            //                      filter: ["id", "=", options.key]
+            //                 })
+            //             }).appendTo(container);
+            //     }
+            // }
    });
     
 }
@@ -1067,9 +1152,10 @@ function stepValidation(step){
                         flag = false
                     }
                 }
+                loadTcodes();
                 break;
                 case 4:
-                loadTcodes();
+    
                 break;
 
             }
@@ -1078,10 +1164,38 @@ function stepValidation(step){
             
         }
 
+        function swal1(){
+
+            let flag = true;
+            Swal.fire({
+
+                    title: 'Do you want to submit the request?',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: `Save`,
+                    denyButtonText: `Don't save`,
+                    }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        Swal.fire('Saved!', '', 'success')
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info')
+                        flag = false
+                    }
+                });
+
+                return flag;
+        }
+
 /** final submit of the form with tcodes */
 $("#finalSubmit").on('click', (e) => {
     e.preventDefault();
     console.log(tree.getSelected());
+  
+    if(!swal1()) {
+        return false;
+    }
+            
     var data = tree.getSelected();
     var formData = $("#msform").serializeArray();
     var finalArray = [];
@@ -1102,11 +1216,21 @@ $("#finalSubmit").on('click', (e) => {
         data:formData,
         error:(r) => {
             console.log('error');
+            toastr.error('Something went wrong');
             console.log(r);
         },
         success: (r) => {
-            toastr.success('sent');
-            console.log(r);
+
+            if(r.message == 'success') {
+                toastr.success('Your Request has been saved successfully');
+                $("#msform")[0].reset();
+                $("#requestModal").modal('hide');
+                fetch_data();
+                console.log(r);
+            } else {
+                toastr.error('Something went wrong');
+            }
+            
         }
     })
 });

@@ -153,20 +153,21 @@ class SapController extends Controller {
                         $actions[] = $aid['t_' . $tcodes];
                     }
                 }
-                $business = $request->business_area ?? [];
+                $business   = $request->business_area ?? [];
+                $plant_code = array_map('intval', $request->plant_name ?? []);
 
                 $array = [
                     'user_id'         => $user_id,
                     'company_code'    => $company_name,
-                    'plant_code'      => json_encode(array_map('intval', $request->plant_name ?? [])),
-                    'storage_id'      => json_encode(array_map('intval', $request->storage_location ?? [])),
-                    'business_id'     => json_encode(array_map('intval', $business)),
-                    'sales_org_id'    => json_encode(array_map('intval', $request->sales_org ?? [])),
-                    'purchase_org_id' => json_encode(array_map('intval', $request->purchase_org ?? [])),
-                    'division_id'     => json_encode(array_map('intval', $request->division ?? [])),
-                    'distribution_id' => json_encode(array_map('intval', $request->distribution_channel ?? [])),
-                    'sales_office_id' => json_encode(array_map('intval', $request->sales_office ?? [])),
-                    'po_release_id'   => json_encode(array_map('intval', $request->po_release ?? [])),
+                    'plant_code'      => $plant_code,
+                    'storage_id'      => array_map('intval', $request->storage_location ?? []),
+                    'business_id'     => array_map('intval', $business),
+                    'sales_org_id'    => array_map('intval', $request->sales_org ?? []),
+                    'purchase_org_id' => array_map('intval', $request->purchase_org ?? []),
+                    'division_id'     => array_map('intval', $request->division ?? []),
+                    'distribution_id' => array_map('intval', $request->distribution_channel ?? []),
+                    'sales_office_id' => array_map('intval', $request->sales_office ?? []),
+                    'po_release_id'   => array_map('intval', $request->po_release ?? []),
                     'module_id'       => $each['module_id'],
                     'tcode_id'        => $tcodes,
                     'actions'         => json_encode($actions),

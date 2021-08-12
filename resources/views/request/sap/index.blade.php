@@ -555,7 +555,7 @@
         }
 
 
-       loadTcodes();
+       //loadTcodes();
         function loadTcodes(dependencies = []){
             $.ajax({
                 url:"{{ route('tcodes.for.user') }}",

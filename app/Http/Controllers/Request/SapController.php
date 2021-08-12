@@ -170,7 +170,7 @@ class SapController extends Controller {
                     'po_release_id'   => array_map('intval', $request->po_release ?? []),
                     'module_id'       => $each['module_id'],
                     'tcode_id'        => $tcodes,
-                    'actions'         => json_encode($actions),
+                    'actions'         => $actions,
                     'status'          => 0,
                     'created_at'      => NOW(),
                     'updated_at'      => NOW()

@@ -40,6 +40,7 @@
     @endif
     <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/plugins/pickletree/pickletree.css')}}">
     <!-- Custom Temp CSS -->
     <style>
         label.error{
@@ -253,6 +254,7 @@
 
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
+    <script src="{{asset('assets/plugins/pickletree/pickletree.js')}}"></script>
     <script>
 
         $('.select2bs4').select2({ theme: 'bootstrap4' });

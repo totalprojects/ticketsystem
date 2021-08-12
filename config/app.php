@@ -254,7 +254,8 @@ return [
         'PORelease'         => App\Models\PO\tbl_purchase_org_release::class,
         'ActionMasters'     => App\Models\tbl_action_masters::class,
         'TCodes'            => App\Models\tbl_tcode_masters::class,
-        'ModuleHead'        => App\Models\tbl_module_head_masters::class
+        'ModuleHead'        => App\Models\tbl_module_head_masters::class,
+        'SAPRequest'        => App\Models\tbl_sap_requests::class
 
     ]
 

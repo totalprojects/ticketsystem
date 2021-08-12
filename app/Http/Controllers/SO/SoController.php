@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use SOMasters;
 use SalesOffice;
+use SO;
 
 class SoController extends Controller {
     //
@@ -14,10 +15,17 @@ class SoController extends Controller {
         $division_code     = $request->division_code;
         $distribution_code = $request->distribution;
         $so                = $request->so;
+        if (isset($so) && isset($distribution_code) && isset($division_code)) {
+            $getSOCode = SO::whereIn('id', $so)->get();
+            $socode    = [];
+            foreach ($getSOCode as $code) {
+                $socode[] = $code->so_code;
+            }
 
-        $sales_offices = SOMasters::with('sales_office')->whereIn('division_code', $division_code)->whereIn('distribution_channel_code', $distribution_code)->whereIn('sales_org_code', $so)->get();
+            $sales_offices = SOMasters::with('sales_office')->whereIn('division_code', $division_code)->whereIn('distribution_channel_code', $distribution_code)->whereIn('sales_org_code', $socode)->get();
 
-        return response(['data' => $sales_offices]);
+            return response(['data' => $sales_offices]);
+        }
     }
 
     public function set_so_id() {

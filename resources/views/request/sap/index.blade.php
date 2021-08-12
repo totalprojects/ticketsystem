@@ -612,53 +612,77 @@
                 return false;
             }
 
-            // if(current==4) {
-            //     if(!swal1()) {
-            //         flag = false
-            //     }
-            // }
-            
+            if(current==4) {
+                Swal.fire({
+                    title: 'Do you want to submit the request h?',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: `Save`,
+                    denyButtonText: `Don't save`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var data = tree.getSelected();
+                            var formData = $("#msform").serializeArray();
+                            var finalArray = [];
+                            $.each(data, (i) => {
+                                finalArray[i] = {
+                                    moduleset : data[i].addional
+                                }
+                            });
+                            formData.push({name:'module', value: JSON.stringify(finalArray)});
 
-            // if(current == 4) {
-            // Swal.fire({
-            //     title: 'Do you want to save the changes?',
-            //     showDenyButton: true,
-            //     showCancelButton: true,
-            //     confirmButtonText: `Save`,
-            //     denyButtonText: `Don't save`,
-            //     }).then((result) => {
-            //     /* Read more about isConfirmed, isDenied below */
-            //     if (result.isConfirmed) {
-            //         Swal.fire('Saved!', '', 'success')
-            //     } else if (result.isDenied) {
-            //         Swal.fire('Changes are not saved', '', 'info')
-            //     }
-            //     })
-            //     return false;
-            // }
+                            finalCall(formData);
+                            
+                            //Swal.fire('Saved!', '', 'success')
+                            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-           
+                    //show the next fieldset
+                    next_fs.show();
+                    //hide the current fieldset with style
+                    current_fs.animate({opacity: 0}, {
+                    step: function(now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                    'display': 'none',
+                    'position': 'relative'
+                    });
+                    next_fs.css({'opacity': opacity});
+                    },
+                    duration: 500
+                    });
+                    setProgressBar(++current);
+                                } else if (result.isDenied) {
+                                    Swal.fire('Changes are not saved', '', 'info')
+                                    return false;
+                                }
+                            });
+            } else {
+                    $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+                //show the next fieldset
+                next_fs.show();
+                //hide the current fieldset with style
+                current_fs.animate({opacity: 0}, {
+                step: function(now) {
+                // for making fielset appear animation
+                opacity = 1 - now;
+
+                current_fs.css({
+                'display': 'none',
+                'position': 'relative'
+                });
+                next_fs.css({'opacity': opacity});
+                },
+                duration: 500
+                });
+                setProgressBar(++current);
+            }
+          
 
             //Add Class Active
-            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-            //show the next fieldset
-            next_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({opacity: 0}, {
-            step: function(now) {
-            // for making fielset appear animation
-            opacity = 1 - now;
-
-            current_fs.css({
-            'display': 'none',
-            'position': 'relative'
-            });
-            next_fs.css({'opacity': opacity});
-            },
-            duration: 500
-            });
-            setProgressBar(++current);
+            
         });
 
         $(".previous").click(function(){
@@ -1167,29 +1191,26 @@ function stepValidation(step){
         function swal1(){
 
             let flag = true;
-            Swal.fire({
-                    title: 'Do you want to submit the request?',
-                    showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: `Save`,
-                    denyButtonText: `Don't save`,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire('Saved!', '', 'success')
-                        } else if (result.isDenied) {
-                            Swal.fire('Changes are not saved', '', 'info')
-                            flag = false
-                        }
-                    });
+           
 
                 return flag;
         }
 
 /** final submit of the form with tcodes */
-$("#finalSubmit").on('click', (e) => {
+$("#finalSubmit1").on('click', (e) => {
+
     e.preventDefault();
     //console.log(tree.getSelected());
-  
+    var data = tree.getSelected();
+    var formData = $("#msform").serializeArray();
+    var finalArray = [];
+    $.each(data, (i) => {
+        finalArray[i] = {
+            moduleset : data[i].addional
+        }
+    });
+    formData.push({name:'module', value: JSON.stringify(finalArray)});
+
     Swal.fire({
         title: 'Do you want to submit the request?',
         showDenyButton: true,
@@ -1198,44 +1219,9 @@ $("#finalSubmit").on('click', (e) => {
         denyButtonText: `Don't save`,
         }).then((result) => {
             if (result.isConfirmed) {
-               // Swal.fire('Saved!', '', 'success')
-            var data = tree.getSelected();
-            var formData = $("#msform").serializeArray();
-            var finalArray = [];
-            $.each(data, (i) => {
-                finalArray[i] = {
-                    moduleset : data[i].addional
-                }
-            });
-            formData.push({name:'module', value: JSON.stringify(finalArray)});
-        // console.log(formData)
-
-        $.ajax({
-            url:"{{ route('save.sap.request') }}",
-            type:"POST",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            data:formData,
-            error:(r) => {
-                console.log('error');
-                toastr.error('Something went wrong');
-                console.log(r);
-            },
-            success: (r) => {
-
-                if(r.message == 'success') {
-                    toastr.success('Your Request has been saved successfully');
-                    $("#msform")[0].reset();
-                    $("#requestModal").modal('hide');
-                    fetch_data();
-                    //console.log(r);
-                } else {
-                    toastr.error('Something went wrong');
-                }
-                
-            }
-        })
+                Swal.fire('Saved!', '', 'success')
+                finalCall(formData);
+                return true;
             } else if (result.isDenied) {
                 Swal.fire('Changes are not saved', '', 'info')
                 return false;
@@ -1244,6 +1230,35 @@ $("#finalSubmit").on('click', (e) => {
             
   
 });
+
+function finalCall(fdata) {
+    $.ajax({
+                    url:"{{ route('save.sap.request') }}",
+                    type:"POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    data:fdata,
+                    error:(r) => {
+                        console.log('error');
+                        toastr.error('Something went wrong');
+                        console.log(r);
+                    },
+                    success: (r) => {
+
+                        if(r.message == 'success') {
+                            toastr.success('Your Request has been saved successfully');
+                            $("#msform")[0].reset();
+                            $("#requestModal").modal('hide');
+                            fetch_data();
+                            //console.log(r);
+                        } else {
+                            toastr.error('Something went wrong');
+                        }
+                        
+                    }
+                })
+}
 
 
 

@@ -612,11 +612,11 @@
                 return false;
             }
 
-            if(current==4) {
-                if(!swal1()) {
-                    flag = false
-                }
-            }
+            // if(current==4) {
+            //     if(!swal1()) {
+            //         flag = false
+            //     }
+            // }
             
 
             // if(current == 4) {
@@ -1168,21 +1168,19 @@ function stepValidation(step){
 
             let flag = true;
             Swal.fire({
-
                     title: 'Do you want to submit the request?',
                     showDenyButton: true,
                     showCancelButton: true,
                     confirmButtonText: `Save`,
                     denyButtonText: `Don't save`,
                     }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        Swal.fire('Saved!', '', 'success')
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info')
-                        flag = false
-                    }
-                });
+                        if (result.isConfirmed) {
+                            Swal.fire('Saved!', '', 'success')
+                        } else if (result.isDenied) {
+                            Swal.fire('Changes are not saved', '', 'info')
+                            flag = false
+                        }
+                    });
 
                 return flag;
         }
@@ -1190,49 +1188,61 @@ function stepValidation(step){
 /** final submit of the form with tcodes */
 $("#finalSubmit").on('click', (e) => {
     e.preventDefault();
-    console.log(tree.getSelected());
+    //console.log(tree.getSelected());
   
-    if(!swal1()) {
-        return false;
-    }
-            
-    var data = tree.getSelected();
-    var formData = $("#msform").serializeArray();
-    var finalArray = [];
-    $.each(data, (i) => {
-        finalArray[i] = {
-            moduleset : data[i].addional
-        }
-    });
-    formData.push({name:'module', value: JSON.stringify(finalArray)});
-    console.log(formData)
+    Swal.fire({
+        title: 'Do you want to submit the request?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: `Save`,
+        denyButtonText: `Don't save`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+               // Swal.fire('Saved!', '', 'success')
+            var data = tree.getSelected();
+            var formData = $("#msform").serializeArray();
+            var finalArray = [];
+            $.each(data, (i) => {
+                finalArray[i] = {
+                    moduleset : data[i].addional
+                }
+            });
+            formData.push({name:'module', value: JSON.stringify(finalArray)});
+        // console.log(formData)
 
-    $.ajax({
-        url:"{{ route('save.sap.request') }}",
-        type:"POST",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-        },
-        data:formData,
-        error:(r) => {
-            console.log('error');
-            toastr.error('Something went wrong');
-            console.log(r);
-        },
-        success: (r) => {
-
-            if(r.message == 'success') {
-                toastr.success('Your Request has been saved successfully');
-                $("#msform")[0].reset();
-                $("#requestModal").modal('hide');
-                fetch_data();
-                console.log(r);
-            } else {
+        $.ajax({
+            url:"{{ route('save.sap.request') }}",
+            type:"POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            data:formData,
+            error:(r) => {
+                console.log('error');
                 toastr.error('Something went wrong');
+                console.log(r);
+            },
+            success: (r) => {
+
+                if(r.message == 'success') {
+                    toastr.success('Your Request has been saved successfully');
+                    $("#msform")[0].reset();
+                    $("#requestModal").modal('hide');
+                    fetch_data();
+                    //console.log(r);
+                } else {
+                    toastr.error('Something went wrong');
+                }
+                
             }
+        })
+            } else if (result.isDenied) {
+                Swal.fire('Changes are not saved', '', 'info')
+                return false;
+            }
+    });
             
-        }
-    })
+  
 });
 
 

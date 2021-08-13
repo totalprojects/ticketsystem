@@ -10,207 +10,131 @@
 
 @section('content')
 <style>
-    #heading {
-    text-transform: uppercase;
-    color: #25396f;
-    font-weight: normal
+
+
+
+
+/** Approval Status */
+.orderstatus {
+  color: #939393;
+  display: block;
+  padding: 1em 0;
+  position: relative;
+  text-align: center;
+  min-height: 150px;
 }
 
-#msform {
-    text-align: center;
-    position: relative;
-    margin-top: 10px;
+.orderstatus.done:before {
+  background: #32841f;
+  
+}
+.orderstatus:before {
+  content: '';
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  background: #939393;
+  margin: 0 25px;
 }
 
-#msform fieldset {
-    background: white;
-    border: 0 none;
-    border-radius: 0.5rem;
-    box-sizing: border-box;
-    width: 100%;
-    margin: 0;
-    padding-bottom: 20px;
-    position: relative
+.orderstatus:last-child:before {
+  height: 0;
 }
 
-.form-card {
-    text-align: left
+.orderstatus.done {
+  color: #333;
 }
 
-#msform fieldset:not(:first-of-type) {
-    display: none
-}
-
-#msform textarea {
-    padding: 8px 15px 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 0px;
-    margin-bottom: 25px;
-    margin-top: 2px;
-    width: 100%;
-    box-sizing: border-box;
-    color: #2C3E50;
-    background-color: #ECEFF1;
-    font-size: 16px;
-    letter-spacing: 1px
-}
-
-#msform input:focus,
-#msform textarea:focus {
-    -moz-box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    border: 1px solid #25396f;
-    outline-width: 0
-}
-
-#msform .action-button {
-    width: 100px;
-    background: #25396f;
-    font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 0px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 10px 0px 10px 5px;
-    float: right
-}
-
-#msform .action-button:hover,
-#msform .action-button:focus {
-    background-color: #311B92
-}
-
-#msform .action-button-previous {
-    width: 100px;
-    background: #616161;
-    font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 0px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 10px 5px 10px 0px;
-    float: right
-}
-
-#msform .action-button-previous:hover,
-#msform .action-button-previous:focus {
-    background-color: #000000
-}
-
-.card {
-    z-index: 0;
-    border: none;
-    position: relative
-}
-
-.fs-title {
-    font-size: 25px;
-    color: #25396f;
-    margin-bottom: 15px;
-    font-weight: normal;
-    text-align: left
-}
-
-.purple-text {
-    color: #25396f;
-    font-weight: normal
-}
-
-.steps {
-    font-size: 25px;
-    color: gray;
-    margin-bottom: 10px;
-    font-weight: normal;
-    text-align: right
-}
-
-.fieldlabels {
-    color: gray;
-    text-align: left
-}
-
-#progressbar {
-    margin-bottom: 30px;
-    overflow: hidden;
-    color: lightgrey
-}
-
-#progressbar .active {
-    color: #25396f
-}
-
-#progressbar li {
-    list-style-type: none;
-    font-size: 15px;
-    width: 25%;
-    float: left;
-    position: relative;
-    font-weight: 400
-}
-
-#progressbar #account:before {
-    font-family: FontAwesome;
-    content: "\f13e"
-}
-
-#progressbar #personal:before {
-    font-family: FontAwesome;
-    content: "\f007"
-}
-
-#progressbar #payment:before {
-    font-family: FontAwesome;
-    content: "\f030"
-}
-
-#progressbar #confirm:before {
-    font-family: FontAwesome;
-    content: "\f00c"
-}
-
-#progressbar li:before {
-    width: 50px;
-    height: 50px;
-    line-height: 45px;
-    display: block;
-    font-size: 20px;
-    color: #ffffff;
-    background: lightgray;
-    border-radius: 50%;
-    margin: 0 auto 10px auto;
-    padding: 2px
-}
-
-#progressbar li:after {
-    content: '';
-    width: 100%;
-    height: 2px;
-    background: lightgray;
-    position: absolute;
+@media only screen and (max-width: 40em) {
+  .orderstatus {
+    text-align: left;
+  }
+  .orderstatus:before {
     left: 0;
-    top: 25px;
-    z-index: -1
-}
-
-#progressbar li.active:before,
-#progressbar li.active:after {
-    background: #25396f
-}
-
-.progress {
-    height: 20px
-}
-
-.progress-bar {
-    background-color: #25396f
-}
-
-.fit-image {
+  }
+  .orderstatus .orderstatus-text {
+    left: 0;
     width: 100%;
-    object-fit: cover
+  }
+}
+
+.orderstatus-text {
+  position: relative;
+  width: 100%;
+  left: 50%;
+  text-align: left;
+  padding-left: 60px;
+}
+
+@media only screen and (min-width: 40em) {
+  .orderstatus:nth-child(2n) .orderstatus-text {
+    left: -100px;
+    text-align: right;
+    padding-right: 20px;
+  }
+}
+
+.orderstatus-container {
+  padding: 2em 0;
+}
+
+.orderstatus time {
+  display: block;
+  font-size: 1em;
+  color: #939393;
+}
+
+.orderstatus.done time {
+  color: #368d22;
+}
+
+@media only screen and (max-width: 40em) {
+  .orderstatus-container {
+    text-align: center;
+  }
+}
+
+.orderstatus-check {
+  font-family: "Helvetica", Arial, sans-serif;
+  border: 2px solid #939393;
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  text-align: center;
+  line-height: 48px;
+  border-radius: 50%;
+  margin-bottom: 0.5em;
+  background: #fff;
+  z-index: 2;
+  position: absolute;
+  color: #939393;
+  left: 50%;
+}
+
+.done .orderstatus-check {
+  color: #368d22;
+  border-color: #368d22;
+}
+
+@media only screen and (max-width: 40em) {
+  .orderstatus-check {
+    left: 0;
+  }
+}
+
+.orderstatus-active {
+  text-align: center;
+  position: relative;
+  left: 25px;
+  top: 20px;
+  color: #939393;
+}
+
+@media only screen and (max-width: 40em) {
+  .orderstatus-active {
+    display: none;
+  }
 }
 </style>
     <div class="tab-content p-1">
@@ -235,93 +159,6 @@
               </button>
             </div>
             <div class="modal-body">
-                {{-- <form method="post" id="sap_request_frm">
-                    <div class="row">
-                        <div class="col-lg-4 pt-2">
-                            <label for="company_name">Company Name</label>
-                                <select name="company_name[]" id="company_name" placeholder="Select Companies" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                    @foreach($companies as $company)
-                                        <option value="{{ $company->company_code }}">{{ $company->company_name }} ({{ $company->company_code }})</option>
-                                    @endforeach
-                                </select>
-                           
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="plant_name">Plant Name </label>
-                                <select name="plant_name[]" id="plant_id" data-placeholder="Select Plant Name" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="storage_location">Storage Location </label>
-                                <select name="storage_location[]"  id="storage_id" data-placeholder="Select Storage Location" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="sales_org">Sales Org </label>
-                                <select name="sales_org[]"  id="sales_org" data-placeholder="Select Sales Organization" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="division">Division </label>
-                                <select name="division[]"  id="division" data-placeholder="Select Division" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                    @foreach($divisions as $division)
-                                        <option value="{{ $division->division_code }}">{{ $division->division_description }} </option>
-                                    @endforeach
-                                </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="distribution_channel">Distribution Channel </label>
-                                <select name="distribution_channel[]"  id="distribution_channel" data-placeholder="Select Distribution Channel" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                    @foreach($distributors as $distributor)
-                                        <option value="{{ $distributor->distribution_channel_code }}">{{ $distributor->distribution_channel_description }} </option>
-                                    @endforeach
-                                </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="sales_office"> Sales Office </label>
-                                <select name="sales_office[]"  id="sales_office" data-placeholder="Select Sales Office" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="business_area"> Business Area </label>
-                                <select name="business_area[]"  id="business_location" data-placeholder="Select Business Area" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                    @foreach($business as $b)
-                                        <option value="{{ $b->business_code }}">{{ $b->business_name }} </option>
-                                    @endforeach
-                                </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="purchase_org"> Purchase Org </label>
-                                <select name="purchase_org[]"  id="purchase_org" data-placeholder="Select Purchase Organization" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                    @foreach($po as $p)
-                                        <option value="{{ $p->po_code }}">{{ $p->po_name }} </option>
-                                    @endforeach
-                                </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                            <label for="po_release"> PO Release </label>
-                                <select name="po_release[]"  id="po_release" data-placeholder="Select PO Release" class="form-control select2bs4" multiple>
-                                    <option value=""></option>
-                                    @foreach($po_release as $p)
-                                        <option value="{{ $p->rel_code }}">{{ $p->rel_description }} </option>
-                                    @endforeach
-                                </select>
-                        </div>
-
-                        <div class="col-lg-12 pt-2 t_code_section">
-
-                        </div>
-                    </div>
-                </form> --}}
                
                     <div class="row">
                         <div class="col-11 col-md-12 col-lg-12 col-xl-12 text-center p-2 mb-2">
@@ -491,10 +328,29 @@
                                             </div> 
                                             
                                         </div>
-                                        <input type="button" name="next" id="finalSubmit" class="next action-button" value="Submit" /> 
+                                        <input type="button" name="next" class="next action-button" value="Next" /> 
                                         <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                                     </fieldset>
-
+                                    <fieldset>
+                                        <div class="form-card">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h2 class="fs-title text-center">You may review all your selections</h2>
+                                                </div>
+                
+                                            </div> <br><br>
+                                            <h2 class="purple-text text-center"><strong>Your selections below</strong></h2> <br>
+                                            <div class="row justify-content-center">
+                                                <div class="col-lg-12">
+                                                   <div id="review_selections"></div>
+                                                </div>
+                                            </div> 
+                                            
+                                        </div>
+                                        <input type="button" name="next" id="finalSubmit" class="next action-button" value="Submit" /> 
+                                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                       
+                                    </fieldset>
                                     <fieldset>
                                         <div class="form-card">
                                             <div class="row">
@@ -521,7 +377,70 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
+
+    <!-- Request Status Modal -->
+    <div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" id="statusModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Request Status</h5>
+              <div class="loading1 ml-2 mt-1 border border-warning rounded d-none" style="padding: 1.5px;"><i class='fas fa-spinner fa-spin'></i> Loading&#8230;</div>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-12 col-lg-12 col-xl-12 text-center p-2 mb-2">
+                            <div class="card">
+                                <h2 id="heading">Request Status</h2>
+                                <section>
+                                    <div class="row justify-content-center orderstatus-container">
+                                      <div class="medium-12 columns">
+                                        <div class="orderstatus">
+                                          <div class="orderstatus-check"><span class="orderstatus-number">4</span></div>
+                                          <div class="orderstatus-text">
+                                            <time>17 Aug</time>
+                                            <p>Your order is delivered</p>
+                                          </div>
+                                        </div>
+                                        <div class="orderstatus done">
+                                          <div class="orderstatus-check"><span class="orderstatus-number">3</span></div>
+                                          <div class="orderstatus-text">
+                                            <time>17 Dec</time>
+                                            <p>Order created</p>
+                                          </div>
+                                        </div>
+                                        <div class="orderstatus done">
+                                          <div class="orderstatus-check"><span class="orderstatus-number">2</span></div>
+                                          <div class="orderstatus-text">
+                                            <time>17 Dec</time>
+                                            <p>Your order is placed</p>
+                                          </div>
+                                        </div>
+                                        <div class="orderstatus done">
+                                          <div class="orderstatus-check"><span class="orderstatus-number">1</span></div>
+                                          <div class="orderstatus-text">
+                                            <time>17 Dec</time>
+                                            <p>Your order is placed</p>
+                                          </div>
+                                        </div>
+                                  
+                                  
+                                      </div>
+                                    </div>
+                                  </section>
+                               
+                            </div>
+                        </div>
+                    </div>
+               
+            </div>
+          </div>
+        </div>
+    </div>
     @stop
 
 @section('css')
@@ -612,9 +531,9 @@
                 return false;
             }
 
-            if(current==4) {
+            if(current==5) {
                 Swal.fire({
-                    title: 'Do you want to submit the request h?',
+                    title: 'Do you want to submit the request?',
                     showDenyButton: true,
                     showCancelButton: true,
                     confirmButtonText: `Save`,
@@ -915,7 +834,7 @@
        columns: [
            {
             caption:"Req No.",
-            dataField:"sl_no",
+            dataField:"request_id",
             width:75
            },
            {
@@ -1020,13 +939,15 @@
                                     var status = JSON.parse(options.data.status);
                                     console.log(status)
                                     var html = ``;
-                                    if(status ==0) {
-                                        html = `<span class='badge badge-warning'>Not Approved</span>`;
-                                    } else if(status == 1) {
-                                        html = `<span class='badge badge-success'>Approved</span>`;
-                                    } else {
-                                        html = `<span class='badge badge-danger'>Rejected</span>`;
-                                    }
+
+                                    html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status})' class='btn btn-warning'><i class='fas fa-eye'></i> View</a>`;
+                                    // if(status ==0) {
+                                    //     html = `<span class='badge badge-warning'>Not Approved</span>`;
+                                    // } else if(status == 1) {
+                                    //     html = `<span class='badge badge-success'>Approved</span>`;
+                                    // } else {
+                                    //     html = `<span class='badge badge-danger'>Rejected</span>`;
+                                    // }
                                        
                                     
                                    
@@ -1179,7 +1100,10 @@ function stepValidation(step){
                 loadTcodes();
                 break;
                 case 4:
-    
+                loadReviewSection();
+                break;
+                case 5:
+
                 break;
 
             }
@@ -1188,13 +1112,25 @@ function stepValidation(step){
             
         }
 
-        function swal1(){
+function loadReviewSection(){
 
-            let flag = true;
-           
-
-                return flag;
+    var data = tree.getSelected();
+    var formData = $("#msform").serializeArray();
+    var finalArray = [];
+    $.each(data, (i) => {
+        finalArray[i] = {
+            moduleset : data[i].addional
         }
+    });
+    formData.push({name:'module', value: JSON.stringify(finalArray)});
+
+    reviewCall(formData)
+}
+
+function loadStatusModal(status) {
+
+    $("#statusModal").modal('show');
+}
 
 /** final submit of the form with tcodes */
 $("#finalSubmit1").on('click', (e) => {
@@ -1255,6 +1191,29 @@ function finalCall(fdata) {
                         } else {
                             toastr.error('Something went wrong');
                         }
+                        
+                    }
+                })
+}
+
+function reviewCall(fdata) {
+    $.ajax({
+                    url:"{{ route('review.sap.request') }}",
+                    type:"GET",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    data:fdata,
+                    error:(r) => {
+                        console.log('error');
+                        toastr.error('Something went wrong');
+                        console.log(r);
+                       
+                    },
+                    success: (r) => {
+                       console.log('got data');
+                       console.log(r);
+                       $("#review_selections").html(r.data);
                         
                     }
                 })

@@ -115,6 +115,7 @@ Route::group(['prefix' => 'ajax'], function () {
     /** Sap Request Reads & Writes */
     Route::get('/tcodes-for-user', [App\Http\Controllers\Request\SapController::class, 'modulesAndTCodes'])->name('tcodes.for.user');
     Route::post('/add-sap-request', [App\Http\Controllers\Request\SapController::class, 'saveRequest'])->name('save.sap.request');
+    Route::get('/review-sap-request', [App\Http\Controllers\Request\SapController::class, 'reviewRequest'])->name('review.sap.request');
     Route::get('/fetch-request', [App\Http\Controllers\Request\SapController::class, 'fetchSelfRequest'])->name('fetch.self.request');
 
 });

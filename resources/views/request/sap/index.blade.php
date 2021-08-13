@@ -879,7 +879,7 @@
        showRowLines: true,
        rowAlternationEnabled: true,
        allowColumnResizing: true,
-       columnHidingEnabled:true,
+       columnHidingEnabled:false,
        sorting: false,
        loadPanel: {
         //indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,

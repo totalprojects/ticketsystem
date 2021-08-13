@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/pickletree/pickletree.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/custom/developer.css') }}">
     <!-- Custom Temp CSS -->
     <style>
         label.error{
@@ -184,9 +185,8 @@
             background-color: rgb(231, 225, 225);
             cursor: pointer;
         }
+/** Multip step form */
 
-
-        /** Multi step form */
         #heading {
     text-transform: uppercase;
     color: #25396f;

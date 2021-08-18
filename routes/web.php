@@ -118,4 +118,9 @@ Route::group(['prefix' => 'ajax'], function () {
     Route::get('/review-sap-request', [App\Http\Controllers\Request\SapController::class, 'reviewRequest'])->name('review.sap.request');
     Route::get('/fetch-request', [App\Http\Controllers\Request\SapController::class, 'fetchSelfRequest'])->name('fetch.self.request');
 
+    Route::get('/fetch-module-tcodes', [App\Http\Controllers\Permission\PermissionController::class, 'fetchModuleTCodes'])->name('fetch.module.tcodes');
+
+    //Route::get('/add-dx-tcode', [App\Http\Controllers\Permission\PermissionController::class, 'dxStoreTcode'])->name('tcode.store');
+    Route::post('/update-dx-tcode', [App\Http\Controllers\Permission\PermissionController::class, 'dxUpdateTcode'])->name('tcode.update');
+
 });

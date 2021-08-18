@@ -49,6 +49,46 @@
             </div>
         </div>
     </div>
+
+    <!-- Tcode List -->
+    <div class="modal fade" id="tcode-list-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Tcode list for <span id="module_name"></span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="tcode_searchFrm">
+                <div class="row p-2">
+                    <div class="col-lg-4">
+                        <input type="hidden" id="s_permission_id">
+                        <input type="text" name="s_tcode" id="s_tcode" class="form-control" placeholder="Search by Tcode">
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" name="s_desc" id="s_desc" class="form-control" placeholder="Search by Description">
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="submit" id="tcode_searchFilterBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+                </form>
+                <div class="tab-pane active dx-viewport" id="modules">
+                    <div class="demo-container p-3" style="max-height: 400px; overflow:auto">
+                       
+                        <div id="tcodes-list-div" style="height:auto"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+            </div>
+        </div>
+        </div>
+</div>
     <!-- Add Modal -->
     <div class="modal fade" id="add-permission-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -212,10 +252,78 @@
                             </select>
                         </div>
                         <div class="col-lg-12 pt-2">
-                            <div id="tcode_section"></div>
+                            {{-- <div id="tcode_section"></div> --}}
                         </div>
                         <div class="col-lg-4 pt-2">
                             <button class='btn btn-primary' type="submit" id="update-permission-btn" name='update-permission-btn'>Update</button>
+                        </div>
+                    </div>
+                
+                </form>
+        
+                
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Edit Tcode -->
+        <div class="modal fade" id="edit-tcode-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Tcode Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <form id="tcode-update-frm" method="post">
+                    <div class="row">
+                        <div class="col-lg-3 pt-2">
+                        <input type="hidden" name="t_id" id="t_id">
+                             <label for="module">
+                                Module Name
+                            </label> 
+                            <select name="t_module_id" id="t_module_id" data-placeholder="Select Module" class="select2bs4 form-control">
+                                <option value=""></option>
+                               @foreach($modules as $module)
+                                    <option value="{{ $module->id }}">{{ $module->name }}</option>
+                               @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-3 pt-2">
+                            <label for="tcode">
+                                T code
+                            </label> 
+                            <input type="text" name="tt_code" id="tt_code" class="form-control">
+                        </div>
+                        <div class="col-lg-3 pt-2">
+                            <label for="tdesc">
+                               Description
+                            </label> 
+                            <input type="text" name="t_description" id="t_description" class="form-control">
+                        </div>
+                        <div class="col-lg-3 pt-2">
+                            <label for="status">
+                                Status
+                            </label>
+                                <select name="t_status" data-placeholder="Status" id="t_status" class="form-control select2bs4">
+                                    <option value=""></option>
+                                    <option value="1">Active</option>
+                                    <option value="0">In-Active</option>
+                                </select>
+                           
+                        </div>
+                        <div class="col-lg-12 pt-2">
+                            <div id="t_actions"></div>
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                            <button class='btn btn-primary' type="submit" id="update-tcode-btn" name='update-tcode-btn'>Update</button>
                         </div>
                     </div>
                 
@@ -240,6 +348,52 @@
 @section('js')
 
     <script>
+        $("#update-tcode-btn").on('click', (e) => {
+            e.preventDefault();
+            var tcode = $("#tt_tcode").val();
+            var desc = $("#t_description").val();
+            var tactions = $("input[name='t_actions[]']").find(":checked").val();
+            var permission_id = $("#t_module_id").val();
+            var formData = $("#tcode-update-frm").serialize();
+            //formData)
+            $.ajax({
+                url:"{{ route('tcode.update') }}",
+                data:formData,
+                type:"POST",
+                headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                error:(r) => {
+                    toasrt.error('Server Error');
+                    //r)
+                },
+                success: (r) => {
+                    //r);
+                    if(r.status == 200) {
+                        toastr.success('Tcode updated successfully');
+                        $("#edit-tcode-modal").modal('hide');
+                        showTcodes(permission_id);
+                        
+                    } else {
+                        toastr.error('Something went wrong');
+                    }
+                }
+            })
+
+        })
+        $("#tcode_searchFilterBtn").on('click', (e) => {
+            e.preventDefault();
+            var tcode = $("#s_tcode").val();
+            var desc = $("#s_desc").val();
+            var permission_id = $("#s_permission_id").val();
+            //permission_id)
+            if(tcode.length == 0 && desc.length == 0) {
+                toastr.error('You must provide atleast one input');
+                return false;
+            }
+            showTcodes(permission_id, tcode, desc);
+        });
+        
         $(document).ready(() => {
             // setTimeout(() => {
             //     $("#link_2").trigger('click');
@@ -262,7 +416,7 @@
             error:(r) => {
               
                 toastr.error('Something went wrong');
-                console.log(r)
+                //r)
             },
             success:(r) => {
                
@@ -290,7 +444,7 @@
     });
 
 $(document).on('click','#add_permission', ()=> {
-   // console.log('inn')
+   // //'inn')
     $("#add-permission-modal").modal('show');
 });
 
@@ -313,7 +467,7 @@ $("#permission-update-frm").validate({
         }
     },
     submitHandler:(r) => {
-        console.log('next')
+        //'next')
         var url = "{{  route('update.permission') }}"
         $.ajax({
             url:url,
@@ -366,7 +520,7 @@ $("#add-permission-frm").validate({
                 $("#add-permission-btn").prop('disabled',true);
             },
             error:(r) => {
-                console.log(r.responseJSON)
+                //r.responseJSON)
                 $("#add-permission-btn").prop('disabled',false);
                 toastr.error(r.responseJSON.message);
             },
@@ -431,7 +585,7 @@ function fetch_data(){
    var jsonData = new DevExpress.data.CustomStore({
        key: "id",
        load: function (loadOptions) {
-           // console.log(loadOptions)
+           // //loadOptions)
            var deferred = $.Deferred(),
                args = {};
            [
@@ -460,7 +614,7 @@ function fetch_data(){
                complete: function (result) {
                    var res = result.responseJSON;
                    var data = res.data;
-                   console.log(res)
+                   //res)
                    deferred.resolve(data, {
                        totalCount: res.totalCount,
                    });
@@ -503,25 +657,11 @@ function fetch_data(){
            enabled: true,
            mode: "select" // or "dragAndDrop"
        },
-    //    searchPanel: {
-    //        visible: true,
-    //        width: 240,
-    //        placeholder: "Search..."
-    //    },
-       headerFilter: {
-           //visible: true
-       },
        scrolling: {
            scrollByContent: true,
        },
        wordWrapEnabled: true,
        columns: [
-        //    {
-        //        dataField: "id",
-        //        caption: "Id",
-        //        width:50,
-        //        visibe: true,
-        //    },
            {
                dataField: "name",
                caption: "Module Name",
@@ -574,14 +714,8 @@ function fetch_data(){
                 dataField:"tcodes",
                 caption:"Tcodes",
                 cellTemplate: (container, options) => {
-                    var codes = options.data.tcodes;
-                    console.log(codes);
-                    var html = '';
-                    $.each(codes, (i) => {
-                        html += `<span class='badge badge-primary' title='${codes[i].description}'>${codes[i].t_code}</span>&nbsp;`;
-                    })
-                      //  html = `<span class='badge badge-primary'>${code}</span>`;
-                   
+                    var permission_id = options.data.id;
+                    var html = `<a href='javascript:void(0)' class='btn btn-warning p-1' onClick='showTcodes(${permission_id})'>Show TCodes</a>`;
                         container.append(html);
                 }
            },
@@ -598,9 +732,8 @@ function fetch_data(){
                    var module_all_heads = options.data.model_permissions;
                   
                    var module_head = options.data.module_head;
-                //    console.log('Modules:');
-                //    console.log(module_head);
-                   if(options.data.module_head !== null) {
+
+                   if(module_head !== null) {
                        module_head = options.data.module_head.user_id;
                    }
                    var tcodes = options.data.tcodes;
@@ -610,66 +743,19 @@ function fetch_data(){
                    var checked = '';
                    var all_actions = <?php echo $actions ?>    
                     
-
-
-            
-                   $.each(tcodes, (i) => {
-
-                    actions = tcodes[i].action_details;
-                    action_markup = '';
-                
-                        $.each(all_actions, (i) => {
-                            checked = '';
-                            $.each(actions, (j) => {
-                                if(all_actions[i].id == actions[j].id) {
-                                    checked = `checked='checked'`;
-                                }
-                            });
-                          
-                        action_markup += `<input type='checkbox' name='actions[]' value='${all_actions[i].id}' ${checked}> ${all_actions[i].name} &nbsp;`;
-                    
-                    })
-                   
-
-                       markup += `
-                       <div class="accordion" id="accordion2">
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse${tcodes[i].t_code}">
-                            ${tcodes[i].description} (${tcodes[i].t_code})
-                            </a>
-                            <span class='trash_module' onclick='trashTcode(${tcodes[i].id},${tcodes[i].permission_id})'><i class='p-1 bg-danger fas fa-trash'></i></span>
-                            </div>
-                        <div id="collapse${tcodes[i].t_code}" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                ${action_markup}
-                            </div>
-                        </div>
-                        </div>
-                        </div>`;
-                   });
                
                 var link = $(`<a href="javascript:void(0)" id='link_${permission_id}' title="edit">`).html("<i class='fa fa-edit'></i> Edit")
                     .attr("href", "javascript:void(0)")
 
                 link.on("click", function () {
-                    console.log(module_all_heads);
-                    // console.log(all_actions)
-                    if(tcodes.length == 0) {
-                       markup = `<br><span>No T Codes assigned</span>`
-                   }
+               
                     $("#settings-modal").modal('show');
                     $("#emodule").val(permission_name).trigger('change');
                     $("#epermission_id").val(permission_id);
                     $("#epermission_code").val(permission_code);
                     $("#epermission_type").val(permission_type).trigger('change');
-                  
-
-
-
+                
                     var mheads_markup = ``;
-                    console.log('module all head')
-                    console.log(module_all_heads)
                    $.each(module_all_heads, (i) => {
                        if(module_all_heads[i].users !== null) {
                             mheads_markup += `<option value='${module_all_heads[i].users.id}'>${module_all_heads[i].users.name} </option>`
@@ -695,6 +781,203 @@ function fetch_data(){
    });
     
 }
+
+function showTcodes(permission_id, tcode = '', desc = '') {
+    
+    function isNotEmpty(value) {
+        return value !== undefined && value !== null && value !== "";
+    }
+    $("#tcode-list-modal").modal('show');
+    var jsonData = new DevExpress.data.CustomStore({
+       key: "id",
+       load: function (loadOptions) {
+           
+           var deferred = $.Deferred(),
+               args = {};
+           [
+               "skip",
+               "take",
+               "requireTotalCount",
+               "sort",
+               "filter",
+           ].forEach(function (i) {
+               if (i in loadOptions && isNotEmpty(loadOptions[i]))
+                   args[i] = JSON.stringify(loadOptions[i]);
+           })
+
+           let take = loadOptions.take
+           let skip = loadOptions.skip
+           var dataSet = []
+           var url = "{{ route('fetch.module.tcodes') }}"
+           $.ajax({
+               url: url,
+               type: 'GET',
+               headers: {
+                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+               },
+               dataType: "json",
+               data: '&take=' + take + '&skip=' + skip + '&permission_id=' + permission_id+'&tcode=' + tcode+ '&description=' + desc,
+               complete: function (result) {
+                   var res = result.responseJSON;
+                   var data = res.data;
+                   
+                   var module_name = res.module_name;
+                   $("#module_name").html(module_name);
+                   ////res)
+                   $("#s_permission_id").val(permission_id)
+                  
+                   deferred.resolve(data, {
+                       totalCount: res.totalCount,
+                   });
+                   
+               },
+               error: function () {
+                   deferred.reject("Data Loading Error");
+               },
+               //timeout: 2000000
+           });
+           return deferred.promise();
+       }
+   });
+               // var jsonData = r.data;
+
+                $("#tcodes-list-div").dxDataGrid({
+                    dataSource: jsonData,
+                    KeyExpr: "id",
+                    showBorders: true,
+                    showRowLines: true,
+                    rowAlternationEnabled: true,
+                    allowColumnResizing: true,
+                    sorting: false,
+                    loadPanel: {
+                        //indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,
+                        text: "Loading...",
+                        showPane: true,
+                    },
+                    remoteOperations: {
+                        filtering: true,
+                        paging: true,
+                        sorting: true,
+                        groupPaging: true,
+                        grouping: true,
+                        summary: true
+                    },
+                    
+                    pager: {
+                        showInfo: true
+                    },
+                    paging: {
+                        enabled: true,
+                        pageSize: 25
+                    },
+                    columnChooser: {
+                        enabled: true,
+                        mode: "select" // or "dragAndDrop"
+                    },
+                    headerFilter: {
+                        //visible: true
+                    },
+                    scrolling: {
+                        scrollByContent: true,
+                    },
+                    wordWrapEnabled: true,
+                    columns: [
+                        {
+                                dataField:"tcodes",
+                                caption:"Tcodes",
+                                cellTemplate: (container, options) => {
+                                    var tcode = options.data.t_code;
+                                    var html = `<a href='javascript:void(0)'>${tcode}</a>`;
+                                
+                                        container.append(html);
+                                }
+                        },
+                        {
+                                dataField:"description",
+                                caption:"Description",
+                                cellTemplate: (container, options) => {
+                                    var desc = options.data.description;
+                                        container.append(desc);
+                                }
+                        },
+                        {
+                                dataField:"action_details",
+                                caption:"Actions",
+                                cellTemplate: (container, options) => {
+                                    var action_details = options.data.action_details;
+                                    var html = ``;
+                                    $.each(action_details,  (i) => {
+                                        html += `<a href='javascript:void(0)' class='badge badge-primary text-white'>${action_details[i].name}</a>&nbsp;`;
+                                    })
+                                    
+                                
+                                        container.append(html);
+                                }
+                        },
+                        {
+                                dataField:"status",
+                                caption:"Status",
+                                cellTemplate: (container, options) => {
+                                    var status = options.data.status;
+                                    var html = ``;
+                                    if(status == 1) {
+                                        html = `<a href='javascript:void(0)' class='badge badge-success text-white'>Active</a>&nbsp;`;
+                                    } else {
+                                        html = `<a href='javascript:void(0)' class='badge badge-danger text-white'>Inactive</a>&nbsp;`;
+                                    }
+                                        
+                                    
+                                    
+                                
+                                        container.append(html);
+                                }
+                        },
+                        {
+                                dataField:"edit",
+                                caption:"Edit",
+                                cellTemplate: (container, options) => {
+                                    //var id = options.data.id;
+                                    var html = `<a href='javascript:void(0)' onClick='editTcode(${JSON.stringify(options.data)})'>Edit</a>`;
+                                    
+                                    
+                                
+                                        container.append(html);
+                                }
+                        },
+                        
+                    ],
+                });
+            }   
+
+            function editTcode(data) {
+                //data);
+                $("#edit-tcode-modal").modal('show');
+                $("#tt_code").val(data.t_code);
+                $("#t_id").val(data.id);
+                $("#t_description").val(data.description)
+                $("#t_module_id").val(data.permission_id).trigger('change')
+                $("#t_status").val(data.status).trigger('change');
+                var actions = data.action_details;
+                var all_actions = <?php echo $actions ?>
+
+
+
+                var action_markup = '';
+            
+                    $.each(all_actions, (i) => {
+                        checked = '';
+                        $.each(actions, (j) => {
+                            if(all_actions[i].id == actions[j].id) {
+                                checked = `checked='checked'`;
+                            }
+                        });
+                        
+                    action_markup += `<input type='checkbox' name='t_actions[]' value='${all_actions[i].id}' ${checked}> ${all_actions[i].name} &nbsp;`;
+                
+                })
+                $("#t_actions").html(action_markup);
+            }
+
     
     </script>
 @stop

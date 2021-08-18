@@ -20,17 +20,42 @@ class PermissionController extends Controller {
         $permissions = Permission::all();
         $actions     = ActionMasters::all();
         $users       = Users::all();
+        $tcodes      = TCodes::orderBy('id', 'asc')->get();
         // return $permissions;
-        return view('permission.index')->with(['modules' => $permissions, 'actions' => $actions, 'users' => $users]);
+        return view('permission.index')->with(['modules' => $permissions, 'actions' => $actions, 'tcodes' => $tcodes, 'users' => $users]);
     }
 
-    public function fetchPermissions() {
-        $roles      = Permission::with('tcodes.action_details:id,name', 'model_permissions.users:id,name', 'module_head.user_details')->get();
-        $totalCount = count($roles);
-        //
-        //
-        return response(['data' => $roles, 'totalCount' => $totalCount]);
+    public function fetchPermissions(Request $request) {
+        $take = $request->take;
+        $skip = $request->skip;
+        //tcodes.action_details:id,name
+        $roles = Permission::with('model_permissions.users:id,name', 'module_head.user_details');
 
+        $totalCount = count($roles->get());
+        return response(['data' => $roles->take($take)->skip($skip)->get(), 'totalCount' => $totalCount]);
+
+    }
+
+    public function fetchModuleTCodes(Request $request) {
+        $permission_id = $request->permission_id;
+
+        $tcode = $request->tcode;
+        $desc  = $request->description;
+        //return $permission_id;
+        $take   = $request->take ?? 25;
+        $skip   = $request->skip ?? 0;
+        $tcodes = TCodes::where('permission_id', $permission_id)
+            ->when(!empty($tcode), function ($Q) use ($tcode) {
+                $Q->where('t_code', $tcode);
+            })->when(!empty($desc), function ($Q) use ($desc) {
+            $Q->where('description', 'like', '%' . $desc . '%');
+        })->with('action_details', 'permission');
+        $permission_data = Permission::where('id', $permission_id)->first();
+        $module_name     = $permission_data->name;
+        $totalCount      = $tcodes->get()->Count();
+        $limitData       = $tcodes->take($take)->skip($skip)->get();
+
+        return response(['data' => $limitData, 'totalCount' => $totalCount, 'module_name' => $module_name, 'status' => 200]);
     }
 
     public function updatePermission(Request $request) {
@@ -130,12 +155,14 @@ class PermissionController extends Controller {
         $tcode_desc    = $request->tcode_desc;
         $permission_id = $request->module;
         $actions       = $request->actions;
+        $status        = $request->status ?? 1;
 
         $insertArray = [
             't_code'        => $tcode,
             'permission_id' => $permission_id,
             'description'   => $tcode_desc,
             'actions'       => json_encode($actions, TRUE),
+            'status'        => $status,
             'created_at'    => date('Y-m-d H:i:s'),
             'updated_at'    => date('Y-m-d H:i:s')
         ];
@@ -170,5 +197,33 @@ class PermissionController extends Controller {
             }
         }
 
+    }
+
+    public function dxUpdateTcode(Request $request) {
+        // return $request->all();
+        $id        = $request->t_id;
+        $module_id = $request->t_module_id;
+        $tcode     = $request->tt_code;
+        $tdesc     = $request->t_description;
+        $actions   = json_encode($request->t_actions, TRUE);
+        $status    = $request->t_status;
+
+        try {
+
+            TCodes::where('id', $id)->update([
+                't_code'        => $tcode,
+                'permission_id' => $module_id,
+                'description'   => $tdesc,
+                'actions'       => $actions,
+                'status'        => $status,
+                'updated_at'    => date('Y-m-d H:i:s')
+            ]);
+
+            return response(['status' => 200, 'message' => 'Success'], 200);
+
+        } catch (\Exception $e) {
+
+            return response(['status' => 500, 'message' => $e->getMessage()], 500);
+        }
     }
 }

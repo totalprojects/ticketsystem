@@ -104,7 +104,7 @@ class SapController extends Controller {
         $user_id = Auth::user()->id;
         // return $modules;
         $company_name = array_map('intval', $request->company_name);
-        $requestId    = 'R' . '/' . date('y') . '/' . date('m') . '/' . microtime();
+        $requestId    = 'RN' . $user_id . '/' . date('y') . '/' . date('m') . '/' . time();
         // return $company_name;
         $entryArray   = [];
         $i            = 0;

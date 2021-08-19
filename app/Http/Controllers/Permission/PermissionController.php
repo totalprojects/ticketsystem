@@ -17,7 +17,7 @@ class PermissionController extends Controller {
      * @return view of users
      */
     public function index() {
-        $permissions = Permission::all();
+        $permissions = Permission::where('type', 2)->get();
         $actions     = ActionMasters::all();
         $users       = Users::all();
         $tcodes      = TCodes::orderBy('id', 'asc')->get();
@@ -25,11 +25,32 @@ class PermissionController extends Controller {
         return view('permission.index')->with(['modules' => $permissions, 'actions' => $actions, 'tcodes' => $tcodes, 'users' => $users]);
     }
 
+    /** Permission for Application */
+    public function app() {
+        $permissions = Permission::where('type', 1)->get();
+        $users       = Users::all();
+        // return $permissions;
+        return view('permission.app-permissions')->with(['modules' => $permissions, 'users' => $users]);
+    }
+
+    public function appPermissions(Request $request) {
+        $take = $request->take;
+        $skip = $request->skip;
+        //tcodes.action_details:id,name
+        // only sap module permissions
+        $roles = Permission::with('model_permissions.users:id,name', 'module_head.user_details')->where('type', 1);
+
+        $totalCount = count($roles->get());
+        return response(['data' => $roles->take($take)->skip($skip)->get(), 'totalCount' => $totalCount]);
+
+    }
+
     public function fetchPermissions(Request $request) {
         $take = $request->take;
         $skip = $request->skip;
         //tcodes.action_details:id,name
-        $roles = Permission::with('model_permissions.users:id,name', 'module_head.user_details');
+        // only sap module permissions
+        $roles = Permission::with('model_permissions.users:id,name', 'module_head.user_details')->where('type', 2);
 
         $totalCount = count($roles->get());
         return response(['data' => $roles->take($take)->skip($skip)->get(), 'totalCount' => $totalCount]);
@@ -45,7 +66,7 @@ class PermissionController extends Controller {
         $take   = $request->take ?? 25;
         $skip   = $request->skip ?? 0;
         $tcodes = TCodes::where('permission_id', $permission_id)
-            ->when(!empty($tcode), function ($Q) use ($tcode) {
+            ->when(!empty($tcode), function ($Q) use ($tcode) { 
                 $Q->where('t_code', $tcode);
             })->when(!empty($desc), function ($Q) use ($desc) {
             $Q->where('description', 'like', '%' . $desc . '%');
@@ -132,12 +153,15 @@ class PermissionController extends Controller {
             $lastID = Permission::where('name', '=', $permission_name)->select('id')->first();
 
             if ($lastID) {
-                $add_module_head = ModuleHead::insert([
-                    'permission_id' => $lastID->id,
-                    'user_id'       => $module_head_id,
-                    'created_at'    => date('Y-m-d H:i:s'),
-                    'updated_at'    => date('Y-m-d H:i:s')
-                ]);
+                if ($module_head_id > 0) {
+                    $add_module_head = ModuleHead::insert([
+                        'permission_id' => $lastID->id,
+                        'user_id'       => $module_head_id,
+                        'created_at'    => date('Y-m-d H:i:s'),
+                        'updated_at'    => date('Y-m-d H:i:s')
+                    ]);
+                }
+
             }
 
             return response(['message' => 'Success', 'data' => []], 200);

@@ -55,7 +55,7 @@
         <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Tcode list for <span id="module_name"></span></h5>
+            <h5 class="modal-title" id="exampleModalLabel"><div class="loading1 ml-2 mt-1 border border-warning rounded d-none" id="loadr1" style="padding: 1.5px;"><i class='fas fa-spinner fa-spin'></i> Loading&#8230;</div><span class="d-module-name d-none">Tcode list for <span id="module_name"></span></span></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -111,11 +111,11 @@
 
                             <input type="text" name="permission_code" id="permission_code" class="form-control" placeholder="Enter module code">
                         </div>
-                        <div class="col-lg-4 pt-2">
+                        <div class="col-lg-4 pt-2 d-none">
 
                             <select name="permission_type" id="permission_type" data-placeholder="Module Type" class="select2bs4 form-control">
-                                <option value=""></option>
-                                <option value="1">User</option>
+                                {{-- <option value=""></option>
+                                <option value="1">User</option> --}}
                                 <option value="2">SAP</option>
                             </select>
                         </div>
@@ -241,13 +241,13 @@
                             </label> 
                             <input type="text" name="epermission_code" id="epermission_code" class="form-control" placeholder="Enter permission code">
                         </div>
-                        <div class="col-lg-4 pt-2">
+                        <div class="col-lg-4 pt-2 d-none">
                             <label for="permission_name">
                                 Module Type
                             </label> 
                             <select name="epermission_type" id="epermission_type" data-placeholder="Permission Type" class="select2bs4 form-control">
-                                <option value=""></option>
-                                <option value="1">User</option>
+                                {{-- <option value=""></option>
+                                <option value="1">User</option> --}}
                                 <option value="2">SAP</option>
                             </select>
                         </div>
@@ -372,6 +372,7 @@
                     if(r.status == 200) {
                         toastr.success('Tcode updated successfully');
                         $("#edit-tcode-modal").modal('hide');
+                        
                         showTcodes(permission_id);
                         
                     } else {
@@ -668,6 +669,7 @@ function fetch_data(){
            },
            {
                 dataField:"type",
+                visible:false,
                 caption:"Module Type",
                 cellTemplate: (container, options) => {
                     var type = options.data.type;
@@ -783,11 +785,12 @@ function fetch_data(){
 }
 
 function showTcodes(permission_id, tcode = '', desc = '') {
-    
+    $(".d-module-name").addClass('d-none');
+    $(".loading1").removeClass('d-none');
     function isNotEmpty(value) {
         return value !== undefined && value !== null && value !== "";
     }
-    $("#tcode-list-modal").modal('show');
+   
     var jsonData = new DevExpress.data.CustomStore({
        key: "id",
        load: function (loadOptions) {
@@ -815,15 +818,22 @@ function showTcodes(permission_id, tcode = '', desc = '') {
                headers: {
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                },
+               beforeSend:() => {
+                $("#tcode-list-modal").modal('show');
+               },
                dataType: "json",
                data: '&take=' + take + '&skip=' + skip + '&permission_id=' + permission_id+'&tcode=' + tcode+ '&description=' + desc,
                complete: function (result) {
+
+                
                    var res = result.responseJSON;
                    var data = res.data;
                    
                    var module_name = res.module_name;
                    $("#module_name").html(module_name);
                    ////res)
+                   $(".loading1").addClass('d-none');
+                   $(".d-module-name").removeClass('d-none');
                    $("#s_permission_id").val(permission_id)
                   
                    deferred.resolve(data, {

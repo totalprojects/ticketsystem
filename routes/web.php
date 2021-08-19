@@ -42,6 +42,8 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions']], funct
 
     Route::get('/sap-request', [App\Http\Controllers\Request\SapController::class, 'index'])->name('sap.view');
 
+    Route::get('/team-sap-request', [App\Http\Controllers\Request\SapController::class, 'team'])->name('team.sap.view');
+
     Route::get('/email-request', [App\Http\Controllers\Request\EmailController::class, 'index'])->name('email.view');
 
 });
@@ -119,6 +121,7 @@ Route::group(['prefix' => 'ajax'], function () {
     Route::post('/add-sap-request', [App\Http\Controllers\Request\SapController::class, 'saveRequest'])->name('save.sap.request');
     Route::get('/review-sap-request', [App\Http\Controllers\Request\SapController::class, 'reviewRequest'])->name('review.sap.request');
     Route::get('/fetch-request', [App\Http\Controllers\Request\SapController::class, 'fetchSelfRequest'])->name('fetch.self.request');
+    Route::get('/fetch-team-request', [App\Http\Controllers\Request\SapController::class, 'fetchTeamRequest'])->name('fetch.team.request');
 
     Route::get('/fetch-module-tcodes', [App\Http\Controllers\Permission\PermissionController::class, 'fetchModuleTCodes'])->name('fetch.module.tcodes');
 
@@ -127,5 +130,8 @@ Route::group(['prefix' => 'ajax'], function () {
 
     /** App Permissions */
     Route::get('/fetch-app-permissions-list', [App\Http\Controllers\Permission\PermissionController::class, 'appPermissions'])->name('show.app.permissions');
+    
+    /** Approval section for all  */
+    Route::post('/approve-sap-request-stage-1', [App\Http\Controllers\Request\SapController::class, 'approveByRM'])->name('approve.sap.request.by.rm');
 
 });

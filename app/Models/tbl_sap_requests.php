@@ -17,6 +17,8 @@ use PORelease;
 use ActionMasters;
 use Permission;
 use TCodes;
+use Users;
+use SAPApprovalLogs;
 
 class tbl_sap_requests extends Model {
     use HasFactory;
@@ -37,6 +39,10 @@ class tbl_sap_requests extends Model {
     ];
 
     protected $guarded = [];
+
+    public function user() {
+        return $this->belongsTo(Users::class, 'user_id', 'id');
+    }
 
     public function company() {
         return $this->belongsToJson(CompanyMasters::class, 'company_code', 'company_code');
@@ -88,6 +94,10 @@ class tbl_sap_requests extends Model {
 
     public function tcodes() {
         return $this->belongsToJson(TCodes::class, 'tcode_id', 'id');
+    }
+
+    public function approval_logs() {
+        return $this->hasMany(SAPApprovalLogs::class, 'request_id', 'req_int');
     }
 
 }

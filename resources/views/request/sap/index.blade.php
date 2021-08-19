@@ -14,129 +14,163 @@
 
 
 
-/** Approval Status */
-.orderstatus {
-  color: #939393;
-  display: block;
-  padding: 1em 0;
-  position: relative;
-  text-align: center;
-  min-height: 150px;
-}
-
-.orderstatus.done:before {
-  background: #32841f;
-  
-}
-.orderstatus:before {
-  content: '';
-  height: 100%;
-  position: absolute;
-  left: 50%;
-  width: 2px;
-  background: #939393;
-  margin: 0 25px;
-}
-
-.orderstatus:last-child:before {
-  height: 0;
-}
-
-.orderstatus.done {
-  color: #333;
-}
-
-@media only screen and (max-width: 40em) {
-  .orderstatus {
-    text-align: left;
-  }
-  .orderstatus:before {
-    left: 0;
-  }
-  .orderstatus .orderstatus-text {
-    left: 0;
-    width: 100%;
-  }
-}
-
-.orderstatus-text {
-  position: relative;
-  width: 100%;
-  left: 50%;
-  text-align: left;
-  padding-left: 60px;
-}
-
-@media only screen and (min-width: 40em) {
-  .orderstatus:nth-child(2n) .orderstatus-text {
-    left: -100px;
-    text-align: right;
-    padding-right: 20px;
-  }
-}
-
-.orderstatus-container {
-  padding: 2em 0;
-}
-
-.orderstatus time {
-  display: block;
-  font-size: 1em;
-  color: #939393;
-}
-
-.orderstatus.done time {
-  color: #368d22;
-}
-
-@media only screen and (max-width: 40em) {
-  .orderstatus-container {
-    text-align: center;
-  }
-}
-
-.orderstatus-check {
-  font-family: "Helvetica", Arial, sans-serif;
-  border: 2px solid #939393;
-  width: 50px;
-  height: 50px;
-  display: inline-block;
-  text-align: center;
-  line-height: 48px;
-  border-radius: 50%;
-  margin-bottom: 0.5em;
-  background: #fff;
-  z-index: 2;
-  position: absolute;
-  color: #939393;
-  left: 50%;
-}
-
-.done .orderstatus-check {
-  color: #368d22;
-  border-color: #368d22;
-}
-
-@media only screen and (max-width: 40em) {
-  .orderstatus-check {
-    left: 0;
-  }
-}
-
-.orderstatus-active {
-  text-align: center;
-  position: relative;
-  left: 25px;
-  top: 20px;
-  color: #939393;
-}
-
-@media only screen and (max-width: 40em) {
-  .orderstatus-active {
-    display: none;
-  }
-}
-</style>
+    /** Approval Status */
+    .orderstatus {
+      color: #939393;
+      display: block;
+      padding: 1em 0;
+      position: relative;
+      text-align: center;
+      min-height: 150px;
+    }
+    
+    .orderstatus.done:before {
+      background: #32841f;
+      
+    }
+    .orderstatus:before {
+      /* content: '';
+      height: 100%;
+      position: absolute;
+      left: 50%;
+      width: 2px;
+      background: #939393;
+      margin: 0 25px; */
+        content: '';
+        height: 100%;
+        position: absolute;
+        left: 47%;
+        width: 1.5px;
+        background: #939393;
+        margin: 0 25px;
+    }
+    
+    .orderstatus:last-child:before {
+      height: 0;
+    }
+    
+    .orderstatus.done {
+      color: #333;
+    }
+    
+    @media only screen and (max-width: 40em) {
+      .orderstatus {
+        text-align: left;
+      }
+      .orderstatus:before {
+        left: 0;
+      }
+      .orderstatus .orderstatus-text {
+        left: 0;
+        width: 100%;
+      }
+    }
+    
+    .orderstatus-text {
+      position: relative;
+      width: 100%;
+      left: 50%;
+      text-align: left;
+      padding-left: 60px;
+    }
+    
+    @media only screen and (min-width: 40em) {
+      .orderstatus:nth-child(2n) .orderstatus-text {
+        left: -130px;
+        text-align: right;
+        padding-right: 20px;
+      }
+    }
+    
+    .orderstatus-container {
+      padding: 2em 0;
+    }
+    
+    .orderstatus time {
+      display: block;
+      font-size: 1em;
+      border:1px solid grey;
+      padding:5px;
+      border-radius: 5px;
+      color: #939393;
+    }
+    
+    .orderstatus.done time {
+      color: #368d22;
+    }
+    
+    @media only screen and (max-width: 40em) {
+      .orderstatus-container {
+        text-align: center;
+      }
+    }
+    
+    .orderstatus-check {
+      /* font-family: "Helvetica", Arial, sans-serif;
+      border: 2px solid #939393;
+      width: 50px;
+      height: 50px;
+      display: inline-block;
+      text-align: center;
+      line-height: 48px;
+      border-radius: 50%;
+      margin-bottom: 0.5em;
+      background: #fff;
+      z-index: 2;
+      position: absolute;
+      color: #939393;
+      left: 50%; */
+        border: 2px solid #939393;
+        width: 35px;
+        height: 35px;
+        display: inline-block;
+        text-align: center;
+        line-height: 31px;
+        border-radius: 50%;
+        margin-bottom: 0.5em;
+        background: #fff;
+        z-index: 2;
+        position: absolute;
+        color: #939393;
+        left: 50%;
+    }
+    
+    .done .orderstatus-check {
+      color: #368d22;
+      border-color: #368d22;
+    }
+    
+    @media only screen and (max-width: 40em) {
+      .orderstatus-check {
+        left: 0;
+      }
+    }
+    
+    @keyframes glowing {
+      0% { box-shadow: 0 0 -10px #368d22; }
+      40% { box-shadow: 0 0 20px #368d22; }
+      60% { box-shadow: 0 0 20px #368d22; }
+      100% { box-shadow: 0 0 -10px #368d22; }
+    }
+    
+    .done .orderstatus-check  {
+      animation: glowing 2500ms infinite;
+    }
+    
+    .orderstatus-active {
+      text-align: center;
+      position: relative;
+      left: 25px;
+      top: 20px;
+      color: #939393;
+    }
+    
+    @media only screen and (max-width: 40em) {
+      .orderstatus-active {
+        display: none;
+      }
+    }
+    </style>
     <div class="tab-content p-1">
         {{-- <div class="loading loadr d-none">Loading&#8230;</div> --}}
         <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-copy"></i> SAP Requests</h4><br></div>
@@ -184,7 +218,7 @@
                                                     <h2 class="fs-title">Basic Information:</h2>
                                                 </div>
                                                 <div class="col-5">
-                                                    <h2 class="steps">Step 1 - 4</h2>
+                                                    <h2 class="steps">Step 1 - 5</h2>
                                                 </div>
 
                                             </div> 
@@ -224,7 +258,33 @@
                                         </div> 
                                         <input type="button" name="next" class="next action-button" value="Next" />
                                     </fieldset>
-                                   
+                                    <!-- Select Role -->
+                                    <fieldset>
+                                        <div class="form-card">
+                                            <div class="row">
+                                                {{-- <div class="col-7">
+                                                    <h2 class="fs-title">Select Role:</h2>
+                                                </div> --}}
+                                                <div class="col-5">
+                                                    <h2 class="steps">Step 2 - 5</h2>
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-center">
+                                               
+                                                <div class="col-lg-6 pt-2">
+                                                    <label for="sales_org">Role </label>
+                                                        <select name="role"  id="role" data-placeholder="Select Role" class="form-control select2bs4">
+                                                            <option value=""></option>
+                                                            @foreach($roles as $role)
+                                                                <option value="{{ $role->id }}"> {{  $role->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                </div>
+                                               
+                                            </div> 
+                                             
+                                        </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                    </fieldset>
                                     <fieldset>
                                         <div class="form-card">
                                             <div class="row">
@@ -232,7 +292,7 @@
                                                     <h2 class="fs-title">Select Type:</h2>
                                                 </div>
                                                 <div class="col-5">
-                                                    <h2 class="steps">Step 2 - 4</h2>
+                                                    <h2 class="steps">Step 3 - 5</h2>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -266,7 +326,7 @@
                                                     <h2 class="fs-title">Other Information:</h2>
                                                 </div>
                                                 <div class="col-5">
-                                                    <h2 class="steps">Step 3 - 4</h2>
+                                                    <h2 class="steps">Step 4 - 5</h2>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -316,7 +376,7 @@
                                                     <h2 class="fs-title">Select T-Codes:</h2>
                                                 </div>
                                                 <div class="col-5">
-                                                    <h2 class="steps">Step 4 - 4</h2>
+                                                    <h2 class="steps">Step 5 - 5</h2>
                                                 </div>
                                                
                                             </div> 
@@ -381,7 +441,7 @@
 
     <!-- Request Status Modal -->
     <div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" id="statusModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Request Status</h5>
@@ -395,43 +455,8 @@
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-12 col-lg-12 col-xl-12 text-center p-2 mb-2">
                             <div class="card">
-                                <h2 id="heading">Request Status</h2>
-                                <section>
-                                    <div class="row justify-content-center orderstatus-container">
-                                      <div class="medium-12 columns">
-                                        <div class="orderstatus">
-                                          <div class="orderstatus-check"><span class="orderstatus-number">4</span></div>
-                                          <div class="orderstatus-text">
-                                            <time>17 Aug</time>
-                                            <p>Your order is delivered</p>
-                                          </div>
-                                        </div>
-                                        <div class="orderstatus done">
-                                          <div class="orderstatus-check"><span class="orderstatus-number">3</span></div>
-                                          <div class="orderstatus-text">
-                                            <time>17 Dec</time>
-                                            <p>Order created</p>
-                                          </div>
-                                        </div>
-                                        <div class="orderstatus done">
-                                          <div class="orderstatus-check"><span class="orderstatus-number">2</span></div>
-                                          <div class="orderstatus-text">
-                                            <time>17 Dec</time>
-                                            <p>Your order is placed</p>
-                                          </div>
-                                        </div>
-                                        <div class="orderstatus done">
-                                          <div class="orderstatus-check"><span class="orderstatus-number">1</span></div>
-                                          <div class="orderstatus-text">
-                                            <time>17 Dec</time>
-                                            <p>Your order is placed</p>
-                                          </div>
-                                        </div>
-                                  
-                                  
-                                      </div>
-                                    </div>
-                                  </section>
+                                {{-- <h2 id="heading">Request Status</h2> --}}
+                                <div id="drop_status"></div>
                                
                             </div>
                         </div>
@@ -476,10 +501,11 @@
 
        //loadTcodes();
         function loadTcodes(dependencies = []){
+            var role_id = $("#role").val();
             $.ajax({
                 url:"{{ route('tcodes.for.user') }}",
                 type:"GET",
-                data:null,
+                data:{role_id:role_id},
                 error:(r) => {
                     toastr.error('Something went wrong');
                     console.log(r);
@@ -531,7 +557,7 @@
                 return false;
             }
 
-            if(current==5) {
+            if(current==6) {
                 Swal.fire({
                     title: 'Do you want to submit the request?',
                     showDenyButton: true,
@@ -744,7 +770,7 @@
     }
    // var jsonData = [];
    var jsonData = new DevExpress.data.CustomStore({
-       key: "id",
+       key: "request_id",
        load: function (loadOptions) {
            // console.log(loadOptions)
            var deferred = $.Deferred(),
@@ -791,15 +817,15 @@
            return deferred.promise();
        }
   });
-   $("#request-list-div").dxDataGrid({
+  $("#request-list-div").dxDataGrid({
        dataSource: jsonData,
-       KeyExpr: "id",
+       KeyExpr: "request_id",
        showBorders: true,
        showRowLines: true,
        rowAlternationEnabled: true,
        allowColumnResizing: true,
+       columnAutoWidth:true,
        columnHidingEnabled:false,
-       sorting: false,
        loadPanel: {
         //indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,
         text: "Loading...",
@@ -821,21 +847,22 @@
            enabled: true,
            mode: "select" // or "dragAndDrop"
        },
-       headerFilter: {
-           //visible: true
-       },
        scrolling: {
+           scroll:"virtual",
            scrollByContent: true,
        },
        sorting: {
             mode: "none"
         },
-       wordWrapEnabled: true,
+       wordWrapEnabled: false,
        columns: [
            {
             caption:"Req No.",
             dataField:"request_id",
-            width:75
+           },
+           {
+            caption:"User Name",
+            dataField:"user_name",
            },
            {
                 caption: 'Company Names',
@@ -890,6 +917,42 @@
                 }
             },
             {
+                  caption: 'Status',
+                  dataField:"status",
+                  cellTemplate:(container, options) => {
+                      //console.log(options.data.module)
+                      var status = JSON.parse(options.data.status);
+                      var status_logs = options.data.req_log;
+                      var created_at = options.data.created_at;
+                      console.log(status)
+                      var html = ``;
+                      html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
+                      container.append(html)
+                  }
+              },
+                           
+            ],
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $("<div>")
+                        .dxDataGrid({
+                            showBorders: true,
+                            allowColumnResizing: true,
+                            paging: false,
+                            // filterRow: {
+                            //     visible: true,
+                            //     applyFilter: "auto"
+                            // },
+                            scrolling: {
+                                mode: "virtual"
+                            },
+                            columnChooser: {
+                                enabled: true,
+                                mode: "select" // or "select"
+                            },
+                            columns: [
+                                {
                                 caption: 'Module',
                                 dataField:"module",
                                 cellTemplate:(container, options) => {
@@ -931,125 +994,18 @@
                                     container.append(html)
                                 }
                             },
-                            {
-                                caption: 'Status',
-                                dataField:"status",
-                                cellTemplate:(container, options) => {
-                                    //console.log(options.data.module)
-                                    var status = JSON.parse(options.data.status);
-                                    console.log(status)
-                                    var html = ``;
-
-                                    html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status})' class='btn btn-warning'><i class='fas fa-eye'></i> View</a>`;
-                                    // if(status ==0) {
-                                    //     html = `<span class='badge badge-warning'>Not Approved</span>`;
-                                    // } else if(status == 1) {
-                                    //     html = `<span class='badge badge-success'>Approved</span>`;
-                                    // } else {
-                                    //     html = `<span class='badge badge-danger'>Rejected</span>`;
-                                    // }
-                                       
-                                    
-                                   
-                                    container.append(html)
-                                }
-                            },
-            ],
-            // masterDetail: {
-            //     enabled: true,
-            //     template: function(container, options) {
-            //         $("<div>")
-            //             .dxDataGrid({
-            //                 showBorders: true,
-            //                 allowColumnResizing: true,
-            //                 paging: false,
-            //                 // filterRow: {
-            //                 //     visible: true,
-            //                 //     applyFilter: "auto"
-            //                 // },
-            //                 scrolling: {
-            //                     mode: "virtual"
-            //                 },
-            //                 columnChooser: {
-            //                     enabled: true,
-            //                     mode: "select" // or "select"
-            //                 },
-            //                 columns: [
-            //                     {
-            //                     caption: 'Module',
-            //                     dataField:"module",
-            //                     cellTemplate:(container, options) => {
-            //                         //console.log(options.data.module)
-            //                         var modules = JSON.parse(options.data.module);
-            //                         console.log(modules)
-            //                         var html = ``;
-            //                         html += `<span class='badge badge-primary'>${modules.name}</span>`;
-            //                         container.append(html)
-            //                     }
-            //                 },
-            //                 {
-            //                     caption: 'TCode',
-            //                     dataField:"tcode",
-            //                     cellTemplate:(container, options) => {
-            //                         //console.log(options.data.module)
-            //                         var tcode = JSON.parse(options.data.tcode);
-            //                         console.log(tcode)
-            //                         var html = ``;
-            //                         $.each(tcode, (i) => {
-            //                             html += `<span class='badge badge-primary'>${tcode[i].description} (${tcode[i].t_code})</span>`;
-            //                         })
-                                   
-            //                         container.append(html)
-            //                     }
-            //                 },
-            //                 {
-            //                     caption: 'Actions',
-            //                     dataField:"action",
-            //                     cellTemplate:(container, options) => {
-            //                         //console.log(options.data.module)
-            //                         var action = JSON.parse(options.data.action);
-            //                         console.log(action)
-            //                         var html = ``;
-            //                         $.each(action, (i) => {
-            //                             html += `<span class='badge badge-primary'>${action[i].name}</span> `;
-            //                         })
-                                   
-            //                         container.append(html)
-            //                     }
-            //                 },
-            //                 {
-            //                     caption: 'Status',
-            //                     dataField:"status",
-            //                     cellTemplate:(container, options) => {
-            //                         //console.log(options.data.module)
-            //                         var status = JSON.parse(options.data.status);
-            //                         console.log(status)
-            //                         var html = ``;
-            //                         if(status ==0) {
-            //                             html = `<span class='badge badge-warning'>Not Approved</span>`;
-            //                         } else if(status == 1) {
-            //                             html = `<span class='badge badge-success'>Approved</span>`;
-            //                         } else {
-            //                             html = `<span class='badge badge-danger'>Rejected</span>`;
-            //                         }
-                                       
-                                    
-                                   
-            //                         container.append(html)
-            //                     }
-            //                 },
-            //                 ],
-            //                 dataSource: new DevExpress.data.DataSource({
-            //                     store: new DevExpress.data.ArrayStore({
-            //                         key: "id",
-            //                         data: window.subData
-            //                     }),
-            //                      filter: ["id", "=", options.key]
-            //                 })
-            //             }).appendTo(container);
-            //     }
-            // }
-   });
+                            ],
+                            dataSource: new DevExpress.data.DataSource({
+                                store: new DevExpress.data.ArrayStore({
+                                    key: "request_id",
+                                    data: window.subData
+                                }),
+                                 filter: ["request_id", "=", options.key]
+                            })
+                        }).appendTo(container);
+                }
+            }
+  });
     
 }
 
@@ -1069,6 +1025,13 @@ function stepValidation(step){
                 }
                 break;
                 case 2:
+                    var role = $("#role").val();
+                    if(role.length == 0) {
+                        toastr.error('Role must be selected');
+                        flag = false
+                    }
+                break;
+                case 3:
                 var sales = $("#sales_org").val();
                 var purchase = $("#purchase_org").val();
                 if(purchase.length == 0 && sales.length == 0) {
@@ -1077,7 +1040,7 @@ function stepValidation(step){
                 }
                 populateStep3(sales,purchase);
                 break;
-                case 3:
+                case 4:
                 var sales = $("#sales_org").val();
                 var purchase = $("#purchase_org").val();
                 if(sales.length>0) {
@@ -1099,10 +1062,10 @@ function stepValidation(step){
                 }
                 loadTcodes();
                 break;
-                case 4:
+                case 5:
                 loadReviewSection();
                 break;
-                case 5:
+                case 6:
 
                 break;
 
@@ -1123,13 +1086,83 @@ function loadReviewSection(){
         }
     });
     formData.push({name:'module', value: JSON.stringify(finalArray)});
-
+    console.log(formData)
     reviewCall(formData)
 }
 
-function loadStatusModal(status) {
+function loadStatusModal(status,created_at, logs) {
 
-    $("#statusModal").modal('show');
+console.log(logs);
+var stages = [0, 1, 2, 3];
+var pointer = 0;
+var html = '<section> <div class="row justify-content-center orderstatus-container">  <div class="medium-12 columns">';
+$.each(stages, (i) => {
+
+  if(stages[i] == 0) {
+
+    html += `<div class="orderstatus done">
+                <div class="orderstatus-check"><span class="orderstatus-number">${stages[i]+1}</span></div>
+                <div class="orderstatus-text">
+                  <time>${created_at}</time>
+                  <p>Your Request was placed</p>
+                </div>
+              </div>`;
+
+  } else {
+
+    let datetime = "N/A";
+    let addClass = "";
+    let status_text = "Not Approved";
+    pointer = i - 1;
+    if(logs[i-1] !== undefined) {
+      console.log('log found')
+      if(stages[i] == logs[pointer].approval_stage) {
+          addClass = `done`;
+          datetime = logs[pointer].created_at;
+          if(logs[pointer].approval_stage == 1) {
+            status_text = `Approved By <br> ${logs[pointer].created_by} (RM)`;
+          } else if(logs[pointer].approval_stage == 2) {
+            status_text = `Approved By <br> ${logs[pointer].created_by} (Module head)`;
+          }
+        } else if(logs[pointer].approval_stage == 3) {
+            status_text = `Approved By <br> ${logs[pointer].created_by} (BASIS)`;
+        }
+      } else {
+
+        if(stages[i] == 1) {
+            status_text = `Not Approved By RM`;
+        } else if(stages[i] == 2) {
+
+          status_text = `Not Approved By Module head(s)`;
+        } else if(stages[i] == 3) {
+
+          status_text = `Not Approved By BASIS`;
+        }
+        
+      }
+
+      
+    html += `<div class="orderstatus ${addClass}">
+                <div class="orderstatus-check"><span class="orderstatus-number">${stages[i]+1}</span></div>
+                <div class="orderstatus-text">
+                  <time>${datetime}</time>
+                  <p>${status_text}</p>
+                </div>
+              </div>`;
+    }
+
+
+
+});
+// 0 -> Request Placed 1 - Approved by Reporting Manager 2 -> Approved By Module Head 3 -> Approved by BASIS
+  html += "</div></div></section>";
+
+
+  $("#statusModal").modal('show');
+  $("#drop_status").html(html)
+
+
+
 }
 
 /** final submit of the form with tcodes */

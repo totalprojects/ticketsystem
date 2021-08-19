@@ -34,6 +34,8 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions']], funct
 
     Route::get('/modules', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('permissions.view');
 
+    Route::get('/app-permissions-list', [App\Http\Controllers\Permission\PermissionController::class, 'app'])->name('app.permissions');
+
     Route::get('/employees', [App\Http\Controllers\Employee\EmployeeController::class, 'index'])->name('employees.view');
 
     Route::get('/tree', [App\Http\Controllers\TreeController::class, 'index'])->name('tree.view');
@@ -122,5 +124,8 @@ Route::group(['prefix' => 'ajax'], function () {
 
     //Route::get('/add-dx-tcode', [App\Http\Controllers\Permission\PermissionController::class, 'dxStoreTcode'])->name('tcode.store');
     Route::post('/update-dx-tcode', [App\Http\Controllers\Permission\PermissionController::class, 'dxUpdateTcode'])->name('tcode.update');
+
+    /** App Permissions */
+    Route::get('/fetch-app-permissions-list', [App\Http\Controllers\Permission\PermissionController::class, 'appPermissions'])->name('show.app.permissions');
 
 });

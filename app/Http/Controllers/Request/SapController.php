@@ -17,10 +17,13 @@ use SAPRequest;
 use Plants;
 use Storages;
 use SO;
+use Role;
 use SalesOffice;
 use ActionMasters;
-
+use App\Models\Role\roles_has_permission as RolePermissions;
 use App\Models\Model\model_has_permissions as UserPermissions;
+use EmployeeMappings;
+use SAPApprovalLogs;
 
 class SapController extends Controller {
     /**
@@ -34,21 +37,34 @@ class SapController extends Controller {
         $business      = BusinessArea::all();
         $po            = PO::all();
         $po_release    = PORelease::all();
+        $roles         = Role::all();
 
-        return view('request.sap.index')->with(['companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release]);
+        return view('request.sap.index')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release]);
+    }
+
+    public function team() {
+
+        $roles = Role::all();
+
+        return view('request.sap.team')->with(['roles' => $roles]);
     }
 
     public function modulesAndTCodes(Request $request) {
 
         $user_id = Auth::user()->id;
-
-        $permissions    = UserPermissions::where('model_id', $user_id)->select('permission_id')->get();
-        $permission_ids = [];
-        foreach ($permissions as $permission) {
+        $role_id = $request->role_id;
+        if ($role_id == 0) {
+            return response(['data' => [], 'message' => 'No Tcodes found'], 200);
+        }
+        //$permissions    = UserPermissions::where('model_id', $user_id)->select('permission_id')->get();
+        $role_based_permissions = RolePermissions::where('role_id', $role_id)->select('permission_id')->get();
+        $permission_ids         = [];
+        foreach ($role_based_permissions as $permission) {
             $permission_ids[] = $permission->permission_id;
         }
         //$modulewithTcodes = TCodes::whereIn('permission_id', $permission_ids)->with('permission', 'action_details')->orderBy('permission_id', 'asc')->get();
-        $modulewithTcodes = Permission::whereIn('id', $permission_ids)->with('tcodes.action_details')->groupBy('id')->orderBy('id', 'asc')->get();
+        $modulewithTcodes = Permission::whereIn('id', $permission_ids)->with('tcodes.action_details')->orderBy('id', 'asc')->get();
+        //->groupBy('id')
 
         $modules      = [];
         $tcodes       = [];
@@ -102,9 +118,11 @@ class SapController extends Controller {
 
         $modules = json_decode($request->module);
         $user_id = Auth::user()->id;
+        $role_id = $request->role;
         // return $modules;
         $company_name = array_map('intval', $request->company_name);
-        $requestId    = 'RN' . $user_id . '/' . date('y') . '/' . date('m') . '/' . time();
+        $uniqueId     = time();
+        $requestId    = 'RN' . $user_id . '/' . date('y') . '/' . date('m') . '/' . $uniqueId;
         // return $company_name;
         $entryArray   = [];
         $i            = 0;
@@ -162,7 +180,9 @@ class SapController extends Controller {
                 $plant_code = array_map('intval', $request->plant_name ?? []);
 
                 $array = [
+                    'role_id'         => $role_id,
                     'user_id'         => $user_id,
+                    'req_int'         => $uniqueId,
                     'request_id'      => $requestId,
                     'company_code'    => $company_name,
                     'plant_code'      => $plant_code,
@@ -203,7 +223,9 @@ class SapController extends Controller {
         $user_id = Auth::user()->id;
         // return $modules;
         $company_name = array_map('intval', $request->company_name);
-
+        $role_id      = $request->role;
+        $role         = Role::where('id', $role_id)->first();
+        $role_name    = $role->name;
         // return $company_name;
         $entryArray   = [];
         $i            = 0;
@@ -290,6 +312,7 @@ class SapController extends Controller {
 
                 $array[] = [
                     'user_id'         => Auth::user()->name,
+                    'role_name'       => $role_name,
                     'company_code'    => $companies,
                     'plant_code'      => $plants,
                     'storage_id'      => $storages,
@@ -313,7 +336,11 @@ class SapController extends Controller {
 
         //return $array;
 
-        $htmlTable = "<table class='table table-bordered table-responsive' style='max-width:100%; overflow:auto'><thead><th>Company</th>
+        $htmlTable = "<table class='table table-bordered table-responsive' style='max-width:100%; overflow:auto'>
+        <thead>
+
+        <th>Company</th>
+        <th>Role</th>
             <th>
                 Plant
             </th>
@@ -354,6 +381,8 @@ class SapController extends Controller {
         <tbody>";
 
         foreach ($array as $row) {
+
+            $role_name = $row['role_name'];
             $companies = '';
             foreach ($row['company_code'] as $company) {
 
@@ -448,6 +477,7 @@ class SapController extends Controller {
             $htmlTable .= "
             <tr>
                 <td>" . $companies . "</td>
+                <td>" . $role_name . "</td>
                 <td>" . $plants . "</td>
                 <td>" . $storages . "</td>
                 <td>" . $businesses . "</td>
@@ -473,7 +503,7 @@ class SapController extends Controller {
         $take    = $request->take;
         $skip    = $request->skip;
 
-        $data       = SAPRequest::where('user_id', $user_id)->with('company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action');
+        $data       = SAPRequest::where('user_id', $user_id)->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action');
         $totalCount = $data->get()->Count();
         $dataArray  = [];
         //return $data->get();
@@ -494,40 +524,175 @@ class SapController extends Controller {
                 }
             }
 
-            // if ($flag == 1) {
+            if ($flag == 1) {
 
-            $dataArray[] = [
-                'id'               => $each->module_id,
-                'request_id'       => $each->request_id,
-                'sl_no'            => $i,
-                'company_name'     => json_encode($each->company),
-                'plant_name'       => json_encode($each->plant),
-                'storage_location' => json_encode($each->storage),
-                'business_area'    => json_encode($each->business),
-                'sales_org'        => json_encode($each->sales_org),
-                'purchase_org'     => json_encode($each->purchase_org),
-                'division'         => json_encode($each->division),
-                'distribution'     => json_encode($each->distributions),
-                'sales_office'     => json_encode($each->sales_office),
-                'po_release'       => json_encode($each->po_release),
-                'module'           => json_encode($each->modules),
-                'tcode'            => json_encode($each->tcodes),
-                'action'           => json_encode($each->action),
-                'status'           => $each->status
-            ];
+                $request_log = [];
+                foreach ($each->approval_logs as $log) {
+                    $request_log[] = [
+                        'approval_stage' => $log->approval_stage,
+                        'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
+                        'created_by'     => $log->created_by_user->name
+                    ];
+                }
 
-            $i++;
-            // }
+                $dataArray[] = [
+                    'id'               => $each->module_id,
+                    'user_id'          => $each->user_id,
+                    'user_name'        => $each->user->name,
+                    'request_id'       => $each->request_id,
+                    'sl_no'            => $i,
+                    'company_name'     => json_encode($each->company),
+                    'plant_name'       => json_encode($each->plant),
+                    'storage_location' => json_encode($each->storage),
+                    'business_area'    => json_encode($each->business),
+                    'sales_org'        => json_encode($each->sales_org),
+                    'purchase_org'     => json_encode($each->purchase_org),
+                    'division'         => json_encode($each->division),
+                    'distribution'     => json_encode($each->distributions),
+                    'sales_office'     => json_encode($each->sales_office),
+                    'po_release'       => json_encode($each->po_release),
+                    'status'           => $each->status,
+                    'req_log'          => json_encode($request_log),
+                    'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at))
+                ];
+
+                $i++;
+            }
 
             $subArray[] = [
-                'id'     => $each->module_id,
-                'module' => json_encode($each->modules),
-                'tcode'  => json_encode($each->tcodes),
-                'action' => json_encode($each->action),
-                'status' => $each->status
+                'request_id' => $each->request_id,
+                'module'     => json_encode($each->modules),
+                'tcode'      => json_encode($each->tcodes),
+                'action'     => json_encode($each->action),
+                'status'     => $each->status
             ];
         }
 
         return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $totalCount], 200);
+    }
+
+    public function fetchTeamRequest(Request $request) {
+
+        $user_id = Auth::user()->employee_id;
+        $take    = $request->take;
+        $skip    = $request->skip;
+
+        $team = EmployeeMappings::where('report_to', $user_id)->select('employee_id')->get();
+
+        $user_ids = [];
+        foreach ($team as $each) {
+            $user_ids[] = $each->employee_id;
+        }
+
+        $userIds = \Users::whereIn('employee_id', $user_ids)->get();
+        $userId  = [];
+        foreach ($userIds as $each) {
+            $userId[] = $each->id;
+        }
+        //return $userId;
+        $data       = SAPRequest::whereIn('user_id', $userId)->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action');
+        $totalCount = $data->get()->Count();
+        $dataArray  = [];
+        //return $data->get();
+        $subArray = [];
+        $i        = 1;
+        foreach ($data->take($take)->skip($skip)->get() as $each) {
+
+            $company_name = $each->company['company_name'] ?? '-';
+            $company_code = $each['company_code'] ?? '-';
+            $flag         = 1;
+            if (!empty($dataArray)) {
+
+                //return $dataArray;
+                foreach ($dataArray as $key => $value) {
+                    if ($value['id'] == $each->module_id) {
+                        $flag = 0;
+                    }
+                }
+            }
+
+            if ($flag == 1) {
+
+                $request_log = [];
+                foreach ($each->approval_logs as $log) {
+                    $request_log[] = [
+                        'approval_stage' => $log->approval_stage,
+                        'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
+                        'created_by'     => $log->created_by_user->name
+                    ];
+                }
+
+                $dataArray[] = [
+                    'id'               => $each->module_id,
+                    'user_id'          => $each->user_id,
+                    'user_name'        => $each->user->name,
+                    'request_id'       => $each->request_id,
+                    'req_int'          => $each->req_int,
+                    'sl_no'            => $i,
+                    'company_name'     => json_encode($each->company),
+                    'plant_name'       => json_encode($each->plant),
+                    'storage_location' => json_encode($each->storage),
+                    'business_area'    => json_encode($each->business),
+                    'sales_org'        => json_encode($each->sales_org),
+                    'purchase_org'     => json_encode($each->purchase_org),
+                    'division'         => json_encode($each->division),
+                    'distribution'     => json_encode($each->distributions),
+                    'sales_office'     => json_encode($each->sales_office),
+                    'po_release'       => json_encode($each->po_release),
+                    'status'           => $each->status,
+                    'req_log'          => json_encode($request_log),
+                    'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at))
+                ];
+
+                $i++;
+            }
+
+            $subArray[] = [
+                'request_id' => $each->request_id,
+                'module'     => json_encode($each->modules),
+                'tcode'      => json_encode($each->tcodes),
+                'action'     => json_encode($each->action)
+            ];
+        }
+
+        return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $i], 200);
+    }
+
+    public function approveByRM(Request $request) {
+
+        $request_id = $request->request_id;
+
+        try {
+            $update = SAPRequest::where('req_int', $request_id)->update([
+                'status'     => 1,
+                'updated_at' => NOW()
+            ]);
+
+            $log = SAPApprovalLogs::insert([
+                'request_id'     => $request_id,
+                'approval_stage' => 1,
+                'created_by'     => Auth::user()->id,
+                'created_at'     => NOW(),
+                'updated_at'     => NOW()
+            ]);
+
+            $req_ca      = SAPRequest::where('req_int', $request_id)->get();
+            $created_at  = date('F, d, Y h:i a', strtotime($req_ca[0]->created_at));
+            $request_log = [];
+            $logs        = SAPApprovalLogs::where('request_id', $request_id)->with('created_by_user')->get();
+            foreach ($logs as $log) {
+                $request_log[] = [
+                    'approval_stage' => $log->approval_stage,
+                    'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
+                    'created_by'     => $log->created_by_user->name
+                ];
+            }
+
+            return response(['logs' => $request_log, 'status' => 1, 'created_at' => $created_at], 200);
+
+        } catch (\Exception $e) {
+            return response(['message' => $e->getMessage(), 'data' => []], 500);
+        }
+
     }
 }

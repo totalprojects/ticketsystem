@@ -255,7 +255,8 @@ return [
         'ActionMasters'     => App\Models\tbl_action_masters::class,
         'TCodes'            => App\Models\tbl_tcode_masters::class,
         'ModuleHead'        => App\Models\tbl_module_head_masters::class,
-        'SAPRequest'        => App\Models\tbl_sap_requests::class
+        'SAPRequest'        => App\Models\tbl_sap_requests::class,
+        'SAPApprovalLogs'   => App\Models\tbl_sap_approval_logs::class
 
     ]
 

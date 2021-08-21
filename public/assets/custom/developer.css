@@ -1,3 +1,6 @@
+ 
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+/*font-family: 'Open Sans', sans-serif;*/
  label.error{
             color:rgb(192, 11, 11);
             font-size: 11px;
@@ -18,17 +21,18 @@
             font-weight: 650 !important;
         }
         body{
-            /* font-family: 'Nunito', sans-serif; */
-            font-family: 'Inter', sans-serif;
+             font-family: 'Open Sans', sans-serif;
             font-weight: 400;
             font-size: 14px !important;
         }
         .dx-datagrid-content {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Open Sans', sans-serif;
             font-weight:400 !important;
         }
         .dx-datagrid-rowsview td {
-            font-weight: bold !important;
+            font-weight: 600 !important;
+             font-size: 13px !important;
+             color: #000;
         }
         .brand-link .brand-image {
             margin-left:0 !important;
@@ -283,22 +287,22 @@
 }
 
 #progressbar #account:before {
-    font-family: FontAwesome;
+    font-family: 'FontAwesome';
     content: "\f13e"
 }
 
 #progressbar #personal:before {
-    font-family: FontAwesome;
+    font-family: 'FontAwesome';
     content: "\f007"
 }
 
 #progressbar #payment:before {
-    font-family: FontAwesome;
+    font-family: 'FontAwesome';
     content: "\f030"
 }
 
 #progressbar #confirm:before {
-    font-family: FontAwesome;
+    font-family: 'FontAwesome';
     content: "\f00c"
 }
 

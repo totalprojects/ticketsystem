@@ -258,7 +258,8 @@ return [
         'SAPRequest'        => App\Models\tbl_sap_requests::class,
         'SAPApprovalLogs'   => App\Models\tbl_sap_approval_logs::class,
         'Designations'      => App\Models\tbl_designation_masters::class,
-        'ActivityLog'      => App\Models\tbl_activity_logs::class
+        'ActivityLog'       => App\Models\tbl_activity_logs::class,
+        'LoginLog'          => App\Models\tbl_login_logs::class
 
     ]
 

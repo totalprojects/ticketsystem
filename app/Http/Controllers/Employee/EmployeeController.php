@@ -9,6 +9,7 @@ use EmployeeMappings;
 use CompanyMasters;
 use DepartmentMasters;
 use App\Models\Role\roles_has_permission as RolePermissions;
+use Designations;
 
 class EmployeeController extends Controller {
 
@@ -20,6 +21,8 @@ class EmployeeController extends Controller {
         $add_permission     = false;
         $edit_permission    = false;
         $create_permission  = false;
+
+        $designations = Designations::all();
 
         foreach ($up as $e) {
 
@@ -36,7 +39,10 @@ class EmployeeController extends Controller {
             }
         }
 
+        $data['designations'] = $designations;
+
         $data['permission'] = ['create' => $create_permission, 'add' => $add_permission, 'edit' => $edit_permission];
+
         return view('employees.index')->with($data);
     }
 
@@ -182,7 +188,8 @@ class EmployeeController extends Controller {
             try {
 
                 $employee = Employees::create($employeeArray);
-                $id       = $employee->id;
+                $eid      = Employees::where('email', $request->email)->first();
+                $id       = $eid->id;
                 if (!empty($request->reporting_to)) {
 
                     $employeeMappingArray = [

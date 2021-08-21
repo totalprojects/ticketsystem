@@ -13,6 +13,7 @@ use MenuMapping;
 use Spatie\Permission\Models\Role as Roles;
 use Spatie\Permission\Models\Permission as Permissions;
 use App\Models\Role\roles_has_permission as RolePermissions;
+//use App\Helpers\Helper;
 
 class UserController extends Controller {
     /**
@@ -21,8 +22,12 @@ class UserController extends Controller {
     public function index() {
 
         $user_permissions = Auth::user()->getAllPermissions();
+        // storeActivity([
+        //     'user_id'          => Auth::user()->id,
+        //     'activity_type'    => "Opened User Page",
+        //     'description_meta' => json_encode([])
+        // ]);
 
-        // return $permissions;
         return view('users.index');
     }
 

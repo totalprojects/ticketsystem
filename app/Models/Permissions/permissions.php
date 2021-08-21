@@ -12,7 +12,7 @@ class permissions extends Model {
     use HasFactory;
 
     public function tcodes() {
-        return $this->hasMany(TCodes::class, 'permission_id', 'id')->orderBy('permission_id', 'asc')->limit(30);
+        return $this->hasMany(TCodes::class, 'permission_id', 'id')->orderBy('permission_id', 'asc');
     }
 
     public function module_head() {

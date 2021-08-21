@@ -63,7 +63,13 @@ class SapController extends Controller {
             $permission_ids[] = $permission->permission_id;
         }
         //$modulewithTcodes = TCodes::whereIn('permission_id', $permission_ids)->with('permission', 'action_details')->orderBy('permission_id', 'asc')->get();
-        $modulewithTcodes = Permission::whereIn('id', $permission_ids)->with('tcodes.action_details')->orderBy('id', 'asc')->get();
+        //return $permission_ids;
+        // $modulewithTcodes = Permission::whereIn('id', $permission_ids)
+        //     ->with(['tcodes' => function ($Q) {
+        //         // $Q->take(500)->skip(0);
+        //         $Q->with('action_details');
+        //     }])
+        //     ->orderBy('id', 'asc')->get();
         //->groupBy('id')
 
         $modules      = [];
@@ -71,8 +77,14 @@ class SapController extends Controller {
         $i            = 1;
         $j            = 1;
         $grandChildId = 1;
-        //return response(['data' => $modulewithTcodes], 200);
-        foreach ($modulewithTcodes as $each) {
+        // return response(['data' => $modulewithTcodes], 200);
+
+        $modulewithTcodes = Permission::whereIn('id', $permission_ids)
+            ->with(['tcodes' => function ($Q) {
+                $Q->with('action_details');
+            }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
+
+            $each->tcodes = $each->tcodes->take(30)->skip(0);
 
             $modules[] = [
                 'n_id'       => $grandChildId,
@@ -109,7 +121,47 @@ class SapController extends Controller {
                 }
 
             }
-        }
+
+        });
+
+        // foreach ($modulewithTcodes as $each) {
+
+        //     $modules[] = [
+        //         'n_id'       => $grandChildId,
+        //         'n_title'    => $each->name,
+        //         'n_parentid' => 0,
+        //         'n_addional' => ['permission_id' => $each->id],
+        //         'n_checked'  => false
+        //     ];
+
+        //     $childId1 = $grandChildId;
+        //     $grandChildId += 1;
+
+        //     foreach ($each->tcodes as $codes) {
+
+        //         $modules[] = [
+        //             'n_id'       => $grandChildId,
+        //             'n_title'    => $codes->description . '(' . $codes->t_code . ')',
+        //             'n_parentid' => $childId1,
+        //             'n_addional' => ['tcode_id' => $codes->id]
+        //         ];
+
+        //         $childId2 = $grandChildId;
+        //         $grandChildId += 1;
+
+        //         foreach ($codes->action_details as $eachAction) {
+        //             $modules[] = [
+        //                 'n_id'       => $grandChildId,
+        //                 'n_title'    => $eachAction->name,
+        //                 'n_parentid' => $childId2,
+        //                 'n_addional' => ['action_id' => $eachAction->id]
+        //             ];
+
+        //             $grandChildId++;
+        //         }
+
+        //     }
+        // }
 
         return response(['data' => $modules], 200);
     }
@@ -176,6 +228,7 @@ class SapController extends Controller {
                         $actions[] = $aid['t_' . $tcodes];
                     }
                 }
+                
                 $business   = $request->business_area ?? [];
                 $plant_code = array_map('intval', $request->plant_name ?? []);
 

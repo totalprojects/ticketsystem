@@ -22,6 +22,7 @@ class RoleController extends Controller {
     }
 
     public function fetchRoles() {
+
         $roles           = Role::with('permissions.permission_names')->get();
         $all_permissions = Permission::all();
         $dataArray       = [];

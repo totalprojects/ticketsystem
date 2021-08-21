@@ -22,7 +22,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth')->name('home');
 
 /** All Views */
-Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions']], function () {
+Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'Logs']], function () {
 
     Route::get('/change-password', [App\Http\Controllers\User\UserController::class, 'changePasswordPage'])->name('user.change.password');
 
@@ -63,8 +63,6 @@ Route::group(['prefix' => 'ajax'], function () {
 
     Route::get('/permissions-list', [App\Http\Controllers\Permission\PermissionController::class, 'fetchPermissions'])->name('show.permissions');
 
-    Route::get('/trash-permission', [App\Http\Controllers\Permission\PermissionController::class, 'trashTcode'])->name('trash.tcode');
-
     Route::get('/employee-list/{token}', [App\Http\Controllers\Employee\EmployeeController::class, 'fetchEmployees'])->name('fetch.employees');
 
     Route::get('/states/list', [App\Http\Controllers\Area\AreaController::class, 'fetchStates'])->name('fetch.states');
@@ -84,6 +82,13 @@ Route::group(['prefix' => 'ajax'], function () {
     Route::get('/storage/list', [App\Http\Controllers\Storage\StorageController::class, 'getStorages'])->name('get.storages');
 
     Route::get('/sales_office/list', [App\Http\Controllers\SO\SoController::class, 'getSalesOffice'])->name('get.sales_office');
+
+});
+
+/** Ajax calls with logs */
+Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
+
+    Route::get('/trash-permission', [App\Http\Controllers\Permission\PermissionController::class, 'trashTcode'])->name('trash.tcode');
 
     Route::get('/temp', [App\Http\Controllers\SO\SoController::class, 'set_so_id'])->name('x.temp');
 
@@ -130,7 +135,7 @@ Route::group(['prefix' => 'ajax'], function () {
 
     /** App Permissions */
     Route::get('/fetch-app-permissions-list', [App\Http\Controllers\Permission\PermissionController::class, 'appPermissions'])->name('show.app.permissions');
-    
+
     /** Approval section for all  */
     Route::post('/approve-sap-request-stage-1', [App\Http\Controllers\Request\SapController::class, 'approveByRM'])->name('approve.sap.request.by.rm');
 

@@ -76,6 +76,15 @@
                         </select>
                     </div>
                     <div class="col-lg-4 pt-2">
+                        <label for="department">Designation <span class="text-red">*</span></label>
+                        <select name="designation" data-placeholder="Select Designation" class="form-control select2bs4">
+                            <option value=""></option>
+                            @foreach($designations as $designation)
+                                <option value="{{ $designation->id }}">{{ $designation->designation_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-4 pt-2 d-none">
                         <label for="department">Role <span class="text-red">*</span></label>
                         <select name="role" data-placeholder="Select Role" class="roles form-control select2bs4" id="roles">
                             <option value=""></option>
@@ -164,7 +173,7 @@
                             <option value=""></option>
                         </select>
                     </div>
-                    <div class="col-lg-4 pt-2">
+                    <div class="col-lg-4 pt-2 d-none">
                         <label for="department">Role <span class="text-red">*</span></label>
                         <select name="role1" data-placeholder="Select Role" class="roles form-control select2bs4" id="roles1">
                             <option value=""></option>

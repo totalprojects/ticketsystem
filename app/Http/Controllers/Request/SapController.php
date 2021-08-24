@@ -299,8 +299,12 @@ class SapController extends Controller {
         // return $modules;
         $company_name = array_map('intval', $request->company_name);
         $role_id      = $request->role;
-        $role         = Role::where('id', $role_id)->first();
-        $role_name    = $role->name;
+        $role_name    = '';
+        if ($role_id > 0) {
+            $role      = Role::where('id', $role_id)->first();
+            $role_name = $role->name;
+        }
+
         // return $company_name;
         $entryArray   = [];
         $i            = 0;

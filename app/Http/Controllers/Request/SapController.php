@@ -663,6 +663,8 @@ class SapController extends Controller {
             $user_ids[] = $each->employee_id;
         }
 
+        return $user_ids;
+
         $userIds = \Users::whereIn('employee_id', $user_ids)->get();
         $userId  = [];
         foreach ($userIds as $each) {
@@ -684,7 +686,7 @@ class SapController extends Controller {
 
                 //return $dataArray;
                 foreach ($dataArray as $key => $value) {
-                    if ($value['id'] == $each->module_id) {
+                    if ($value['req_int'] == $each->req_int) {
                         $flag = 0;
                     }
                 }

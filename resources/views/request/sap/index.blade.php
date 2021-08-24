@@ -5,7 +5,12 @@
 @section('content_header')
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-  
+ <style>
+#div_tree ul ul ul li {
+
+    display: inline-block !important;
+}     
+</style> 
 @stop
 
 @section('content')
@@ -111,7 +116,9 @@
                                             <div class="row justify-content-center">
                                                
                                                 <div class="col-lg-6 pt-2">
+                                                    
                                                     <label for="sales_org">Role </label>
+                                                    <span><small>(This option is not mandatory)</small></span>
                                                         <select name="role"  id="role" data-placeholder="Select Role" class="form-control select2bs4">
                                                             <option value=""></option>
                                                             @foreach($roles as $role)
@@ -365,11 +372,16 @@
                     },
                     c_data: data
                 });
+
+                $(".ldr_tc").hide();
         }
 
 
        //loadTcodes();
         function loadTcodes(dependencies = []){
+            pickerTreeRender([]);
+            $("#modules_tcodes_block").append("<h3 class='ldr_tc badge badge-warning p-1 m-1'><i class='fas fa-spinner fa-spin'></i> Loading...</h3>")
+           
             var role_id = $("#role").val();
             $.ajax({
                 url:"{{ route('tcodes.for.user') }}",
@@ -909,10 +921,10 @@ function stepValidation(step){
                 break;
                 case 2:
                     var role = $("#role").val();
-                    if(role.length == 0) {
-                        toastr.error('Role must be selected');
-                        flag = false
-                    }
+                    // if(role.length == 0) {
+                    //     toastr.error('Role must be selected');
+                    //     flag = false
+                    // }
                 break;
                 case 3:
                 var sales = $("#sales_org").val();
@@ -963,6 +975,7 @@ function stepValidation(step){
                     }
                     
                 }
+                
                 loadTcodes();
                 break;
                 case 5:

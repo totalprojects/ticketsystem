@@ -25,6 +25,8 @@ use App\Models\Model\model_has_permissions as UserPermissions;
 use EmployeeMappings;
 use SAPApprovalLogs;
 use PurchaseGroup;
+use DepartmentMasters;
+use Employees;
 
 class SapController extends Controller {
     /**
@@ -38,8 +40,21 @@ class SapController extends Controller {
         $business      = BusinessArea::all();
         $po            = PO::all();
         $po_release    = PORelease::all();
-        $roles         = Role::all();
-        $pg            = PurchaseGroup::all();
+        $empData       = Employees::where('id', Auth::user()->employee_id)->first();
+        $did           = 0;
+        if ($empData) {
+            $did = $empData->department_id;
+            $did = DepartmentMasters::where('id', $did)->first();
+            if ($did) {
+                $did = $did->id;
+            }
+        }
+        //return Auth::user()->employee_id;
+
+        $roles = Role::when($did > 0, function ($Q) use ($did) {
+            $Q->where('type', $did);
+        })->get();
+        $pg = PurchaseGroup::all();
 
         return view('request.sap.index')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release, 'pg' => $pg]);
     }
@@ -55,9 +70,9 @@ class SapController extends Controller {
 
         $user_id = Auth::user()->id;
         $role_id = $request->role_id;
-        if ($role_id == 0) {
-            return response(['data' => [], 'message' => 'No Tcodes found'], 200);
-        }
+        // if ($role_id == 0) {
+        //     return response(['data' => [], 'message' => 'No Tcodes found'], 200);
+        // }
         //$permissions    = UserPermissions::where('model_id', $user_id)->select('permission_id')->get();
         $role_based_permissions = RolePermissions::where('role_id', $role_id)->select('permission_id')->get();
         $permission_ids         = [];
@@ -81,12 +96,17 @@ class SapController extends Controller {
         $grandChildId = 1;
         // return response(['data' => $modulewithTcodes], 200);
 
-        $modulewithTcodes = Permission::whereIn('id', $permission_ids)
+        $modulewithTcodes = Permission::when($role_id > 0, function ($Q) use ($permission_ids) {
+            $Q->whereIn('id', $permission_ids);
+        })
+            ->where('id', '!=', 12)
+        // sap department
+            ->where('type', 2)
             ->with(['tcodes' => function ($Q) {
                 $Q->with('action_details');
             }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
 
-            $each->tcodes = $each->tcodes->take(30)->skip(0);
+            $each->tcodes = $each->tcodes->take(50)->skip(0);
 
             $modules[] = [
                 'n_id'       => $grandChildId,
@@ -230,7 +250,7 @@ class SapController extends Controller {
                         $actions[] = $aid['t_' . $tcodes];
                     }
                 }
-                
+
                 $business   = $request->business_area ?? [];
                 $plant_code = array_map('intval', $request->plant_name ?? []);
 

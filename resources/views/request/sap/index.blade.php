@@ -6,7 +6,7 @@
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="csrf-token" content="{{ csrf_token() }}">
  <style>
-#div_tree ul ul ul li {
+#div_tree ul ul ul li { 
 
     display: inline-block !important;
 }     
@@ -356,7 +356,35 @@
         function pickerTreeRender(data) {
             tree = new PickleTree({
                     switchCallback: (node) => {
-                        console.log(node)
+
+                        //console.log(node)
+                        if(node.title  == 'Create') {
+                            if(node.checkStatus == true) {
+                                //console.log('create')
+                                let our_node = tree.getNode(node.value+4);
+                                // console.log('release check')
+                                // console.log(our_node)
+                                if(our_node){
+                                    if(our_node.title == 'Release') {
+                                        our_node.toggleCheck(false);
+                                    }
+                                }
+                                
+                            }
+                        }
+
+                        if(node.title  == 'Release') {
+                            if(node.checkStatus == true) {
+                                //console.log('Release')
+                                let our_node = {}
+                                for(let i=4; i>=1; i--) {
+                                    our_node = tree.getNode(node.value-i);
+                                    if(our_node){
+                                        our_node.toggleCheck(false);
+                                    }
+                                }   
+                            }
+                        }
                     },
                     c_target: 'div_tree',
                     c_config: {

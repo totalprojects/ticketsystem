@@ -206,6 +206,7 @@
                                         <li id="personal"><strong>Step 2</strong></li>
                                         <li id="payment"><strong>Step 3</strong></li>
                                         <li id="confirm"><strong>Step 4</strong></li>
+                                        <li id="confirm2"><strong>Step 5</strong></li>
                                     </ul>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
@@ -299,13 +300,13 @@
                                                 <div class="col-lg-12">
                                                     <h5>Select any one option or both to continue</h5>
                                                 </div>
-                                                <div class="col-lg-6 pt-2">
+                                                <div class="col-lg-4 pt-2">
                                                     <label for="sales_org">Sales Organization </label>
                                                         <select name="sales_org[]"  id="sales_org" data-placeholder="Select Sales Organization" class="form-control select2bs4" multiple>
                                                             <option value=""></option>
                                                         </select>
                                                 </div>
-                                                <div class="col-lg-6 pt-2">
+                                                <div class="col-lg-4 pt-2">
                                                     <label for="purchase_org"> Purchase Organization </label>
                                                         <select name="purchase_org[]"  id="purchase_org" data-placeholder="Select Purchase Organization" class="form-control select2bs4" multiple>
                                                             <option value=""></option>
@@ -313,7 +314,15 @@
                                                                 <option value="{{ $p->id }}">{{ $p->po_name }} ({{ $p->po_code }}) </option>
                                                             @endforeach
                                                         </select>
-                                                </div>    
+                                                </div>  
+                                                <div class="col-lg-4 pt-2">
+                                                    <label for="action_type">Action</label>
+                                                    <br>
+                                                   <input type="radio" name="action_type" value="cr1"> Create &amp; 1<sup>st</sup> Release &nbsp;
+                                                   <input type="radio" name="action_type" value="c"> Create &nbsp;
+                                                   <input type="radio" name="action_type" value="r"> Release &nbsp;
+                                                </div>   
+                                                   
                                             </div> 
                                              
                                         </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
@@ -354,6 +363,15 @@
                                                             <option value=""></option>
                                                         </select>
                                                 </div>
+                                                <div class="col-lg-4 pt-2">
+                                                    <label for="purchase_group"> Purchase Group </label>
+                                                        <select name="purchase_group[]"  id="purchase_group" data-placeholder="Select Purchase Group" class="form-control select2bs4" multiple>
+                                                            <option value=""></option>
+                                                            @foreach($pg as $p)
+                                                                <option value="{{ $p->id }}">{{ $p->pg_description }} ({{ $p->pg_code }}) </option>
+                                                            @endforeach
+                                                        </select>
+                                                </div> 
                                                 <div class="col-lg-4 pt-2">
                                                     <label for="po_release"> PO Release </label>
                                                         <select name="po_release[]"  id="po_release" data-placeholder="Select PO Release" class="form-control select2bs4" multiple>
@@ -475,6 +493,19 @@
 @section('js')
 
     <script>
+
+        $("input[name='action_type']").prop('disabled',true);
+
+        $("#purchase_org").on('change', (e) => {
+            var value = $("#purchase_org").val();
+
+            if(value.length>0) {
+                $("input[name='action_type']").prop('disabled',false);
+            } else {
+                $("input[name='action_type']").prop('disabled',true);
+            }
+        });
+
         var tree;
 
         function pickerTreeRender(data) {
@@ -530,11 +561,25 @@
                 $("#distribution_channel").parent().addClass('d-none');
                 $("#sales_office").parent().addClass('d-none');
             }
-
+            
             if(purhcase.length > 0) {
-                $("#po_release").parent().removeClass('d-none');
+                var action = $("input[name='action_type']:checked").val();
+                if(!action) {
+                    toastr.error('Provide the actions for PO to continue');
+                    flag = false
+                }
+                console.log(action)
+                if(action === 'cr1' || action === 'r') {
+                    $("#po_release").parent().removeClass('d-none');
+                } else {
+                    console.log('donone')
+                    $("#po_release").parent().addClass('d-none');
+                }
+                //$("#po_release").parent().removeClass('d-none');
+                $("#purchase_group").parent().removeClass('d-none');
             } else {
                 $("#po_release").parent().addClass('d-none');
+                $("#purchase_group").parent().addClass('d-none');
             }
         }
 
@@ -1038,6 +1083,20 @@ function stepValidation(step){
                     toastr.error('Either purchase / sales input must be filled to continue');
                     flag = false
                 }
+                if(purchase.length>0) {
+                    var action = $("input[name='action_type']:checked").val();
+                    if(!action) {
+                        toastr.error('Provide the actions for PO to continue');
+                        flag = false
+                    }
+                    console.log(action)
+                    if(action === 'cr1' || action === 'r') {
+                        $("#po_release").parent().removeClass('d-none');
+                    } else {
+                        console.log('donone')
+                        $("#po_release").parent().addClass('d-none');
+                    }
+                }
                 populateStep3(sales,purchase);
                 break;
                 case 4:
@@ -1053,12 +1112,18 @@ function stepValidation(step){
                     }
                 }
                 if(purchase.length>0) {
+
                     var po = $("#po_release").val();
-            
-                    if(po.length == 0) {
-                        toastr.error('Po Release must be filled');
-                        flag = false
+                    var action = $("input[name='action_type']:checked").val();
+                    if(action) {
+                        if(action == 'cr1' || action == 'r') {
+                            if(po.length == 0) {
+                                toastr.error('Po Release must be filled');
+                                flag = false
+                            }
+                        }
                     }
+                    
                 }
                 loadTcodes();
                 break;

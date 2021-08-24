@@ -140,3 +140,6 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
     Route::post('/approve-sap-request-stage-1', [App\Http\Controllers\Request\SapController::class, 'approveByRM'])->name('approve.sap.request.by.rm');
 
 });
+
+/** Migration Routes */
+Route::get('/migrate-tcodes', [App\Http\Controllers\MigrationController::class, 'tcodeMigrate'])->name('migrate.tcodes');

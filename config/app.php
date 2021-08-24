@@ -259,7 +259,9 @@ return [
         'SAPApprovalLogs'   => App\Models\tbl_sap_approval_logs::class,
         'Designations'      => App\Models\tbl_designation_masters::class,
         'ActivityLog'       => App\Models\tbl_activity_logs::class,
-        'LoginLog'          => App\Models\tbl_login_logs::class
+        'LoginLog'          => App\Models\tbl_login_logs::class,
+        'StandardTCodes'    => App\Models\tbl_standard_tcode_masters::class,
+        'PurchaseGroup'     => App\Models\PO\tbl_purchase_group_masters::class
 
     ]
 

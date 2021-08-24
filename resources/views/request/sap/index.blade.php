@@ -9,168 +9,6 @@
 @stop
 
 @section('content')
-<style>
-
-
-
-
-    /** Approval Status */
-    .orderstatus {
-      color: #939393;
-      display: block;
-      padding: 1em 0;
-      position: relative;
-      text-align: center;
-      min-height: 150px;
-    }
-    
-    .orderstatus.done:before {
-      background: #32841f;
-      
-    }
-    .orderstatus:before {
-      /* content: '';
-      height: 100%;
-      position: absolute;
-      left: 50%;
-      width: 2px;
-      background: #939393;
-      margin: 0 25px; */
-        content: '';
-        height: 100%;
-        position: absolute;
-        left: 47%;
-        width: 1.5px;
-        background: #939393;
-        margin: 0 25px;
-    }
-    
-    .orderstatus:last-child:before {
-      height: 0;
-    }
-    
-    .orderstatus.done {
-      color: #333;
-    }
-    
-    @media only screen and (max-width: 40em) {
-      .orderstatus {
-        text-align: left;
-      }
-      .orderstatus:before {
-        left: 0;
-      }
-      .orderstatus .orderstatus-text {
-        left: 0;
-        width: 100%;
-      }
-    }
-    
-    .orderstatus-text {
-      position: relative;
-      width: 100%;
-      left: 50%;
-      text-align: left;
-      padding-left: 60px;
-    }
-    
-    @media only screen and (min-width: 40em) {
-      .orderstatus:nth-child(2n) .orderstatus-text {
-        left: -130px;
-        text-align: right;
-        padding-right: 20px;
-      }
-    }
-    
-    .orderstatus-container {
-      padding: 2em 0;
-    }
-    
-    .orderstatus time {
-      display: block;
-      font-size: 1em;
-      border:1px solid grey;
-      padding:5px;
-      border-radius: 5px;
-      color: #939393;
-    }
-    
-    .orderstatus.done time {
-      color: #368d22;
-    }
-    
-    @media only screen and (max-width: 40em) {
-      .orderstatus-container {
-        text-align: center;
-      }
-    }
-    
-    .orderstatus-check {
-      /* font-family: "Helvetica", Arial, sans-serif;
-      border: 2px solid #939393;
-      width: 50px;
-      height: 50px;
-      display: inline-block;
-      text-align: center;
-      line-height: 48px;
-      border-radius: 50%;
-      margin-bottom: 0.5em;
-      background: #fff;
-      z-index: 2;
-      position: absolute;
-      color: #939393;
-      left: 50%; */
-        border: 2px solid #939393;
-        width: 35px;
-        height: 35px;
-        display: inline-block;
-        text-align: center;
-        line-height: 31px;
-        border-radius: 50%;
-        margin-bottom: 0.5em;
-        background: #fff;
-        z-index: 2;
-        position: absolute;
-        color: #939393;
-        left: 50%;
-    }
-    
-    .done .orderstatus-check {
-      color: #368d22;
-      border-color: #368d22;
-    }
-    
-    @media only screen and (max-width: 40em) {
-      .orderstatus-check {
-        left: 0;
-      }
-    }
-    
-    @keyframes glowing {
-      0% { box-shadow: 0 0 -10px #368d22; }
-      40% { box-shadow: 0 0 20px #368d22; }
-      60% { box-shadow: 0 0 20px #368d22; }
-      100% { box-shadow: 0 0 -10px #368d22; }
-    }
-    
-    .done .orderstatus-check  {
-      animation: glowing 2500ms infinite;
-    }
-    
-    .orderstatus-active {
-      text-align: center;
-      position: relative;
-      left: 25px;
-      top: 20px;
-      color: #939393;
-    }
-    
-    @media only screen and (max-width: 40em) {
-      .orderstatus-active {
-        display: none;
-      }
-    }
-    </style>
     <div class="tab-content p-1">
         {{-- <div class="loading loadr d-none">Loading&#8230;</div> --}}
         <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-copy"></i> SAP Requests</h4><br></div>
@@ -206,6 +44,7 @@
                                         <li id="personal"><strong>Step 2</strong></li>
                                         <li id="payment"><strong>Step 3</strong></li>
                                         <li id="confirm"><strong>Step 4</strong></li>
+                                        <li id="confirm2"><strong>Step 5</strong></li>
                                     </ul>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
@@ -299,13 +138,13 @@
                                                 <div class="col-lg-12">
                                                     <h5>Select any one option or both to continue</h5>
                                                 </div>
-                                                <div class="col-lg-6 pt-2">
+                                                <div class="col-lg-4 pt-2">
                                                     <label for="sales_org">Sales Organization </label>
                                                         <select name="sales_org[]"  id="sales_org" data-placeholder="Select Sales Organization" class="form-control select2bs4" multiple>
                                                             <option value=""></option>
                                                         </select>
                                                 </div>
-                                                <div class="col-lg-6 pt-2">
+                                                <div class="col-lg-4 pt-2">
                                                     <label for="purchase_org"> Purchase Organization </label>
                                                         <select name="purchase_org[]"  id="purchase_org" data-placeholder="Select Purchase Organization" class="form-control select2bs4" multiple>
                                                             <option value=""></option>
@@ -313,7 +152,15 @@
                                                                 <option value="{{ $p->id }}">{{ $p->po_name }} ({{ $p->po_code }}) </option>
                                                             @endforeach
                                                         </select>
-                                                </div>    
+                                                </div>  
+                                                <div class="col-lg-4 pt-2">
+                                                    <label for="action_type">Action</label>
+                                                    <br>
+                                                   <input type="radio" name="action_type" value="cr1"> Create &amp; 1<sup>st</sup> Release &nbsp;
+                                                   <input type="radio" name="action_type" value="c"> Create &nbsp;
+                                                   <input type="radio" name="action_type" value="r"> Release &nbsp;
+                                                </div>   
+                                                   
                                             </div> 
                                              
                                         </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
@@ -354,6 +201,15 @@
                                                             <option value=""></option>
                                                         </select>
                                                 </div>
+                                                <div class="col-lg-4 pt-2">
+                                                    <label for="purchase_group"> Purchase Group </label>
+                                                        <select name="purchase_group[]"  id="purchase_group" data-placeholder="Select Purchase Group" class="form-control select2bs4" multiple>
+                                                            <option value=""></option>
+                                                            @foreach($pg as $p)
+                                                                <option value="{{ $p->id }}">{{ $p->pg_description }} ({{ $p->pg_code }}) </option>
+                                                            @endforeach
+                                                        </select>
+                                                </div> 
                                                 <div class="col-lg-4 pt-2">
                                                     <label for="po_release"> PO Release </label>
                                                         <select name="po_release[]"  id="po_release" data-placeholder="Select PO Release" class="form-control select2bs4" multiple>
@@ -475,6 +331,19 @@
 @section('js')
 
     <script>
+
+        $("input[name='action_type']").prop('disabled',true);
+
+        $("#purchase_org").on('change', (e) => {
+            var value = $("#purchase_org").val();
+
+            if(value.length>0) {
+                $("input[name='action_type']").prop('disabled',false);
+            } else {
+                $("input[name='action_type']").prop('disabled',true);
+            }
+        });
+
         var tree;
 
         function pickerTreeRender(data) {
@@ -530,11 +399,25 @@
                 $("#distribution_channel").parent().addClass('d-none');
                 $("#sales_office").parent().addClass('d-none');
             }
-
+            
             if(purhcase.length > 0) {
-                $("#po_release").parent().removeClass('d-none');
+                var action = $("input[name='action_type']:checked").val();
+                if(!action) {
+                    toastr.error('Provide the actions for PO to continue');
+                    flag = false
+                }
+                console.log(action)
+                if(action === 'cr1' || action === 'r') {
+                    $("#po_release").parent().removeClass('d-none');
+                } else {
+                    console.log('donone')
+                    $("#po_release").parent().addClass('d-none');
+                }
+                //$("#po_release").parent().removeClass('d-none');
+                $("#purchase_group").parent().removeClass('d-none');
             } else {
                 $("#po_release").parent().addClass('d-none');
+                $("#purchase_group").parent().addClass('d-none');
             }
         }
 
@@ -1038,6 +921,20 @@ function stepValidation(step){
                     toastr.error('Either purchase / sales input must be filled to continue');
                     flag = false
                 }
+                if(purchase.length>0) {
+                    var action = $("input[name='action_type']:checked").val();
+                    if(!action) {
+                        toastr.error('Provide the actions for PO to continue');
+                        flag = false
+                    }
+                    console.log(action)
+                    if(action === 'cr1' || action === 'r') {
+                        $("#po_release").parent().removeClass('d-none');
+                    } else {
+                        console.log('donone')
+                        $("#po_release").parent().addClass('d-none');
+                    }
+                }
                 populateStep3(sales,purchase);
                 break;
                 case 4:
@@ -1053,12 +950,18 @@ function stepValidation(step){
                     }
                 }
                 if(purchase.length>0) {
+
                     var po = $("#po_release").val();
-            
-                    if(po.length == 0) {
-                        toastr.error('Po Release must be filled');
-                        flag = false
+                    var action = $("input[name='action_type']:checked").val();
+                    if(action) {
+                        if(action == 'cr1' || action == 'r') {
+                            if(po.length == 0) {
+                                toastr.error('Po Release must be filled');
+                                flag = false
+                            }
+                        }
                     }
+                    
                 }
                 loadTcodes();
                 break;

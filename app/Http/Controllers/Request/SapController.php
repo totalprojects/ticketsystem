@@ -24,6 +24,7 @@ use App\Models\Role\roles_has_permission as RolePermissions;
 use App\Models\Model\model_has_permissions as UserPermissions;
 use EmployeeMappings;
 use SAPApprovalLogs;
+use PurchaseGroup;
 
 class SapController extends Controller {
     /**
@@ -38,8 +39,9 @@ class SapController extends Controller {
         $po            = PO::all();
         $po_release    = PORelease::all();
         $roles         = Role::all();
+        $pg            = PurchaseGroup::all();
 
-        return view('request.sap.index')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release]);
+        return view('request.sap.index')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release, 'pg' => $pg]);
     }
 
     public function team() {

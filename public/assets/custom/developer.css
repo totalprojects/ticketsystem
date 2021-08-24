@@ -5,14 +5,7 @@
             color:rgb(192, 11, 11);
             font-size: 11px;
         }
-        .btn-primary, .modal-header {
-            /* background-color:#25396f !important; */
-            background-color:#25396f !important;
-            border:none !important;
-            padding:0.44rem !important;
-            color:cornsilk !important;
-            box-shadow: 0 0 1px 1px rgba(0,0,0,0.18);
-        }
+        
         .modal-header span {
             color:cornsilk !important;
         }
@@ -39,9 +32,9 @@
             margin-right:0 !important;
         }
         .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active{
-            background-color:#435ebe !important;
-            color:cornsilk !important;
-            border-radius: .2rem
+            background-color: #5a33bf !important;
+            color: white !important;
+            border-radius: .2rem;
         }
         button {
             transition: 0.5s all;
@@ -49,11 +42,7 @@
         i {
             transition: 0.5s all;
         }
-        button i {
-            background-color: #435ebe;
-            padding: 0.22em;
-            color:cornsilk;
-        }
+       
         .btn-primary:hover{
             background-color: #435ebe !important;
         }
@@ -106,43 +95,20 @@
             padding: 0.44em;
             font-weight: 400;
         }
-        .small-box{
-            background-color: #435ebe !important;
-            padding: 0.22em;
-            color:cornsilk !important;
-        }
-        .small-box-footer{
-            color:cornsilk !important;
-        }
-        .dx-datagrid{
-            padding:8px !important;
-            margin:8px !important;
-        }
-        .active{
+        
+        
+        
+        /*.active{
             background-color: #dee6f5 !important;
-        }
-        .dx-datagrid-headers {
-            background-color: #25396f;
-            color:cornsilk;
-            font-weight: 400;
-        }
-        .tab-content .right {
-            background-color:#435ebe !important;
-            color:cornsilk;
-            padding:0.22em;
-            box-shadow: 0 2px 2px rgba(0,0,0,.25),0 4px 4px rgba(0,0,0,.22) !important;
-            border-radius: .2rem;
-            font-style: normal;
-        }
+        }*/
+       
+
         .dx-data-row{
             background-color: rgb(255, 255, 255);
             transition:0.33s all;
             font-weight: 550;
         }
-        .dx-data-row:hover {
-            background-color: rgb(231, 225, 225);
-            cursor: pointer;
-        }
+        
 /** Multip step form */
 
         #heading {
@@ -347,3 +313,132 @@
     width: 100%;
     object-fit: cover
 }
+img.brand-image.img-circle.elevation-3 {
+    opacity: 1 !important;
+}
+/*==========theme color apply css===========*/
+aside.main-sidebar.sidebar-custom {
+    background: #280680;
+}
+aside.main-sidebar.sidebar-custom a.nav-link {
+    color: #fff !important;
+    font-weight: 400 !important;
+}
+[class*=sidebar-light-] .nav-sidebar>.nav-item.menu-open>.nav-link, [class*=sidebar-light-] .nav-sidebar>.nav-item:hover>.nav-link {
+    color: #fff !important;
+    font-weight: 400 !important;
+    opacity: 1 !important;
+    background: #5a33bf;
+}
+
+[class*=sidebar-light] .brand-link {
+    border-bottom: 1px solid #dee2e6;
+    color: rgb(255 255 255) !important;
+    font-size: 18px;
+}
+.content-wrapper {
+    background: #ffffff !important;
+}
+.tab-content .right {
+    background-color: #ece5ff !important;
+    color: #280680;
+    padding: 7px 15px;
+    border-radius: 5px;
+    font-style: normal;
+    font-size: 20px;
+    border: 2px dashed #280680;
+}
+.tab-content .right i {
+    height: 30px;
+    width: 30px;
+    font-size: 15px;
+    line-height: 30px;
+    text-align: center;
+    background: #280680;
+    border-radius: 50%;
+    color: #fff;
+}
+.dx-data-row:hover {
+    background-color: #ece5ff;
+    cursor: pointer;
+}
+.content-wrapper .tab-pane {
+    background: #ece5ff !important;
+    border-radius: 5px;
+}
+.content-wrapper .tab-pane .dx-datagrid {
+    padding: 18px !important;
+    margin-top: 15px;
+    border-radius: 5px;
+}
+aside.main-sidebar.sidebar-custom a.nav-link.active {
+    background: #fff !important;
+    color: #280680 !important;
+}
+.dx-datagrid-headers {
+    background-color: #280680;
+    color: white;
+    font-weight: 400;
+}
+.small-box {
+    background-color: #5a33bf !important;
+    padding: 0.22em;
+    color: white !important;
+}
+.small-box-footer{
+  color:#fff !important;
+}
+.btn-primary, .modal-header {
+    background-color: #280680 !important;
+    background-color: #280680 !important;
+    border: none !important;
+    padding: 0.44rem !important;
+    color: white !important;
+    box-shadow: 0 0 1px 1px rgb(0 0 0 / 18%);
+}
+button i {
+    background-color: #5a33bf;
+    padding: 0.22em;
+    color: white;
+}
+/*==========theme color apply css===========*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

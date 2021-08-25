@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use TCodes;
 use ModuleHead;
 use App\Models\Model\model_has_permissions as UserPermissions;
+use ModuleApprovalStages;
 
 class permissions extends Model {
     use HasFactory;
@@ -21,5 +22,9 @@ class permissions extends Model {
 
     public function model_permissions() {
         return $this->hasMany(UserPermissions::class, 'permission_id');
+    }
+
+    public function module_approval_stages(){
+        return $this->hasMany(ModuleApprovalStages::class, 'module_id', 'id')->orderBy('approval_matrix_id', 'asc');
     }
 }

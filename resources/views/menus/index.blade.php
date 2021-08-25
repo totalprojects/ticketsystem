@@ -66,7 +66,7 @@
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" name="estatus" class="custom-control-input" id="estatus" value="1">
                                 <label id="status_text" class="custom-control-label" for="estatus">Active</label>
-                              </div>
+                            </div>
                         </div>
                         <div class="col-lg-8 pt-2 form-group">
                             <span></span>

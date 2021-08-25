@@ -45,7 +45,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/custom/developer.css') }}">
     <!-- Custom Temp CSS -->
     <style>
-       
+       .badge-primary {
+           background-color: #326568 !important;
+       }
     </style>
 
     {{-- Livewire Styles --}}

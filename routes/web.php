@@ -46,6 +46,7 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'Logs']
 
     Route::get('/email-request', [App\Http\Controllers\Request\EmailController::class, 'index'])->name('email.view');
 
+    Route::get('/module-approval-stages',[App\Http\Controllers\Module\ModuleController::class, 'approval_matrix'])->name('approval.matrix');
 });
 
 /** Ajax Calls */
@@ -139,6 +140,12 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
     /** Approval section for all  */
     Route::post('/approve-sap-request-stage-1', [App\Http\Controllers\Request\SapController::class, 'approveByRM'])->name('approve.sap.request.by.rm');
 
+
+    /** Module Approval Stages List */
+    Route::get('/fetch-module-approval-stages', [App\Http\Controllers\Module\ModuleController::class,'fetchModuleApprovalStages'])->name('module.approval.stages');
+    // change.module.approval.stage
+   
+    Route::post('/change-module-approval-stages', [App\Http\Controllers\Module\ModuleController::class,'changeModuleApprovalStages'])->name('change.module.approval.stage');
 });
 
 /** Migration Routes */

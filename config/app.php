@@ -261,7 +261,10 @@ return [
         'ActivityLog'       => App\Models\tbl_activity_logs::class,
         'LoginLog'          => App\Models\tbl_login_logs::class,
         'StandardTCodes'    => App\Models\tbl_standard_tcode_masters::class,
-        'PurchaseGroup'     => App\Models\PO\tbl_purchase_group_masters::class
+        'PurchaseGroup'     => App\Models\PO\tbl_purchase_group_masters::class,
+        'CriticalTCodes'    => App\Models\tbl_critical_tcode_masters::class,
+        'ApprovalMatrix'    => App\Models\tbl_approval_matrix_masters::class,
+        'ModuleApprovalStages'=> App\Models\tbl_module_approval_stages::class
 
     ]
 

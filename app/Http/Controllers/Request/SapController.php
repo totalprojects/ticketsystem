@@ -663,7 +663,7 @@ class SapController extends Controller {
             $user_ids[] = $each->employee_id;
         }
 
-        return $user_ids;
+        //return $user_ids;
 
         $userIds = \Users::whereIn('employee_id', $user_ids)->get();
         $userId  = [];

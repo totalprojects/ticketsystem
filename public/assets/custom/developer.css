@@ -32,7 +32,7 @@
             margin-right:0 !important;
         }
         .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active{
-            background-color: #595add !important;
+            background-color: #255e61 !important;
             color: white !important;
             border-radius: .2rem;
         }
@@ -44,7 +44,7 @@
         }
        
         .btn-primary:hover{
-            background-color: #435ebe !important;
+            background-color: #3f8c90 !important;
         }
         .bg-primary {
             background-color: #435ebe !important;
@@ -88,7 +88,7 @@
         
 
         .btn-primary:hover i{
-            background-color: #25396f !important;
+            background-color: #255e61 !important;
         }
         .badge-primary {
             background-color: #435ebe;
@@ -113,7 +113,7 @@
 
         #heading {
     text-transform: uppercase;
-    color: #25396f;
+    color: #255e61;
     font-size: 22px;
     font-weight: 600;
 }
@@ -164,13 +164,13 @@
     -moz-box-shadow: none !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
-    border: 1px solid #25396f;
-    outline-width: 0
+    border: 1px solid #255e61;
+    outline-width: 0;
 }
 
 #msform .action-button {
     width: 100px;
-    background: #25396f;
+    background: #255e61;
     font-weight: bold;
     color: white;
     border: 0 none;
@@ -178,12 +178,12 @@
     cursor: pointer;
     padding: 10px 5px;
     margin: 10px 0px 10px 5px;
-    float: right
+    float: right;
 }
 
 #msform .action-button:hover,
 #msform .action-button:focus {
-    background-color: #311B92
+    background-color: #255e61;
 }
 
 #msform .action-button-previous {
@@ -212,7 +212,7 @@
 
 .fs-title {
     font-size: 18px;
-    color: #25396f;
+    color: #255e61;
     margin-bottom: 0;
     font-weight: 600;
     text-align: left;
@@ -225,7 +225,7 @@
 
 .steps {
     font-size: 17px;
-    color: #25396f;
+    color: #255e61;
     margin-bottom: 10px;
     font-weight: 600;
     text-align: right;
@@ -243,7 +243,7 @@
 }
 
 #progressbar .active {
-    color: #25396f
+    color: #255e61;
 }
 
 #progressbar li {
@@ -267,7 +267,7 @@
     margin: 0 auto;
 }
 #progressbar .active i {
-    background: #25396f;
+    background: #255e61;
 }
 
 #progressbar li:before {
@@ -296,7 +296,7 @@
 
 #progressbar li.active:before,
 #progressbar li.active:after {
-    background: #25396f
+    background: #255e61;
 }
 
 .progress {
@@ -304,7 +304,7 @@
 }
 
 .progress-bar {
-    background-color: #25396f
+    background-color: #255e61;
 }
 
 .fit-image {
@@ -314,18 +314,31 @@
 img.brand-image.img-circle.elevation-3 {
     opacity: 1 !important;
 }
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+    background: #255e61;
+    color: #fff !important;
+    opacity: 1 !important;
+}
+
+.select2-container--bootstrap4.select2-container--focus .select2-selection {
+    border-color: #84ccd0;
+    -webkit-box-shadow: 0 0 5px #255e61 !important;
+    box-shadow: 0 0 5px #255e61 !important;
+}
+
+
+
 /*==========theme color apply css===========*/
 aside.main-sidebar.sidebar-custom {
-    background: #2b2c8e;
-    background: -webkit-linear-gradient(to bottom, #5e5eaf , #4e4e94);
-    background: linear-gradient(to bottom, #5e5eaf , #4e4e94);
+    background: #3f8c90;
+    
 }
 span.dx-datagrid-nodata {
     min-height: 350px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url(https://financialadvisors.com/media/no-images/nodata-found.png) no-repeat center;
+    background: url(../images/nodata-found.png) no-repeat center;
     font-size: 0;
 }
 aside.main-sidebar.sidebar-custom a.nav-link {
@@ -336,7 +349,7 @@ aside.main-sidebar.sidebar-custom a.nav-link {
     color: #fff !important;
     font-weight: 400 !important;
     opacity: 1 !important;
-    background: #595add;
+    background: #255e61;
 }
 
 [class*=sidebar-light] .brand-link {
@@ -348,13 +361,14 @@ aside.main-sidebar.sidebar-custom a.nav-link {
     background: #ffffff !important;
 }
 .tab-content .right {
-    background-color: #ece5ff !important;
-    color: #280680;
+    background-color: #ffffff !important;
+    color: #255e61;
     padding: 7px 15px;
     border-radius: 5px;
     font-style: normal;
-    font-size: 20px;
-    border: 2px dashed #4e4ec9;
+    font-size: 17px;
+    font-weight: 600;
+    box-shadow: 0 0 15px #cacaca;
 }
 .tab-content .right i {
     height: 30px;
@@ -362,17 +376,19 @@ aside.main-sidebar.sidebar-custom a.nav-link {
     font-size: 15px;
     line-height: 30px;
     text-align: center;
-    background: #4e4ec9;
+    background: #255e61;
     border-radius: 50%;
     color: #fff;
 }
 .dx-data-row:hover {
-    background-color: #ece5ff;
+    background-color: #ecfeff;
     cursor: pointer;
 }
 .content-wrapper .tab-pane {
-    background: #ece5ff !important;
+    background: #ffffff !important;
     border-radius: 5px;
+    box-shadow: 0 0 15px #ccc;
+    position: relative;
 }
 .content-wrapper .tab-pane .dx-datagrid {
     padding: 18px !important;
@@ -381,15 +397,15 @@ aside.main-sidebar.sidebar-custom a.nav-link {
 }
 aside.main-sidebar.sidebar-custom a.nav-link.active {
     background: #fff !important;
-    color: #280680 !important;
+    color: #255e61 !important;
 }
 .dx-datagrid-headers {
-    background-color: #4e4ec9;
+    background-color: #3f8c90;
     color: white;
     font-weight: 400;
 }
 .small-box {
-    background-color: #4e4ec9 !important;
+    background-color: #3f8c90 !important;
     padding: 0.22em;
     color: white !important;
 }
@@ -397,15 +413,14 @@ aside.main-sidebar.sidebar-custom a.nav-link.active {
   color:#fff !important;
 }
 .btn-primary, .modal-header {
-        background-color: #4e4ec9 !important;
-    background-color: #4e4ec9 !important;
-    border: none !important;
-    padding: 0.44rem !important;
-    color: white !important;
-    box-shadow: 0 0 1px 1px rgb(0 0 0 / 18%);
+        background-color: #255e61 !important;
+        border: none !important;
+        padding: 0.44rem !important;
+        color: white !important;
+        box-shadow: 0 0 1px 1px rgb(0 0 0 / 18%);
 }
 button i {
-    background-color: #5a33bf;
+    background-color: #3f8c90;
     padding: 0.22em;
     color: white;
 }

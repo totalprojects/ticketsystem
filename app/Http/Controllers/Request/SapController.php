@@ -684,7 +684,7 @@ class SapController extends Controller {
 
                 //return $dataArray;
                 foreach ($dataArray as $key => $value) {
-                    if ($value['id'] == $each->module_id) {
+                    if ($value['req_int'] == $each->req_int) {
                         $flag = 0;
                     }
                 }

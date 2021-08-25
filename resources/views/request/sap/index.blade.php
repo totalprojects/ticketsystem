@@ -38,18 +38,18 @@
             <div class="modal-body">
                
                     <div class="row">
-                        <div class="col-11 col-md-12 col-lg-12 col-xl-12 text-center p-2 mb-2">
-                            <div class="card p-2 pt-4 pb-0 mt-3 mb-3">
+                        <div class="col-12 col-md-12 col-lg-12 col-xl-12 text-center p-2 mb-2 sap-req-form">
+                            <div class="card">
                                 <h2 id="heading">SAP Request Form</h2>
                                 <p>Fill all form field to go to next step</p>
                                 <form id="msform" method="post">
                                     <!-- progressbar -->
                                     <ul id="progressbar">
-                                        <li class="active" id="account"><strong>Step 1</strong></li>
-                                        <li id="personal"><strong>Step 2</strong></li>
-                                        <li id="payment"><strong>Step 3</strong></li>
-                                        <li id="confirm"><strong>Step 4</strong></li>
-                                        <li id="confirm2"><strong>Step 5</strong></li>
+                                        <li class="active" id="account"><i class="fas fa-user"></i><strong>Step 1</strong></li>
+                                        <li id="personal"><i class="far fa-address-card"></i><strong>Step 2</strong></li>
+                                        <li id="payment"><i class="fas fa-store-alt"></i><strong>Step 3</strong></li>
+                                        <li id="confirm"><i class="fas fa-building"></i><strong>Step 4</strong></li>
+                                        <li id="confirm2"><i class="fas fa-tasks"></i><strong>Step 5</strong></li>
                                     </ul>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>

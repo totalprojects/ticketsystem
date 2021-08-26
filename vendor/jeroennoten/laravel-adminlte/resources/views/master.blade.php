@@ -84,7 +84,23 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     @endif
+<style>
+    .dashboard-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/monitor.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        lin
+        background-position:center;
+        background-size:cover;
+    }
 
+    .nav-link p {
+        position: relative;
+        top:-5px;
+    }
+</style>
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>

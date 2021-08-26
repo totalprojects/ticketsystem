@@ -75,10 +75,12 @@ class ModuleController extends Controller
     }
 
     public function criticalTCodes(Request $request) {
-
+        $permission = $request->permission_id;
         $take = $request->take ?? 100000;
         $skip = $request->skip ?? 0;
-        $critical_tcodes = CriticalTCodes::with('tcodes.permission')->orderBy('id', 'asc');
+        $critical_tcodes = CriticalTCodes::with('tcodes.permission')->whereHas('tcodes', function($Q) use($permission) {
+            $Q->where('permission_id', $permission);
+        })->orderBy('id', 'asc');
         $totalCount = $critical_tcodes->get()->Count();
 
         return response(['data' => $critical_tcodes->take($take)->skip($skip)->get(), 'totalCount' => $totalCount]);

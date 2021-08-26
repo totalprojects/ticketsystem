@@ -838,59 +838,34 @@ function showTcodes(permission_id, tcode = '', desc = '') {
                     },
                     wordWrapEnabled: true,
                     columns: [
-                        {
-                                dataField:"tcodes",
-                                caption:"Tcodes",
-                                cellTemplate: (container, options) => {
-                                    var tcode = options.data.t_code;
-                                    var html = `<a href='javascript:void(0)'>${tcode}</a>`;
-                                
-                                        container.append(html);
-                                }
-                        },
-                        {
-                                dataField:"description",
-                                caption:"Description",
-                                cellTemplate: (container, options) => {
-                                    var desc = options.data.description;
-                                        container.append(desc);
-                                }
-                        },
-                        {
-                                dataField:"action_details",
-                                caption:"Actions",
-                                cellTemplate: (container, options) => {
-                                    var action_details = options.data.action_details;
-                                    var html = ``;
-                                    $.each(action_details,  (i) => {
-                                        html += `<a href='javascript:void(0)' class='badge badge-primary text-white'>${action_details[i].name}</a>&nbsp;`;
-                                    })
-                                    
-                                
-                                        container.append(html);
-                                }
-                        },
-                        {
-                                dataField:"status",
-                                caption:"Status",
-                                cellTemplate: (container, options) => {
-                                    var status = options.data.status;
-                                    var html = ``;
-                                    if(status == 1) {
-                                        html = `<a href='javascript:void(0)' class='badge badge-success text-white'>Active</a>&nbsp;`;
-                                    } else {
-                                        html = `<a href='javascript:void(0)' class='badge badge-danger text-white'>Inactive</a>&nbsp;`;
-                                    }
-                                        
-                                    
-                                    
-                                
-                                        container.append(html);
-                                }
-                        },
+                    {
+                        dataField: "name",
+                        caption: "Module Name",
+                        cellTemplate: (container, options) => {
+                            var type = options.data.tcodes.permission.name                   
+                            container.append(type);
+                        }
+                    },
+                    {
+                        dataField:"code",
+                        caption:"Module Code",
+                        cellTemplate: (container, options) => {
+                            var type = options.data.tcodes.permission.code                   
+                            container.append(type);
+                        }
+                    },
+                    {
+                        dataField:"tcodes",
+                        caption:"Tcodes",
+                        cellTemplate: (container, options) => {
+                            var type = options.data.tcodes.description+' ('+options.data.tcodes.t_code+')';                 
+                            container.append(type);
+                        }
+                    },
                         {
                                 dataField:"edit",
                                 caption:"Edit",
+                                visible:false,
                                 cellTemplate: (container, options) => {
                                     //var id = options.data.id;
                                     var html = `<a href='javascript:void(0)' onClick='editTcode(${JSON.stringify(options.data)})'>Edit</a>`;

@@ -8,6 +8,7 @@ use TCodes;
 use ModuleHead;
 use App\Models\Model\model_has_permissions as UserPermissions;
 use ModuleApprovalStages;
+use CriticalTCodes;
 
 class permissions extends Model {
     use HasFactory;
@@ -27,4 +28,5 @@ class permissions extends Model {
     public function module_approval_stages(){
         return $this->hasMany(ModuleApprovalStages::class, 'module_id', 'id')->orderBy('approval_matrix_id', 'asc');
     }
+
 }

@@ -264,7 +264,7 @@ return [
         'PurchaseGroup'     => App\Models\PO\tbl_purchase_group_masters::class,
         'CriticalTCodes'    => App\Models\tbl_critical_tcode_masters::class,
         'ApprovalMatrix'    => App\Models\tbl_approval_matrix_masters::class,
-        'ModuleApprovalStages'=> App\Models\tbl_module_approval_stages::class
+        'ModuleApprovalStages'=> App\Models\tbl_module_approval_stages::class,
 
     ]
 

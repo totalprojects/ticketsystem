@@ -9,7 +9,8 @@ use TCodes;
 class tbl_critical_tcode_masters extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
+    
     public function tcodes(){
         return $this->belongsTo(TCodes::class, 'tcode_id', 'id');
     }

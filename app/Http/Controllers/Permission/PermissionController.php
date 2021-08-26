@@ -70,7 +70,7 @@ class PermissionController extends Controller {
                 $Q->where('t_code', $tcode);
             })->when(!empty($desc), function ($Q) use ($desc) {
             $Q->where('description', 'like', '%' . $desc . '%');
-        })->with('action_details', 'permission');
+        })->with('action_details', 'permission','critical_tcodes');
         $permission_data = Permission::where('id', $permission_id)->first();
         $module_name     = $permission_data->name;
         $totalCount      = $tcodes->get()->Count();
@@ -180,6 +180,7 @@ class PermissionController extends Controller {
         $permission_id = $request->module;
         $actions       = $request->actions;
         $status        = $request->status ?? 1;
+        $type = $request->tcode_type;
 
         $insertArray = [
             't_code'        => $tcode,
@@ -196,8 +197,21 @@ class PermissionController extends Controller {
             if ($dup->Count() > 0) {
                 return response(['message' => 'Duplicate TCode Name', 'data' => []], 409);
             }
-            $update = TCodes::insert($insertArray);
-
+            $insert = TCodes::insert($insertArray);
+            $lastId = TCodes::orderBy('id','desc')->limit(1)->first();
+            if($type == 1) {
+                
+                $ctc =  \CriticalTCodes::where('tcode_id',$lastId->id)->get();
+ 
+                 if($ctc->Count() == 0) {
+                     \CriticalTCodes::create([
+                         'tcode_id' => $lastId->id,
+                         'status' => 1,
+                         'created_at' => NOW(),
+                         'updated_at' => NOW()
+                     ]);
+                 }
+             }
             return response(['message' => 'Success', 'data' => []], 200);
 
         } catch (\Exception $e) {
@@ -231,6 +245,7 @@ class PermissionController extends Controller {
         $tdesc     = $request->t_description;
         $actions   = json_encode($request->t_actions, TRUE);
         $status    = $request->t_status;
+        $type = $request->tcode_type;
 
         try {
 
@@ -242,6 +257,32 @@ class PermissionController extends Controller {
                 'status'        => $status,
                 'updated_at'    => date('Y-m-d H:i:s')
             ]);
+
+            if($type == 1) {
+
+               $ctc =  \CriticalTCodes::where('tcode_id',$id)->get();
+
+                if($ctc->Count() == 0) {
+                    \CriticalTCodes::create([
+                        'tcode_id' => $id,
+                        'status' => 1,
+                        'created_at' => NOW(),
+                        'updated_at' => NOW()
+                    ]);
+                } else {
+                    $ctc =  \CriticalTCodes::where('tcode_id',$id)->update([
+                        'tcode_id' => $id,
+                        'status' => 1,
+                        'updated_at' => NOW()
+                    ]);
+                }
+            } else {
+
+                \CriticalTCodes::where('tcode_id',$id)->update([
+                    'status' => 0,
+                    'updated_at' => NOW()
+                ]);
+            }
 
             return response(['status' => 200, 'message' => 'Success'], 200);
 

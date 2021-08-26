@@ -89,62 +89,7 @@
         </div>
         </div>
 </div>
-    <!-- Add Modal -->
-    <div class="modal fade" id="add-permission-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Module</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-        
-                <form id="add-permission-frm" method="post">
-                    <div class="row">
-                        <div class="col-lg-4 pt-2">
 
-                            <input type="text" name="permission_name" id="permission_name" class="form-control" placeholder="Enter module name">
-                        </div>
-                        <div class="col-lg-4 pt-2">
-
-                            <input type="text" name="permission_code" id="permission_code" class="form-control" placeholder="Enter module code">
-                        </div>
-                        <div class="col-lg-4 pt-2 d-none">
-
-                            <select name="permission_type" id="permission_type" data-placeholder="Module Type" class="select2bs4 form-control">
-                                {{-- <option value=""></option>
-                                <option value="1">User</option> --}}
-                                <option value="2">SAP</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-4 pt-2">
-
-                            <select name="module_head" id="module_head" data-placeholder="Module Head" class="select2bs4 form-control">
-                                <option value=""></option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                       
-                        <div class="col-lg-4 pt-2">
-                            <button class='btn btn-primary' type="submit" id="add-permission-btn" name='add-permission-btn'>Submit</button>
-                        </div>
-                    </div>
-                
-                </form>
-        
-                
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                </div>
-            </div>
-            </div>
-    </div>
     <!-- Add T COdes -->
     <div class="modal fade" id="add-tcode-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -182,18 +127,9 @@
                             <input type="checkbox" name="actions[]" id="actions" value="{{ $action->id }}"> {{  $action->name }}
                         @endforeach
                     </div>
-                    <div class="col-lg-3 pt-2">
-                        <label for="status">
-                            Tcode Type
-                        </label>
-                            <select name="tcode_type" data-placeholder="Tcode Type" id="tcode_type1" class="form-control select2bs4">
-                                <option value=""></option>
-                                <option value="0">Non Critical</option>
-                                <option value="1">Critical</option>
-                            </select>
-                    </div>
-                    <div class="col-lg-4 pt-2 mt-4">
-                        <button class='btn btn-primary mt-1' type="submit" id="add-tcode-btn" name='add-tcode-btn'>Submit</button>
+                    
+                    <div class="col-lg-4 pt-2">
+                        <button class='btn btn-primary' type="submit" id="add-tcode-btn" name='add-tcode-btn'><i class='fas fa-plus'></i> Add</button>
                     </div>
                 </div>
             
@@ -207,7 +143,7 @@
             </div>
         </div>
         </div>
-</div>
+    </div>
 
     <!-- Edit Modal -->
         <div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -326,16 +262,7 @@
                                     <option value="1">Active</option>
                                     <option value="0">In-Active</option>
                                 </select>
-                        </div>
-                        <div class="col-lg-3 pt-2">
-                            <label for="status">
-                                Tcode Type
-                            </label>
-                                <select name="tcode_type" data-placeholder="Tcode Type" id="tcode_type" class="form-control select2bs4">
-                                    <option value=""></option>
-                                    <option value="0">Non Critical</option>
-                                    <option value="1">Critical</option>
-                                </select>
+                           
                         </div>
                         <div class="col-lg-12 pt-2">
                             <div id="t_actions"></div>
@@ -714,6 +641,7 @@ function fetch_data(){
            {
                 dataField:"module_head",
                 caption:"Module Owner",
+                visible:false,
                 cellTemplate: (container, options) => {
                     var module_head = options.data.module_head;
                     var html = '';
@@ -761,7 +689,7 @@ function fetch_data(){
                    var actions = '';
                    var action_markup = ``;
                    var checked = '';
-                   var all_actions = <?php echo $actions ?>    
+               
                     
                
                 var link = $(`<a href="javascript:void(0)" id='link_${permission_id}' title="edit">`).html("<i class='fa fa-edit'></i> Edit")
@@ -829,7 +757,7 @@ function showTcodes(permission_id, tcode = '', desc = '') {
            let take = loadOptions.take
            let skip = loadOptions.skip
            var dataSet = []
-           var url = "{{ route('fetch.module.tcodes') }}"
+           var url = "{{ route('fetch.critical.tcodes') }}"
            $.ajax({
                url: url,
                type: 'GET',
@@ -929,18 +857,6 @@ function showTcodes(permission_id, tcode = '', desc = '') {
                                 }
                         },
                         {
-                                dataField:"critical_tcode",
-                                caption:"Critical Tcode",
-                                cellTemplate: (container, options) => {
-                                    var critical = options.data.critical_tcodes;
-                                    var html = `<span class='badge badge-primary'>No</span>`;
-                                    if(critical !== null) {
-                                        html = `<span class='badge badge-danger'>Yes</span>`
-                                    }
-                                        container.append(html);
-                                }
-                        },
-                        {
                                 dataField:"action_details",
                                 caption:"Actions",
                                 cellTemplate: (container, options) => {
@@ -997,14 +913,8 @@ function showTcodes(permission_id, tcode = '', desc = '') {
                 $("#t_description").val(data.description)
                 $("#t_module_id").val(data.permission_id).trigger('change')
                 $("#t_status").val(data.status).trigger('change');
-                if(data.critical_tcodes !== null) {
-                    $("#tcode_type").val(1).trigger('change');
-                } else {
-                    $("#tcode_type").val(0).trigger('change');
-                }
-                
                 var actions = data.action_details;
-                var all_actions = <?php echo $actions ?>
+               
 
 
 

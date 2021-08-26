@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Permission;
 use ApprovalMatrix;
 use ModuleApprovalStages;
+use CriticalTCodes;
+use ActionMasters;
+
 
 
 class ModuleController extends Controller
@@ -62,5 +65,22 @@ class ModuleController extends Controller
        } catch(\Exception $e) {
             return response(['status' => 400, 'message' => $e->getMessage()], 500);
        }
+    }
+
+    public function critical_tcodes() {
+
+        $permissions = Permission::where('type', 1)->get();
+        $actions     = ActionMasters::all();
+        return view('critical_tcodes.index')->with(['modules' => $permissions, 'actions' => $actions]);
+    }
+
+    public function criticalTCodes(Request $request) {
+
+        $take = $request->take ?? 100000;
+        $skip = $request->skip ?? 0;
+        $critical_tcodes = CriticalTCodes::orderBy('id', 'asc');
+        $totalCount = $critical_tcodes->get()->Count();
+
+        return response(['data' => $critical_tcodes->take($take)->skip($skip)->get(), 'totalCount' => $totalCount]);
     }
 }

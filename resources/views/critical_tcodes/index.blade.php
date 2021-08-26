@@ -39,12 +39,12 @@
 }
 </style>
     <div class="tab-content p-1">
-        <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-user-lock"></i> Module & T Code List </h4></div>
+        <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-user-lock"></i> Critical Tcodes </h4></div>
         <div class="tab-pane active dx-viewport" id="users">
             <div class="demo-container p-3">
-            <button id="add_permission" class='btn btn-primary p-1'><i class='fa fa-plus'></i> Module</button>
+            {{-- <button id="add_permission" class='btn btn-primary p-1'><i class='fa fa-plus'></i> Module</button>
             &nbsp;
-            <button id="add_tcodes" class='btn btn-primary p-1'><i class='fa fa-plus'></i> T-CODES</button>
+            <button id="add_tcodes" class='btn btn-primary p-1'><i class='fa fa-plus'></i> T-CODES</button> --}}
                 <div id="roles-list-div" style="height:600px"></div>
             </div>
         </div>

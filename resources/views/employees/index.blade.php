@@ -9,14 +9,17 @@
 @section('content')
     
     <div class="tab-content p-1">
-        <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-user-friends"></i> User List </h4></div>
         <div class="tab-pane active dx-viewport" id="employees">
-            @if(isset($permission))
-                @if($permission['add'] === true)
-                <button id="add_employee_btn" class='btn btn-primary p-1 m-2'><i class='fa fa-plus'></i> Create User</button>
-                @endif
-            @endif
-            <div class="demo-container p-3">
+           
+            <div class="demo-container">
+                <div class="top-info">
+                  <div class="table-heading-custom"><h4 class="right"><i class="fas fa-user-friends"></i> User List </h4></div>
+                    @if(isset($permission))
+                        @if($permission['add'] === true)
+                        <button id="add_employee_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Create User</button>
+                        @endif
+                    @endif
+              </div>
                 <div id="employee-list-div" style="height:auto"></div>
             </div>
         </div>

@@ -85,21 +85,151 @@
         <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     @endif
 <style>
+
     .dashboard-icon {
         content:"";
         background-image:url("{{ asset('assets/images/monitor.png') }}") !important;
         width: 20px;
         height: 20px; 
         display: inline-block;
-        lin
         background-position:center;
         background-size:cover;
-    }
-
-    .nav-link p {
         position: relative;
-        top:-5px;
+        
     }
+    .role-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/Roles.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+       
+    }
+    .sap-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/sap.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .manage-users-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/users.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .menu-set-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/Menu.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .request-access-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/Request-access.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .modules-approval-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/Modules-Approval.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .app-permission-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/App-Permission.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .critical-code-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/Critical-tCodes.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .sap-request-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/sap-request.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .team-request-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/team-request.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .user-list-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/user-list.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+    .user-permission-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/user-permission.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+   
 </style>
 </head>
 

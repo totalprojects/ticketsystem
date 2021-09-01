@@ -42,7 +42,7 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/pickletree/pickletree.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/custom/developer.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/custom/developer.css?v=') }} {{  time() }}">
     <!-- Custom Temp CSS -->
     <style>
        .badge-primary {

@@ -627,6 +627,7 @@ class SapController extends Controller {
                     'user_name'        => $each->user->name,
                     'request_id'       => $each->request_id,
                     'sl_no'            => $i,
+                    'req_int'          => $each->req_int,
                     'company_name'     => json_encode($each->company),
                     'plant_name'       => json_encode($each->plant),
                     'storage_location' => json_encode($each->storage),

@@ -15,9 +15,11 @@
         }
     </style>
     <div class="tab-content p-1">
-        <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-key"></i> User Permissions </h4></div>
         <div class="tab-pane active dx-viewport" id="users">
-            <div class="demo-container p-3">
+            <div class="demo-container">
+                <div class="top-info">
+                <div class="table-heading-custom"><h4 class="right"><i class="fas fa-key"></i> User Permissions </h4></div>
+              </div>
                 <div id="user-list-div" style="height:600px"></div>
             </div>
         </div>

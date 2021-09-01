@@ -16,10 +16,13 @@
     }
 </style>
     <div class="tab-content p-1">
-        <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-bars"></i> Menu List </h4></div>
         <div class="tab-pane active dx-viewport" id="users">
-            <div class="demo-container p-3">
-                <button id="add_menu" class='btn btn-primary p-1'><i class='fa fa-plus'></i> Menu</button>
+            <div class="demo-container">
+              <div class="top-info">
+                <div class="table-heading-custom"><h4 class="right"><i class="fas fa-bars"></i> Menu List </h4></div>
+                <button id="add_menu" class='custom-theme-btn'><i class='fa fa-plus'></i> Menu</button>
+              </div>
+                
                 <div id="menu-list-div" style="height:600px"></div>
             </div>
         </div>

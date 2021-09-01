@@ -265,6 +265,7 @@ return [
         'CriticalTCodes'    => App\Models\tbl_critical_tcode_masters::class,
         'ApprovalMatrix'    => App\Models\tbl_approval_matrix_masters::class,
         'ModuleApprovalStages'=> App\Models\tbl_module_approval_stages::class,
+        'RoleTcodeAccess'   => App\Models\tbl_role_wise_module_tcode_access::class,
 
     ]
 

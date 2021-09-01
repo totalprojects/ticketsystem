@@ -162,8 +162,16 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
     /** Fetch Critical Tcode list */
     Route::get('/fetch-critical-tcode-list', [ModuleController::class,'criticalTCodes'])->name('fetch.critical.tcodes');
     
-    // change.module.approval.stage
+    /* change.module.approval.stage */
     Route::post('/change-module-approval-stages', [ModuleController::class,'changeModuleApprovalStages'])->name('change.module.approval.stage');
+
+    /* Role wise standard tcode access */
+    Route::get('/role-wise-standard-tcode-access',[RoleController::class, 'roleTcodeAccess'])->name('role.tcode.access');
+    /** Role wise tcode update / add */
+    Route::post('/submit-role-wise-standard-tcode-access',[RoleController::class, 'submitRoleTcodeAccess'])->name('submit.selected.tcodes');
+
+    /** Exixisting tcode role wise access */
+    Route::get('/current-tcodes',[RoleController::class, 'getCurrentTcodes'])->name('get.current.tcodes');
 });
 
 /** Migration Routes */

@@ -23,7 +23,7 @@
                  alt="{{ Auth::user()->name }}">
         @endif
         <span @if(config('adminlte.usermenu_image')) class="d-none d-md-inline" @endif>
-            {{ Auth::user()->name }}
+            <p align='center' style='font-weight:bold'> {{ Auth::user()->name }} <br> <small>{{ (!empty(Auth::user()->roles->pluck('name')[0])) ? Auth::user()->roles->pluck('name')[0] : 'NO ROLE' }}</small> </p>
         </span>
     </a>
 

@@ -70,6 +70,10 @@ class SapController extends Controller {
 
         $user_id = Auth::user()->id;
         $role_id = $request->role_id;
+
+        if(empty($role_id)) {
+            $role_id = Auth::user()->roles->pluck('id')[0];
+        }
         // if ($role_id == 0) {
         //     return response(['data' => [], 'message' => 'No Tcodes found'], 200);
         // }
@@ -102,11 +106,14 @@ class SapController extends Controller {
             ->where('id', '!=', 12)
         // sap department
             ->where('type', 2)
-            ->with(['tcodes' => function ($Q) {
-                $Q->with('action_details');
+            ->with(['allowed_tcodes' => function ($Q) use($role_id) {
+                $Q->when($role_id > 0, function ($Q) use ($role_id) {
+                    $Q->where('role_id', $role_id);
+                });                
+                $Q->with('access_action_details', 'tcode');
             }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
 
-            $each->tcodes = $each->tcodes->take(50)->skip(0);
+           // $each->tcodes = $each->tcodes->take(50)->skip(0);
 
             $modules[] = [
                 'n_id'       => $grandChildId,
@@ -118,12 +125,12 @@ class SapController extends Controller {
 
             $childId1 = $grandChildId;
             $grandChildId += 1;
-
-            foreach ($each->tcodes as $codes) {
+                //return response($each->allowed_tcodes);
+            foreach ($each->allowed_tcodes as $codes) {
 
                 $modules[] = [
                     'n_id'       => $grandChildId,
-                    'n_title'    => $codes->description . '(' . $codes->t_code . ')',
+                    'n_title'    => $codes->tcode->description . '(' . $codes->tcode->t_code . ')',
                     'n_parentid' => $childId1,
                     'n_addional' => ['tcode_id' => $codes->id]
                 ];
@@ -131,7 +138,7 @@ class SapController extends Controller {
                 $childId2 = $grandChildId;
                 $grandChildId += 1;
 
-                foreach ($codes->action_details as $eachAction) {
+                foreach ($codes->access_action_details as $eachAction) {
                     $modules[] = [
                         'n_id'       => $grandChildId,
                         'n_title'    => $eachAction->name,

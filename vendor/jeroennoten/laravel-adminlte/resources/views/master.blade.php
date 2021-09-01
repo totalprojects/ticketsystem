@@ -91,7 +91,6 @@
         width: 20px;
         height: 20px; 
         display: inline-block;
-        lin
         background-position:center;
         background-size:cover;
     }

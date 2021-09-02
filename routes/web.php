@@ -12,6 +12,7 @@ use App\Http\Controllers\Plant\PlantController;
 use App\Http\Controllers\Storage\StorageController;
 use App\Http\Controllers\SO\SOController;
 use App\Http\Controllers\Permission\PermissionController;
+use App\Http\Controllers\Moderator\ModeratorController;
 
 
 /*
@@ -61,6 +62,8 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'Logs']
     Route::get('/module-approval-stages',[ModuleController::class, 'approval_matrix'])->name('approval.matrix');
 
     Route::get('/critical-tcodes-list',[ModuleController::class, 'critical_tcodes'])->name('critical.tcodes.list');
+
+    Route::get('/moderators',[ModeratorController::class, 'index'])->name('view.moderators');
 });
 
 /** Ajax Calls */
@@ -130,6 +133,8 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
 
     Route::post('/add-employee', [EmployeeController::class, 'addEmployee'])->name('add.employee');
 
+    Route::post('/add-moderator', [ModeratorController::class, 'add_moderator'])->name('add.moderator');
+
     Route::post('/create-employee', [EmployeeController::class, 'createEmployee'])->name('create.employee');
 
     Route::post('/edit-employee', [EmployeeController::class, 'editEmployee'])->name('edit.employee');
@@ -142,7 +147,8 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
     Route::get('/review-sap-request', [SapController::class, 'reviewRequest'])->name('review.sap.request');
     
     Route::get('/fetch-request', [SapController::class, 'fetchSelfRequest'])->name('fetch.self.request');
-    
+    Route::get('/fetch-moderator', [ModeratorController::class, 'fetchModerators'])->name('fetch.moderators');
+    Route::post('/edit-moderator', [ModeratorController::class, 'updateModerator'])->name('edit.moderator');
     Route::get('/fetch-team-request', [SapController::class, 'fetchTeamRequest'])->name('fetch.team.request');
 
     Route::get('/fetch-module-tcodes', [PermissionController::class, 'fetchModuleTCodes'])->name('fetch.module.tcodes');

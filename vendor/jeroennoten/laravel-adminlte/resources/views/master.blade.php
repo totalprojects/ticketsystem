@@ -229,6 +229,20 @@
         position: relative;
         
     }
+
+    .moderator {
+        content:"";
+        background-image:url("{{ asset('assets/images/moderator.png') }}") !important;
+        width: 20px;
+        height: 20px; 
+        display: inline-block;
+        background-position:center;
+        background-size:cover;
+        position: relative;
+        
+    }
+
+
    
 </style>
 </head>

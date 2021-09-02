@@ -604,7 +604,10 @@ class SapController extends Controller {
 
                 //return $dataArray;
                 foreach ($dataArray as $key => $value) {
-                    if ($value['id'] == $each->module_id) {
+                    // if ($value['id'] == $each->module_id) {
+                    //     $flag = 0;
+                    // }
+                    if ($value['req_int'] == $each->req_int) {
                         $flag = 0;
                     }
                 }
@@ -626,6 +629,7 @@ class SapController extends Controller {
                     'user_id'          => $each->user_id,
                     'user_name'        => $each->user->name,
                     'request_id'       => $each->request_id,
+                    'req_int'          => $each->req_int,
                     'sl_no'            => $i,
                     'company_name'     => json_encode($each->company),
                     'plant_name'       => json_encode($each->plant),

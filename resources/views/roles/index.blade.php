@@ -50,23 +50,24 @@
                             <label for="permissions1"> Role Name </label>
                             <input type="text" name="role_name" id="role_name" class="form-control" placeholder="Enter Role name">
                         </div>
-                        <div class="col-lg-12 pt-2">
+                        <div class="col-lg-12 mt-2">
                             <label for="permissions1"> Permissions </label> <br>
-                            <div class='row'>
-                                <div class='row bg-secondary'>
-                                    <div class='col-lg-12 p-2'><h3>User Modules</h3></div>
+                            <div class='permission-checkbox-sec'>
+                                <div class='row'>
+                                    <!-- <div class='col-lg-12'><h3>User Modules</h3></div> -->
                             @php($flag=0)
                             @foreach($permissions as $permission)
                                 @if($permission->type == 2 && $flag == 0) 
 
-                                    </div><div class='row bg-primary'><div class='col-lg-12 p-2'><h3>SAP Modules</h3></div>
+                                    </div>
+                                  <div class='row'><!-- <div class='col-lg-12'><h3>SAP Modules</h3></div> -->
                                     @php($flag=1)
-                                @endif
-                                <div class="col-lg-3 p-2">
-                                    <input type="checkbox" name="permissions1[]" value="{{ $permission->id }}"> {{ $permission->name }} &nbsp;
+                                    @endif
+                                    <div class="checkbox-group col-lg-3 mb-2 d-flex align-items-center">
+                                      <input type="checkbox" class="mr-2" name="permissions1[]" value="{{ $permission->id }}"> <span>{{ $permission->name }}</span>
+                                    </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
-                            </div>
                             </div>
                         </div>
                         <div class="col-lg-4 pt-2">

@@ -150,6 +150,7 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
     Route::get('/fetch-moderator', [ModeratorController::class, 'fetchModerators'])->name('fetch.moderators');
     Route::post('/edit-moderator', [ModeratorController::class, 'updateModerator'])->name('edit.moderator');
     Route::get('/fetch-team-request', [SapController::class, 'fetchTeamRequest'])->name('fetch.team.request');
+    Route::get('/fetch-stages', [ModuleController::class, 'fetchStages'])->name('fetch.stages');
 
     Route::get('/fetch-module-tcodes', [PermissionController::class, 'fetchModuleTCodes'])->name('fetch.module.tcodes');
 

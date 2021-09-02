@@ -220,8 +220,12 @@
 
     <script>
 
+      const IS_RM = false;
       const IS_MODULEHEAD = false;
       const IS_BASIS = false;
+      const IS_DIRECTOR = false;
+      const IS_ITHEAD = false;
+      const IS_SAP_LEAD = false;
 
 
       /** Fetch SAP Requests */
@@ -471,12 +475,52 @@
   });
     
 }
+window.data = '';
 
+function fetchStages(request_id, logs, created_at) {
 
+  var url = "{{ route('fetch.stages') }}";
+
+  var stages = [0]
+  $.ajax({
+      url: url,
+      type: 'GET',
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+      },
+      dataType: "json",
+      data: {request_id},
+      complete: function (result) {
+          var res = result.responseJSON;
+          var result = res.data;
+          console.log('Result')
+          console.log(result)
+          stage = result;
+      
+      $.each(stage, (i) => {
+        stages.push(stage[i]);
+      })
+      console.log('stages');
+      console.log(stages);
+      renderApprovalStages(stages, logs, created_at)
+
+      },
+      error: function (e) {
+        console.log(e)
+        toastr.error('Something went wrong')
+      },
+    });
+
+    return true
+}
 function loadStatusModal(status,created_at, logs, request_id) {
 
-  console.log(logs);
-  var stages = [0, 1, 2, 3];
+ fetchStages(request_id, logs, created_at);
+
+}
+
+
+function renderApprovalStages(stages, logs, created_at) {
   var pointer = 0;
   var html = '<section> <div class="row justify-content-center orderstatus-container">  <div class="medium-12 columns">';
   $.each(stages, (i) => {
@@ -517,6 +561,7 @@ function loadStatusModal(status,created_at, logs, request_id) {
           } else if(stages[i] == 2) {
 
             status_text = `Not Approved By Module head(s)`;
+            
             if(IS_MODULEHEAD === true) {
                status_text += `<br> <a href='javascript:void(0)' id='mh_approve_request_btn' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>`;
             }
@@ -532,7 +577,7 @@ function loadStatusModal(status,created_at, logs, request_id) {
 
         
       html += `<div class="orderstatus ${addClass}">
-                  <div class="orderstatus-check"><span class="orderstatus-number">${stages[i]+1}</span></div>
+                  <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
                   <div class="orderstatus-text">
                     <time>${datetime}</time>
                     <p>${status_text}</p>
@@ -549,7 +594,6 @@ function loadStatusModal(status,created_at, logs, request_id) {
 
     $("#statusModal").modal('show');
     $("#drop_status").html(html)
-
 
 
 }

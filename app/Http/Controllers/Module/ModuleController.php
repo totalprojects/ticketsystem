@@ -85,4 +85,25 @@ class ModuleController extends Controller
 
         return response(['data' => $critical_tcodes->take($take)->skip($skip)->get(), 'totalCount' => $totalCount]);
     }
+
+    public function fetchStages(Request $request) {
+
+        $req_id = $request->request_id;
+
+        $getData = \SAPRequest::where('req_int', $req_id)->select('module_id')->first();
+        $module_id = !empty($getData) ? $getData->module_id : NULL;
+        $stages = [];
+
+        if($module_id > 0) {
+
+            $getStages = \ModuleApprovalStages::where('module_id', $module_id)->select('module_id','approval_matrix_id')->orderBy('approval_matrix_id', 'asc')->get();
+        }
+
+        foreach($getStages as $stage) {
+            $stages[] = $stage->approval_matrix_id;
+        }
+        
+        return response(['data' => $stages],200);
+
+    }
 }

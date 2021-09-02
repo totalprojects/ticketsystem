@@ -435,7 +435,7 @@ function fetch_data(){
                     $("#erole_id").val(role_id);
                     $("#selected_role_id").val(role_id);
 
-                    var html = `<div class='row'><div class='row bg-secondary'>`;
+                    var html = `<div class='row'><div class='row'>`;
                     var checked = ``;
                     var flag = 0;
                     $.each(all_permissions, (i) => {
@@ -450,11 +450,11 @@ function fetch_data(){
 
                         if(all_permissions[i].type == 2 && flag == 0) {
 
-                            html += `</div><div class='row bg-primary'><div class='col-lg-12 p-2'><h3>SAP Modules</h3></div>`;
+                            html += `</div><div class='row'><div class='col-lg-12 p-2'><h6>SAP Modules</h6></div>`;
                             flag = 1;
                         }
 
-                        html += `<div class='col-lg-3 p-2'><input type='checkbox' id='p_${all_permissions[i].id}' name='permissions[]' value="${all_permissions[i].id}" ${checked}> <a href='#' class='module_links' style='color:#fff !important; text-decoration:underline' onclick='standardTCodeList(${all_permissions[i].id})'>${all_permissions[i].name}</a> &nbsp; </div>`;
+                        html += `<div class='checkbox-group col-lg-3 mb-2 d-flex align-items-center'><input type='checkbox' id='p_${all_permissions[i].id}' name='permissions[]' value="${all_permissions[i].id}" ${checked}> <a href='#' class='module_links ml-2' style=' text-decoration:underline' onclick='standardTCodeList(${all_permissions[i].id})'>${all_permissions[i].name}</a> </div>`;
                     });
 
                     html += `</div>`;

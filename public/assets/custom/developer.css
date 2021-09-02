@@ -1,17 +1,19 @@
  
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
 /*font-family: 'Open Sans', sans-serif;*/
+
  label.error{
             color:rgb(192, 11, 11);
             font-size: 11px;
         }
-        
+        .dx-datagrid-content .dx-datagrid-table .dx-row > td, .dx-datagrid-content .dx-datagrid-table .dx-row > tr > td {
+    vertical-align: middle;
+}
         .modal-header span {
             color:cornsilk !important;
         }
         a{
             color:#25396f !important;
-            font-weight: 650 !important;
         }
         body{
              font-family: 'Open Sans', sans-serif;
@@ -335,7 +337,7 @@ aside.main-sidebar.sidebar-custom a.nav-link p {
     /* font-weight: 600; */
     opacity: 1 !important;
 }
-.demo-container .dx-datagrid span.badge {
+.demo-container .dx-datagrid .badge {
     display: inline-block;
     margin-bottom: 5px;
     font-size: 12px;
@@ -486,7 +488,6 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
     background: #f5f5f5;
     margin-bottom: 8px;
 }
-
 
 
 

@@ -62,8 +62,9 @@ class SapController extends Controller {
     public function team() {
 
         $roles = Role::all();
-
-        return view('request.sap.team')->with(['roles' => $roles]);
+        $approval_stages =  requestApprovalStages();
+        //return requestApprovalStages();
+        return view('request.sap.team')->with(['roles' => $roles, 'approval_stages' => $approval_stages]);
     }
 
     public function modulesAndTCodes(Request $request) {
@@ -746,13 +747,16 @@ class SapController extends Controller {
                 'action'     => json_encode($each->action)
             ];
         }
-
-        return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $i], 200);
+       
+        return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $i, 'apporval_stages' => requestApprovalStages()], 200);
     }
 
-    public function approveByRM(Request $request) {
+    public function approve(Request $request) {
 
         $request_id = $request->request_id;
+        $type = $request->approver ?? die;
+        $remarks = $request->remarks;
+
 
         try {
             $update = SAPRequest::where('req_int', $request_id)->update([
@@ -762,7 +766,8 @@ class SapController extends Controller {
 
             $log = SAPApprovalLogs::insert([
                 'request_id'     => $request_id,
-                'approval_stage' => 1,
+                'approval_stage' => $type,
+                'remarks'        => $remarks,
                 'created_by'     => Auth::user()->id,
                 'created_at'     => NOW(),
                 'updated_at'     => NOW()

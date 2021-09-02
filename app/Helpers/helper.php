@@ -20,4 +20,17 @@ function storeActivity(Array $data) {
     return $log;
 }
 
+/** SAP Request approval stages */
+
+function requestApprovalStages($stage_id = 0) {
+    try {
+        $stage = \ApprovalMatrix::when($stage_id > 0, function($Q) use($stage_id) {
+            $Q->where('id', $stage_id);
+        })->where('id', '!=', 0)->get();
+        return $stage;
+    } catch (\Exception $e) {
+        return "Error " . $e->getMessage();
+    }
+}
+
 ?>

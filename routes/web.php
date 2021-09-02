@@ -161,7 +161,7 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
     Route::get('/fetch-app-permissions-list', [PermissionController::class, 'appPermissions'])->name('show.app.permissions');
 
     /** Approval section for all  */
-    Route::post('/approve-sap-request-stage-1', [SapController::class, 'approveByRM'])->name('approve.sap.request.by.rm');
+    Route::post('/approve-sap-request', [SapController::class, 'approve'])->name('approve.sap.request');
 
     /** Module Approval Stages List */
     Route::get('/fetch-module-approval-stages', [ModuleController::class,'fetchModuleApprovalStages'])->name('module.approval.stages');

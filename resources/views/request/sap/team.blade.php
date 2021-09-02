@@ -76,7 +76,7 @@
 
 @media only screen and (min-width: 40em) {
   .orderstatus:nth-child(2n) .orderstatus-text {
-    left: -130px;
+    left: -156px;
     text-align: right;
     padding-right: 20px;
   }
@@ -220,11 +220,10 @@
 
     <script>
 
-      const IS_RM = false;
-      const IS_MODULEHEAD = false;
+      const IS_MODULE_HEAD = true;
       const IS_BASIS = false;
       const IS_DIRECTOR = false;
-      const IS_ITHEAD = false;
+      const IS_IT_HEAD = false;
       const IS_SAP_LEAD = false;
 
 
@@ -480,7 +479,7 @@ window.data = '';
 function fetchStages(request_id, logs, created_at) {
 
   var url = "{{ route('fetch.stages') }}";
-
+  // initial stage
   var stages = [0]
   $.ajax({
       url: url,
@@ -493,16 +492,13 @@ function fetchStages(request_id, logs, created_at) {
       complete: function (result) {
           var res = result.responseJSON;
           var result = res.data;
-          console.log('Result')
-          console.log(result)
           stage = result;
       
       $.each(stage, (i) => {
         stages.push(stage[i]);
       })
-      console.log('stages');
-      console.log(stages);
-      renderApprovalStages(stages, logs, created_at)
+
+      renderApprovalStages(stages, logs, created_at, request_id)
 
       },
       error: function (e) {
@@ -520,15 +516,16 @@ function loadStatusModal(status,created_at, logs, request_id) {
 }
 
 
-function renderApprovalStages(stages, logs, created_at) {
+function renderApprovalStages(stages, logs, created_at, request_id) {
   var pointer = 0;
   var html = '<section> <div class="row justify-content-center orderstatus-container">  <div class="medium-12 columns">';
+  console.log(stages)
   $.each(stages, (i) => {
 
     if(stages[i] == 0) {
 
       html += `<div class="orderstatus done">
-                  <div class="orderstatus-check"><span class="orderstatus-number">${stages[i]+1}</span></div>
+                  <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
                   <div class="orderstatus-text">
                     <time>${created_at}</time>
                     <p>Your Request was placed</p>
@@ -537,58 +534,91 @@ function renderApprovalStages(stages, logs, created_at) {
 
     } else {
 
+      let approval_stages = {!!  json_encode($approval_stages) !!}
+
       let datetime = "N/A";
+
       let addClass = "";
+
       let status_text = "Not Approved";
+
       pointer = i - 1;
+
       if(logs[i-1] !== undefined) {
-        //console.log('log found')
+
+        console.log('log found')
         if(stages[i] == logs[pointer].approval_stage) {
+
+          console.log('log found approval stage')
             addClass = `done`;
+
             datetime = logs[pointer].created_at;
-            if(logs[pointer].approval_stage == 1) {
-              status_text = `Approved By <br> ${logs[pointer].created_by} (RM)`;
-            } else if(logs[pointer].approval_stage == 2) {
-              status_text = `Approved By <br> ${logs[pointer].created_by} (Module head)`;
-            }
-          } else if(logs[pointer].approval_stage == 3) {
-              status_text = `Approved By <br> ${logs[pointer].created_by} (BASIS)`;
-          }
-        } else {
 
-          if(stages[i] == 1) {
-              status_text = `Not Approved By RM <br><a href='javascript:void(0)' id='rm_approve_request_btn' onClick='approveRequestByRM(${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a> &nbsp; <a href='javascript:void(0)' id='rm_reject_request_btn' onClick='approveRequestByRM(${request_id},-1)' class='btn btn-danger p-1 text-white'><i class='fas fa-times'></i> Reject</a>`;
-          } else if(stages[i] == 2) {
+            $.each(approval_stages, (x) => {
+              if(approval_stages[x] !== undefined) {
+                if(logs[pointer].approval_stage == approval_stages[x].id) {
+                  status_text = `Approved By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
+                }
+              }
+            });
+        } 
 
-            status_text = `Not Approved By Module head(s)`;
+        } 
+        else {
+
+                if(stages[i] == approval_stages[stages[i] - 1].id) {
+
+                  status_text = `Not Approved By <br> (${approval_stages[stages[i] - 1].approval_type})`;
+
+                  let type = approval_stages[stages[i] - 1].approval_type.replace(" ", "_").toUpperCase();
             
-            if(IS_MODULEHEAD === true) {
-               status_text += `<br> <a href='javascript:void(0)' id='mh_approve_request_btn' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>`;
-            }
-          } else if(stages[i] == 3) {
+                  switch(type) {
 
-            status_text = `Not Approved By BASIS`;
-            if(IS_BASIS === true) {
-               status_text += `<br> <a href='javascript:void(0)' id='mh_approve_request_btn' class='btn btn-success text-white'><i class='fas fa-check'></i> Approve</a>`;
-            }
-          }
-          
-        }
+                    case 'REPORTING_MANAGER':
+                      status_text += `<br> <a href='javascript:void(0)' class='btn btn-success p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)'><i class='fas fa-check'></i> Approve</a>`;
+                      break;
+                    case 'MODULE_HEAD':
+                      (IS_MODULE_HEAD === true) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
+                      <br>
+                      <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>
+                      ` : '';
+                      break;
+                    case 'SAP_LEAD':
+                      (IS_SAP_LEAD === true) ? status_text += `<br> <a href='javascript:void(0)' id='sap_lead_approve_request_btn'  data-requestid='${request_id}' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>` : '';
+                      break;
+                    case 'DIRECTOR':
+                      (IS_DIRECTOR === true) ? status_text += `<br> <a href='javascript:void(0)' id='director_approve_request_btn' data-requestid='${request_id}' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>` : '';
+                      break;
+                    case 'IT_HEAD':
+                      (IS_IT_HEAD === true) ? status_text += `<br> <a href='javascript:void(0)' id='it_approve_request_btn' data-requestid='${request_id}' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>` : '';
+                      break;
+                    case 'BASIS':
+                      (IS_BASIS === true) ? status_text += `<br> <a href='javascript:void(0)' id='basis_approve_request_btn' data-requestid='${request_id}' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>` : '';
+                      break;
+                     default:
+                     status_text += '';
+                  
+                  }
 
-        
-      html += `<div class="orderstatus ${addClass}">
-                  <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
-                  <div class="orderstatus-text">
-                    <time>${datetime}</time>
-                    <p>${status_text}</p>
-                  </div>
-                </div>`;
+                 
+                   
+                }
+
       }
 
+      html += `<div class="orderstatus ${addClass}">
+                    <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
+                    <div class="orderstatus-text">
+                      <time>${datetime}</time>
+                      <p>${status_text}</p>
+                    </div>
+                  </div>`;
 
+    }
 
   });
-  // 0 -> Request Placed 1 - Approved by Reporting Manager 2 -> Approved By Module Head 3 -> Approved by BASIS
+
     html += "</div></div></section>";
 
 
@@ -598,10 +628,15 @@ function renderApprovalStages(stages, logs, created_at) {
 
 }
 
-function approveRequestByRM(request_id, status = 1) {
+function approve(approver, request_id, status = 1) {
+  var remarks = $("#r_"+request_id).val();
+  if(remarks.length == 0) {
+    toastr.error('Remarks field is mandatory');
+    return false;
+  }
   $.ajax({
-    url:"{{  route('approve.sap.request.by.rm') }}",
-    data:{request_id:request_id},
+    url:`{{  route('approve.sap.request') }}`,
+    data:{request_id:request_id,approver,remarks},
     type:"POST",
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),

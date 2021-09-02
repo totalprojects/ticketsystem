@@ -389,8 +389,8 @@ return [
                 ],
                 [
                     'type'     => 'css',
-                    'asset'    => false,
-                    'location' => 'https://cdn3.devexpress.com/jslib/21.1.5/css/dx.light.css'
+                    'asset'    => true,
+                    'location' => 'assets/plugins/dx/css/dx.light.css'
                 ],
                 [
                     'type'     => 'css',

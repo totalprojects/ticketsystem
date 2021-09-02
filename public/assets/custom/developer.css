@@ -20,7 +20,6 @@
         }
         .dx-datagrid-content {
             font-family: 'Open Sans', sans-serif;
-            font-weight:400 !important;
         }
         .dx-datagrid-rowsview td {
             font-weight: 600 !important;
@@ -61,14 +60,15 @@
         input[type='checkbox'] {
             -webkit-appearance: none;
             width: 25px;
-            height:22px;
-            background-color: rgb(245, 250, 234) !important;
-            border: none;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+            height: 22px;
+            background-color: rgb(184 222 224) !important;
+            border: 1px solid #255e61;
+            box-shadow: 0 1px 2px rgb(0 0 0 / 5%), inset 0px -15px 10px -12px rgb(0 0 0 / 5%);
             padding: 6px;
-            border-radius: none;
+            border-radius: 0;
             display: inline-block;
             position: relative;
+            outline: none;
         }
 
         input[type='checkbox']:checked {
@@ -80,13 +80,12 @@
 
         input[type='checkbox']:checked:after {
             content: '\2714';
-            font-size: 20px;
+            font-size: 16px;
             position: absolute;
-            top: -3px;
-            left: 3px;
+            top: -2px;
+            left: 5px;
             color: #171d1a;
         }
-        
 
         .btn-primary:hover i{
             background-color: #255e61 !important;
@@ -96,8 +95,12 @@
             padding: 0.44em;
             font-weight: 400;
         }
-        
-        
+        .modal-content button.close {
+            padding: 0;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 400 !important;
+        }
         
         /*.active{
             background-color: #dee6f5 !important;
@@ -338,18 +341,18 @@ aside.main-sidebar.sidebar-custom a.nav-link p {
     font-size: 12px;
     line-height: 1;
 }
-.dx-button-content {
-    background: #bb71ff;
-    border: 2px solid #a645ff;
+/*.dx-button-content {
+    background: #255e61;
+    border: 2px solid #255e61;
     border-radius: 4px;
 }
 .dx-button-content i {
     color: #fff !important;
 }
 .dx-button-mode-contained.dx-state-hover {
-    background-color: #a645ff;
+    background-color: #255e61;
     border-color: #fff;
-}
+}*/
 /*==========theme color apply css===========*/
 aside.main-sidebar.sidebar-custom {
     background: #ffffff;
@@ -432,9 +435,9 @@ aside.main-sidebar.sidebar-custom a.nav-link.active {
     color: #255e61 !important;
 }
 .dx-datagrid-headers {
-    background-color: #3f8c90;
-    color: white;
-    font-weight: 400;
+    background-color: #f5f5f5;
+    color: black;
+    font-weight: 600 !important;
 }
 .small-box {
     background-color: #ffffff !important;

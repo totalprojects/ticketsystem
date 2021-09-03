@@ -89,8 +89,8 @@
     .dashboard-icon {
         content:"";
         background-image:url("{{ asset('assets/images/monitor.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -100,8 +100,8 @@
     .role-icon {
         content:"";
         background-image:url("{{ asset('assets/images/Roles.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -111,8 +111,8 @@
     .sap-icon {
         content:"";
         background-image:url("{{ asset('assets/images/sap.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -121,9 +121,9 @@
     }
     .manage-users-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/users.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        background-image:url("{{ asset('assets/images/users.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -133,8 +133,8 @@
     .menu-set-icon {
         content:"";
         background-image:url("{{ asset('assets/images/Menu.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -144,8 +144,8 @@
     .request-access-icon {
         content:"";
         background-image:url("{{ asset('assets/images/Request-access.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -155,8 +155,8 @@
     .modules-approval-icon {
         content:"";
         background-image:url("{{ asset('assets/images/Modules-Approval.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -166,8 +166,8 @@
     .app-permission-icon {
         content:"";
         background-image:url("{{ asset('assets/images/App-Permission.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -177,8 +177,8 @@
     .critical-code-icon {
         content:"";
         background-image:url("{{ asset('assets/images/Critical-tCodes.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -188,8 +188,8 @@
     .sap-request-icon {
         content:"";
         background-image:url("{{ asset('assets/images/sap-request.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -199,8 +199,8 @@
     .team-request-icon {
         content:"";
         background-image:url("{{ asset('assets/images/team-request.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -210,8 +210,8 @@
     .user-list-icon {
         content:"";
         background-image:url("{{ asset('assets/images/user-list.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -221,8 +221,8 @@
     .user-permission-icon {
         content:"";
         background-image:url("{{ asset('assets/images/user-permission.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;
@@ -233,8 +233,8 @@
     .moderator {
         content:"";
         background-image:url("{{ asset('assets/images/moderator.png') }}") !important;
-        width: 20px;
-        height: 20px; 
+        width: 25px;
+        height: 25px; 
         display: inline-block;
         background-position:center;
         background-size:cover;

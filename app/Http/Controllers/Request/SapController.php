@@ -49,6 +49,8 @@ class SapController extends Controller {
                 $did = $did->id;
             }
         }
+
+        $approval_stages =  requestApprovalStages();
         //return Auth::user()->employee_id;
 
         $roles = Role::when($did > 0, function ($Q) use ($did) {
@@ -56,15 +58,51 @@ class SapController extends Controller {
         })->get();
         $pg = PurchaseGroup::all();
 
-        return view('request.sap.index')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release, 'pg' => $pg]);
+        return view('request.sap.index')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release, 'pg' => $pg, 'approval_stages'=> $approval_stages]);
     }
 
     public function team() {
 
         $roles = Role::all();
         $approval_stages =  requestApprovalStages();
-        //return requestApprovalStages();
-        return view('request.sap.team')->with(['roles' => $roles, 'approval_stages' => $approval_stages]);
+
+        return view('request.sap.team')->with(['roles' => $roles, 'approval_stages' => $approval_stages, 'moderators' => $this->isModerator()]);
+    }
+
+    public function isModerator() {
+
+        $employee_id = \Auth::user()->employee_id;
+        
+        $permissions = [
+            'IS_SAP_LEAD' => false,
+            'IS_DIRECTOR' => false,
+            'IS_IT_HEAD' => false,
+            'IS_BASIS' => false
+        ];
+
+        if($employee_id > 0) {
+
+            $is_moderator = \Moderators::where('employee_id', $employee_id)->get();
+            //return $is_moderator;
+            foreach($is_moderator as $moderator) {
+                switch($moderator->type_id) {
+                    case 1:
+                        $permissions['IS_SAP_LEAD'] = true;
+                    break;
+                    case 2:
+                        $permissions['IS_DIRECTOR'] = true;
+                    break;
+                    case 3:
+                        $permissions['IS_IT_HEAD'] = true;
+                    break;
+                    case 4:
+                        $permissions['IS_BASIS'] = true;
+
+                }
+            }
+        }
+
+        return $permissions;
     }
 
     public function modulesAndTCodes(Request $request) {
@@ -75,24 +113,13 @@ class SapController extends Controller {
         if(empty($role_id)) {
             $role_id = Auth::user()->roles->pluck('id')[0];
         }
-        // if ($role_id == 0) {
-        //     return response(['data' => [], 'message' => 'No Tcodes found'], 200);
-        // }
-        //$permissions    = UserPermissions::where('model_id', $user_id)->select('permission_id')->get();
+      
         $role_based_permissions = RolePermissions::where('role_id', $role_id)->select('permission_id')->get();
         $permission_ids         = [];
         foreach ($role_based_permissions as $permission) {
             $permission_ids[] = $permission->permission_id;
         }
-        //$modulewithTcodes = TCodes::whereIn('permission_id', $permission_ids)->with('permission', 'action_details')->orderBy('permission_id', 'asc')->get();
-        //return $permission_ids;
-        // $modulewithTcodes = Permission::whereIn('id', $permission_ids)
-        //     ->with(['tcodes' => function ($Q) {
-        //         // $Q->take(500)->skip(0);
-        //         $Q->with('action_details');
-        //     }])
-        //     ->orderBy('id', 'asc')->get();
-        //->groupBy('id')
+     
 
         $modules      = [];
         $tcodes       = [];
@@ -153,45 +180,6 @@ class SapController extends Controller {
             }
 
         });
-
-        // foreach ($modulewithTcodes as $each) {
-
-        //     $modules[] = [
-        //         'n_id'       => $grandChildId,
-        //         'n_title'    => $each->name,
-        //         'n_parentid' => 0,
-        //         'n_addional' => ['permission_id' => $each->id],
-        //         'n_checked'  => false
-        //     ];
-
-        //     $childId1 = $grandChildId;
-        //     $grandChildId += 1;
-
-        //     foreach ($each->tcodes as $codes) {
-
-        //         $modules[] = [
-        //             'n_id'       => $grandChildId,
-        //             'n_title'    => $codes->description . '(' . $codes->t_code . ')',
-        //             'n_parentid' => $childId1,
-        //             'n_addional' => ['tcode_id' => $codes->id]
-        //         ];
-
-        //         $childId2 = $grandChildId;
-        //         $grandChildId += 1;
-
-        //         foreach ($codes->action_details as $eachAction) {
-        //             $modules[] = [
-        //                 'n_id'       => $grandChildId,
-        //                 'n_title'    => $eachAction->name,
-        //                 'n_parentid' => $childId2,
-        //                 'n_addional' => ['action_id' => $eachAction->id]
-        //             ];
-
-        //             $grandChildId++;
-        //         }
-
-        //     }
-        // }
 
         return response(['data' => $modules], 200);
     }
@@ -621,6 +609,8 @@ class SapController extends Controller {
                     $request_log[] = [
                         'approval_stage' => $log->approval_stage,
                         'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
+                        'remarks'        => $log->remarks,
+                        'status'         => $log->status,
                         'created_by'     => $log->created_by_user->name
                     ];
                 }
@@ -668,6 +658,29 @@ class SapController extends Controller {
         $take    = $request->take;
         $skip    = $request->skip;
 
+        $is_module_head = \ModuleHead::where('user_id',Auth::user()->id)->get();
+        $module_permissions = [];
+        if($is_module_head->Count()>0) {
+            foreach($is_module_head as $each) {
+                $module_permissions[] = $each->permission_id;
+            }
+        }
+
+        /** Moderators check (views all modules) */
+        $is_sap_lead = isModerator(1); 
+        $is_director = isModerator(2); 
+        $is_it_head = isModerator(3); 
+        $is_basis = isModerator(4); 
+
+        if($is_sap_lead || $is_director || $is_it_head || $is_basis)  {
+            $all_permissions = \Permission::where('type', 2)->get();
+            foreach($all_permissions as $each) {
+                $module_permissions[] = $each->id;
+            }
+        }
+        /* Moderators check ends */
+
+
         $team = EmployeeMappings::where('report_to', $user_id)->select('employee_id')->get();
 
         $user_ids = [];
@@ -683,7 +696,12 @@ class SapController extends Controller {
             $userId[] = $each->id;
         }
         //return $userId;
-        $data       = SAPRequest::whereIn('user_id', $userId)->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action');
+        $data       = SAPRequest::when(empty($module_permissions), function($Q) use($userId) {
+                        $Q->whereIn('user_id', $userId);
+        })->when(!empty($module_permissions), function($Q) use($module_permissions) {
+                        $Q->whereIn('module_id',$module_permissions);
+        })->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action');
+        
         $totalCount = $data->get()->Count();
         $dataArray  = [];
         //return $data->get();
@@ -710,6 +728,8 @@ class SapController extends Controller {
                 foreach ($each->approval_logs as $log) {
                     $request_log[] = [
                         'approval_stage' => $log->approval_stage,
+                        'remarks'        => $log->remarks,
+                        'status'         => $log->status,
                         'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
                         'created_by'     => $log->created_by_user->name
                     ];
@@ -756,6 +776,7 @@ class SapController extends Controller {
         $request_id = $request->request_id;
         $type = $request->approver ?? die;
         $remarks = $request->remarks;
+        $status = $request->status;
 
 
         try {
@@ -768,6 +789,7 @@ class SapController extends Controller {
                 'request_id'     => $request_id,
                 'approval_stage' => $type,
                 'remarks'        => $remarks,
+                'status'         => $status,
                 'created_by'     => Auth::user()->id,
                 'created_at'     => NOW(),
                 'updated_at'     => NOW()
@@ -777,15 +799,18 @@ class SapController extends Controller {
             $created_at  = date('F, d, Y h:i a', strtotime($req_ca[0]->created_at));
             $request_log = [];
             $logs        = SAPApprovalLogs::where('request_id', $request_id)->with('created_by_user')->get();
+
             foreach ($logs as $log) {
                 $request_log[] = [
                     'approval_stage' => $log->approval_stage,
+                    'remarks'        => $remarks,
+                    'status'         => $status,
                     'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
                     'created_by'     => $log->created_by_user->name
                 ];
             }
 
-            return response(['logs' => $request_log, 'status' => 1, 'created_at' => $created_at], 200);
+            return response(['logs' => $request_log, 'status' => $status, 'created_at' => $created_at], 200);
 
         } catch (\Exception $e) {
             return response(['message' => $e->getMessage(), 'data' => []], 500);

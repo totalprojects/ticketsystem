@@ -33,4 +33,14 @@ function requestApprovalStages($stage_id = 0) {
     }
 }
 
+function isModerator($type) {
+
+    $user_id = \Auth::user()->employee_id;
+    $moderator = Moderators::where(['type_id' => $type, 'employee_id' => $user_id])->get();
+    
+    $flag = ($moderator->Count() > 0) ? true : false;
+
+    return $flag;
+}
+
 ?>

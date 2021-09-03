@@ -9,7 +9,7 @@ use ApprovalMatrix;
 use ModuleApprovalStages;
 use CriticalTCodes;
 use ActionMasters;
-
+use Auth;
 
 
 class ModuleController extends Controller
@@ -90,12 +90,36 @@ class ModuleController extends Controller
 
         $req_id = $request->request_id;
 
-        $getData = \SAPRequest::where('req_int', $req_id)->select('module_id')->first();
+        $getData = \SAPRequest::where('req_int', $req_id)->select('module_id', 'user_id')->first();
         $module_id = !empty($getData) ? $getData->module_id : NULL;
+        $userID = !empty($getData) ? $getData->user_id : NULL;
+        $IS_RM = false;
+        $IS_MH = false;
+        $employee_id = 0;
+        if(!is_null($userID)) {
+            $emp = \Users::where('id',$userID)->select('employee_id')->first();
+            if($emp) {
+                $employee_id = $emp->employee_id;
+            }
+        }
+        
         $stages = [];
-
+       
         if($module_id > 0) {
 
+            $is_module_head = \ModuleHead::where(['user_id' => Auth::user()->id, 'permission_id' => $module_id])->get();
+            if($is_module_head->Count()>0) {
+               $IS_MH = true;
+            }
+
+            $is_rm = \EmployeeMappings::where('report_to', Auth::user()->employee_id)->get();
+            if($is_rm->Count() > 0) {
+                foreach($is_rm as $rm) {
+                    if($rm->employee_id == $employee_id) {
+                        $IS_RM = true;
+                    }
+                }
+            }
             $getStages = \ModuleApprovalStages::where('module_id', $module_id)->select('module_id','approval_matrix_id')->orderBy('approval_matrix_id', 'asc')->get();
         }
 
@@ -103,7 +127,7 @@ class ModuleController extends Controller
             $stages[] = $stage->approval_matrix_id;
         }
         
-        return response(['data' => $stages],200);
+        return response(['data' => $stages, 'IS_RM' => $IS_RM, 'IS_MH' => $IS_MH],200);
 
     }
 }

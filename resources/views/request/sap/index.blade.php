@@ -847,9 +847,10 @@
                       var status = JSON.parse(options.data.status);
                       var status_logs = options.data.req_log;
                       var created_at = options.data.created_at;
-                      console.log(status)
+                      var req_id = options.data.req_int;
+
                       var html = ``;
-                      html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
+                      html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs}, ${req_id})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
                       container.append(html)
                   }
               },
@@ -1034,18 +1035,158 @@ function loadReviewSection(){
     reviewCall(formData)
 }
 
-function loadStatusModal(status,created_at, logs) {
+/** final submit of the form with tcodes */
+$("#finalSubmit1").on('click', (e) => {
 
-console.log(logs);
-var stages = [0, 1, 2, 3];
+e.preventDefault();
+//console.log(tree.getSelected());
+var data = tree.getSelected();
+var formData = $("#msform").serializeArray();
+var finalArray = [];
+$.each(data, (i) => {
+    finalArray[i] = {
+        moduleset : data[i].addional
+    }
+});
+formData.push({name:'module', value: JSON.stringify(finalArray)});
+
+Swal.fire({
+    title: 'Do you want to submit the request?',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: `Save`,
+    denyButtonText: `Don't save`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire('Saved!', '', 'success')
+            finalCall(formData);
+            return true;
+        } else if (result.isDenied) {
+            Swal.fire('Changes are not saved', '', 'info')
+            return false;
+        }
+});
+        
+
+});
+
+function finalCall(fdata) {
+$.ajax({
+                url:"{{ route('save.sap.request') }}",
+                type:"POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                data:fdata,
+                error:(r) => {
+                    console.log('error');
+                    toastr.error('Something went wrong');
+                    console.log(r);
+                },
+                success: (r) => {
+
+                    if(r.message == 'success') {
+                        toastr.success('Your Request has been saved successfully');
+                        $("#msform")[0].reset();
+                        $("#requestModal").modal('hide');
+                        fetch_data();
+                        //console.log(r);
+                    } else {
+                        toastr.error('Something went wrong');
+                    }
+                    
+                }
+            })
+}
+
+function reviewCall(fdata) {
+$.ajax({
+                url:"{{ route('review.sap.request') }}",
+                type:"GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                data:fdata,
+                error:(r) => {
+                    console.log('error');
+                    toastr.error('Something went wrong');
+                    console.log(r);
+                   
+                },
+                success: (r) => {
+                   console.log('got data');
+                   console.log(r);
+                   $("#review_selections").html(r.data);
+                    
+                }
+            })
+}
+
+
+
+
+
+
+
+
+
+
+
+function fetchStages(request_id, logs, created_at) {
+
+var url = "{{ route('fetch.stages') }}";
+// initial stage
+var stages = [0]
+
+$.ajax({
+    url: url,
+    type: 'GET',
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+    },
+    dataType: "json",
+    data: {request_id},
+    complete: function (result) {
+        var res = result.responseJSON;
+        var result = res.data;
+        stage = result;
+        /* Reporting Manager */
+        const IS_RM = res.IS_RM;
+        /* Module Head */
+        const IS_MH = res.IS_MH;
+    
+        $.each(stage, (i) => {
+          stages.push(stage[i]);
+        })
+
+        renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH)
+
+    },
+    error: function (e) {
+      //console.log(e)
+      toastr.error('Something went wrong')
+    },
+  });
+
+  return true
+}
+function loadStatusModal(status,created_at, logs, request_id) {
+
+fetchStages(request_id, logs, created_at, status);
+
+}
+
+
+function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH) {
 var pointer = 0;
 var html = '<section> <div class="row justify-content-center orderstatus-container">  <div class="medium-12 columns">';
+//console.log(stages)
 $.each(stages, (i) => {
 
   if(stages[i] == 0) {
 
     html += `<div class="orderstatus done">
-                <div class="orderstatus-check"><span class="orderstatus-number">${stages[i]+1}</span></div>
+                <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
                 <div class="orderstatus-text">
                   <time>${created_at}</time>
                   <p>Your Request was placed</p>
@@ -1054,51 +1195,66 @@ $.each(stages, (i) => {
 
   } else {
 
+    let approval_stages = {!!  json_encode($approval_stages) !!}
+
     let datetime = "N/A";
+
     let addClass = "";
+
     let status_text = "Not Approved";
+
     pointer = i - 1;
+
     if(logs[i-1] !== undefined) {
-      console.log('log found')
+
+      //console.log('log found')
       if(stages[i] == logs[pointer].approval_stage) {
+
+        //console.log('log found approval stage')
           addClass = `done`;
+
           datetime = logs[pointer].created_at;
-          if(logs[pointer].approval_stage == 1) {
-            status_text = `Approved By <br> ${logs[pointer].created_by} (RM)`;
-          } else if(logs[pointer].approval_stage == 2) {
-            status_text = `Approved By <br> ${logs[pointer].created_by} (Module head)`;
-          }
-        } else if(logs[pointer].approval_stage == 3) {
-            status_text = `Approved By <br> ${logs[pointer].created_by} (BASIS)`;
-        }
-      } else {
 
-        if(stages[i] == 1) {
-            status_text = `Not Approved By RM`;
-        } else if(stages[i] == 2) {
+          $.each(approval_stages, (x) => {
+            if(approval_stages[x] !== undefined) {
+              if(logs[pointer].approval_stage == approval_stages[x].id) {
+                console.log(logs[pointer])
+                if(logs[pointer].status == 1) {
+                  status_text = `Approved By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
+                } else {
+                  status_text = `Rejected By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
+                }
 
-          status_text = `Not Approved By Module head(s)`;
-        } else if(stages[i] == 3) {
+                status_text += `<br>Remarks: `+logs[pointer].remarks;
+                
+              }
+            }
+          });
+      } 
 
-          status_text = `Not Approved By BASIS`;
-        }
-        
-      }
+      } 
+      else {
 
-      
-    html += `<div class="orderstatus ${addClass}">
-                <div class="orderstatus-check"><span class="orderstatus-number">${stages[i]+1}</span></div>
-                <div class="orderstatus-text">
-                  <time>${datetime}</time>
-                  <p>${status_text}</p>
-                </div>
-              </div>`;
+              if(stages[i] == approval_stages[stages[i] - 1].id) {
+
+                status_text = `Not Approved By <br> (${approval_stages[stages[i] - 1].approval_type})`;          
+                 
+              }
+
     }
 
+    html += `<div class="orderstatus ${addClass}">
+                  <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
+                  <div class="orderstatus-text">
+                    <time>${datetime}</time>
+                    <p>${status_text}</p>
+                  </div>
+                </div>`;
 
+  }
 
 });
-// 0 -> Request Placed 1 - Approved by Reporting Manager 2 -> Approved By Module Head 3 -> Approved by BASIS
+
   html += "</div></div></section>";
 
 
@@ -1106,94 +1262,6 @@ $.each(stages, (i) => {
   $("#drop_status").html(html)
 
 
-
-}
-
-/** final submit of the form with tcodes */
-$("#finalSubmit1").on('click', (e) => {
-
-    e.preventDefault();
-    //console.log(tree.getSelected());
-    var data = tree.getSelected();
-    var formData = $("#msform").serializeArray();
-    var finalArray = [];
-    $.each(data, (i) => {
-        finalArray[i] = {
-            moduleset : data[i].addional
-        }
-    });
-    formData.push({name:'module', value: JSON.stringify(finalArray)});
-
-    Swal.fire({
-        title: 'Do you want to submit the request?',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: `Save`,
-        denyButtonText: `Don't save`,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire('Saved!', '', 'success')
-                finalCall(formData);
-                return true;
-            } else if (result.isDenied) {
-                Swal.fire('Changes are not saved', '', 'info')
-                return false;
-            }
-    });
-            
-  
-});
-
-function finalCall(fdata) {
-    $.ajax({
-                    url:"{{ route('save.sap.request') }}",
-                    type:"POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    },
-                    data:fdata,
-                    error:(r) => {
-                        console.log('error');
-                        toastr.error('Something went wrong');
-                        console.log(r);
-                    },
-                    success: (r) => {
-
-                        if(r.message == 'success') {
-                            toastr.success('Your Request has been saved successfully');
-                            $("#msform")[0].reset();
-                            $("#requestModal").modal('hide');
-                            fetch_data();
-                            //console.log(r);
-                        } else {
-                            toastr.error('Something went wrong');
-                        }
-                        
-                    }
-                })
-}
-
-function reviewCall(fdata) {
-    $.ajax({
-                    url:"{{ route('review.sap.request') }}",
-                    type:"GET",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    },
-                    data:fdata,
-                    error:(r) => {
-                        console.log('error');
-                        toastr.error('Something went wrong');
-                        console.log(r);
-                       
-                    },
-                    success: (r) => {
-                       console.log('got data');
-                       console.log(r);
-                       $("#review_selections").html(r.data);
-                        
-                    }
-                })
 }
 
 

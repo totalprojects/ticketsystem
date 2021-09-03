@@ -392,10 +392,8 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
 
       if(logs[i-1] !== undefined) {
 
-        //console.log('log found')
         if(stages[i] == logs[pointer].approval_stage) {
 
-          //console.log('log found approval stage')
             addClass = `done`;
 
             datetime = logs[pointer].created_at;
@@ -403,8 +401,7 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
             $.each(approval_stages, (x) => {
               if(approval_stages[x] !== undefined) {
                 if(logs[pointer].approval_stage == approval_stages[x].id) {
-                  //console.log('pointer check')
-                  //console.log(logs[pointer].status)
+
                   if(logs[pointer].status == 1) {
                     status_text = `Approved By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
                   } else {
@@ -430,7 +427,7 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                   switch(type) {
 
                     case 'REPORTING_MANAGER':
-                    (IS_RM === true) ? status_text += `<br> <a href='javascript:void(0)' class='btn btn-success p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)'><i class='fas fa-check'></i> Approve</a>
+                      (IS_RM === true) ? status_text += `<br> <a href='javascript:void(0)' class='btn btn-success p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)'><i class='fas fa-check'></i> Approve</a>
                       <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br>
                       <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>
@@ -470,11 +467,8 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                      status_text += '';
                   
                   }
-
-                 
                    
                 }
-
       }
 
       html += `<div class="orderstatus ${addClass}">

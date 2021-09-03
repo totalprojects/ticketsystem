@@ -489,6 +489,21 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
     margin-bottom: 8px;
 }
 
+.checkbox-group {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

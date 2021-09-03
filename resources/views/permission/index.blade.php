@@ -182,9 +182,14 @@
                     </div>
                     <div class="col-lg-12 pt-2">
                         <label for="actions">Actions</label>
-                        @foreach($actions as $action)
-                            <input type="checkbox" name="actions[]" id="actions" value="{{ $action->id }}"> {{  $action->name }}
-                        @endforeach
+                        <div class="row">
+                            @foreach($actions as $action)
+                            <div class="checkbox-group col-lg-2">
+                                <input type="checkbox" name="actions[]" class="mr-2" id="actions" value="{{ $action->id }}"><span>{{  $action->name }}</span> 
+                             </div>   
+                            @endforeach
+                        </div>
+                        
                     </div>
                     <div class="col-lg-3 pt-2">
                         <label for="status">
@@ -342,7 +347,7 @@
                                 </select>
                         </div>
                         <div class="col-lg-12 pt-2">
-                            <div id="t_actions"></div>
+                            <div id="t_actions" class="row m-0"></div>
                         </div>
                         <div class="col-lg-4 pt-2">
                             <button class='btn btn-primary' type="submit" id="update-tcode-btn" name='update-tcode-btn'>Update</button>
@@ -1022,7 +1027,7 @@ function showTcodes(permission_id, tcode = '', desc = '') {
                             }
                         });
                         
-                    action_markup += `<input type='checkbox' name='t_actions[]' value='${all_actions[i].id}' ${checked}> ${all_actions[i].name} &nbsp;`;
+                    action_markup += `<div class="checkbox-group mr-2"><input type='checkbox'  name='t_actions[]' value='${all_actions[i].id}' ${checked}> <span class="ml-2">${all_actions[i].name}</span> </div>`;
                 
                 })
                 $("#t_actions").html(action_markup);

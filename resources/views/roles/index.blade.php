@@ -63,7 +63,7 @@
                                   <div class='row'><!-- <div class='col-lg-12'><h3>SAP Modules</h3></div> -->
                                     @php($flag=1)
                                     @endif
-                                    <div class="checkbox-group col-lg-3 mb-2 d-flex align-items-center">
+                                    <div class="checkbox-group col-lg-3">
                                       <input type="checkbox" class="mr-2" name="permissions1[]" value="{{ $permission->id }}"> <span>{{ $permission->name }}</span>
                                     </div>
                                     @endforeach
@@ -454,7 +454,7 @@ function fetch_data(){
                             flag = 1;
                         }
 
-                        html += `<div class='checkbox-group col-lg-3 mb-2 d-flex align-items-center'><input type='checkbox' id='p_${all_permissions[i].id}' name='permissions[]' value="${all_permissions[i].id}" ${checked}> <a href='#' class='module_links ml-2' style=' text-decoration:underline' onclick='standardTCodeList(${all_permissions[i].id})'>${all_permissions[i].name}</a> </div>`;
+                        html += `<div class='checkbox-group col-lg-3'><input type='checkbox' id='p_${all_permissions[i].id}' name='permissions[]' value="${all_permissions[i].id}" ${checked}> <a href='#' class='module_links ml-2' style=' text-decoration:underline' onclick='standardTCodeList(${all_permissions[i].id})'>${all_permissions[i].name}</a> </div>`;
                     });
 
                     html += `</div>`;

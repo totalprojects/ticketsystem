@@ -9,7 +9,6 @@
 @stop
 
 @section('content')
-
     <div class="tab-content p-1">
         <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-copy"></i> Team SAP Requests</h4><br></div>
         <div class="tab-pane active dx-viewport" id="request_block">

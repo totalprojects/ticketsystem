@@ -506,7 +506,6 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
 
 
 
-
 /** SAP Request Page CSS */
 
 
@@ -534,13 +533,12 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         width: 2px;
         background: #939393;
         margin: 0 25px; */
-          content: '';
-          height: 100%;
-          position: absolute;
-          left: 47%;
-          width: 1.5px;
-          background: #939393;
-          margin: 0 25px;
+        content: '';
+        height: 100%;
+        position: absolute;
+        left: 50%;
+        width: 2px;
+        background: #939393;
       }
       
       .orderstatus:last-child:before {
@@ -569,19 +567,22 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         width: 100%;
         left: 50%;
         text-align: left;
-        padding-left: 60px;
+        padding-left: 30px;
+        max-width: 300px;
       }
       
       @media only screen and (min-width: 40em) {
         .orderstatus:nth-child(2n) .orderstatus-text {
-          left: -130px;
+          left: -50%;
           text-align: right;
-          padding-right: 20px;
+          padding-right: 30px;
+          padding-left: 0;
         }
       }
       
       .orderstatus-container {
         padding: 2em 0;
+        background: #fbfbfb;
       }
       
       .orderstatus time {
@@ -595,6 +596,7 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
       
       .orderstatus.done time {
         color: #368d22;
+        background: #e8ffe2;
       }
       
       @media only screen and (max-width: 40em) {
@@ -618,24 +620,25 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         position: absolute;
         color: #939393;
         left: 50%; */
-          border: 2px solid #939393;
-          width: 35px;
-          height: 35px;
-          display: inline-block;
-          text-align: center;
-          line-height: 31px;
-          border-radius: 50%;
-          margin-bottom: 0.5em;
-          background: #fff;
-          z-index: 2;
-          position: absolute;
-          color: #939393;
-          left: 50%;
+        border: 2px solid #939393;
+        width: 35px;
+        height: 35px;
+        display: inline-block;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 50%;
+        margin-bottom: 0.5em;
+        background: #fff;
+        z-index: 2;
+        position: absolute;
+        color: #939393;
+        left: calc(50% - 17px);
       }
       
       .done .orderstatus-check {
-        color: #368d22;
+        color: #fff;
         border-color: #368d22;
+        background: #368d22;
       }
       
       @media only screen and (max-width: 40em) {
@@ -668,7 +671,6 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
           display: none;
         }
       }
-
 
 
 

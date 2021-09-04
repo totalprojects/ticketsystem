@@ -14,6 +14,9 @@ use App\Http\Controllers\SO\SOController;
 use App\Http\Controllers\Permission\PermissionController;
 use App\Http\Controllers\Moderator\ModeratorController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\BusinessAreaController;
 
 
 /*
@@ -70,6 +73,21 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'Logs']
 
     /** Departments */
     Route::get('/departments',[DepartmentController::class, 'index'])->name('view.departments');
+
+    /** Designation  */
+    Route::get('/designations',[DesignationController::class, 'index'])->name('view.designations');
+
+    /** Company */
+    Route::get('/company',[CompanyController::class, 'index'])->name('view.company');
+
+    /** Business Area */
+    Route::get('/business-area',[BusinessAreaController::class, 'index'])->name('view.business');
+
+    /** Storage Area */
+    Route::get('/storage',[StorageController::class, 'index'])->name('view.storage');
+
+    /** Sales Office */
+    Route::get('/sales-office',[SOController::class, 'index'])->name('view.sales.office');
 });
 
 /** Ajax Calls */
@@ -193,8 +211,38 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
 
      /** Departments Add, Read and Update */
      Route::get('/fetch-departments', [DepartmentController::class, 'get'])->name('get.departments');
-    Route::post('/add-department', [DepartmentController::class, 'create'])->name('add.department');
+     Route::post('/add-department', [DepartmentController::class, 'create'])->name('add.department');
      Route::post('/update-department', [DepartmentController::class, 'update'])->name('update.department');
+
+     /** Designation Add, Read and Update */
+     Route::get('/fetch-designations', [DesignationController::class, 'get'])->name('get.designations');
+     Route::post('/add-designation', [DesignationController::class, 'create'])->name('add.designation');
+     Route::post('/update-designation', [DesignationController::class, 'update'])->name('update.designation');
+
+     /** Company Add, Read and Update */
+     Route::get('/fetch-companies', [CompanyController::class, 'get'])->name('get.companies');
+     Route::post('/add-company', [CompanyController::class, 'create'])->name('add.company');
+     Route::post('/update-company', [CompanyController::class, 'update'])->name('update.Company');
+
+     /** Company Add, Read and Update */
+     Route::get('/fetch-companies', [CompanyController::class, 'get'])->name('get.company');
+     Route::post('/add-company', [CompanyController::class, 'create'])->name('add.company');
+     Route::post('/update-company', [CompanyController::class, 'update'])->name('update.company');
+
+     /** Business Area Add, Read and Update */
+     Route::get('/fetch-business-areas', [BusinessAreaController::class, 'get'])->name('get.business.area');
+     Route::post('/add-ba', [BusinessAreaController::class, 'create'])->name('add.business.area');
+     Route::post('/update-ba', [BusinessAreaController::class, 'update'])->name('update.business.area');
+
+     /** Storage Add, Read and Update */
+     Route::get('/fetch-storage', [StorageController::class, 'get'])->name('get.storage');
+     Route::post('/add-storage', [StorageController::class, 'create'])->name('add.storage');
+     Route::post('/update-storage', [StorageController::class, 'update'])->name('update.storage');
+
+     /** Sales office Add, Read and Update */
+     Route::get('/fetch-sales-office', [SOController::class, 'get'])->name('get.sales.office');
+     Route::post('/add-sales-office', [SOController::class, 'create'])->name('add.sales.office');
+     Route::post('/update-sales-office', [SOController::class, 'update'])->name('update.sales.office');
 
 });
 

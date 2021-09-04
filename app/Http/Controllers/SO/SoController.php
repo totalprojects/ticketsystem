@@ -42,4 +42,57 @@ class SoController extends Controller {
         }
 
     }
+
+    public function index() {
+        $data['page_title'] = 'Sales Office';
+        return view('sales_offices.index');
+    }
+
+    public function get(Request $request) {
+
+        $take = $request->take ?? 10000;
+        $skip = $request->skip ?? 0;
+        $companies = SalesOffice::orderBy('id', 'asc');
+        $totalCount = $companies->get()->Count();
+        return response(['data' => $companies->get(), 'totalCount' => $totalCount]);
+    }
+
+    public function create(Request $request) {
+
+        $sales_office_name = $request->sales_office_name;
+        $sales_office_code = $request->sales_office_code;
+
+        try {
+            $deaprtment_name = SalesOffice::create([
+                'sales_office_name' => $sales_office_name,
+                'sales_office_code' => $sales_office_code,
+                'created_at' => NOW(),
+                'updated_at' => NOW()
+            ]);
+
+            return response(['message' => 'Company Added Successfully', 'status' => 200], 200);
+
+        } catch(\Exception $e) {
+            return response(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function update(Request $request) {
+
+        $sales_office_name = $request->esales_office_name;
+        $sales_office_code = $request->esales_office_code;
+        $sales_office_id = $request->esales_office_id;
+
+        try {
+            $update = SalesOffice::where('id', $sales_office_id)->update([
+                'sales_office_name' => $sales_office_name,
+                'updated_at' => NOW()
+            ]);
+
+            return response(['message' => 'Company Updated Successfully', 'status' => 200], 200);
+
+        } catch(\Exception $e) {
+            return response(['message' => $e->getMessage()], 500);
+        }
+    }
 }

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class tbl_sales_office_masters extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }

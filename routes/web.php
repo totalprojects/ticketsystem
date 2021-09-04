@@ -193,7 +193,7 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
 
      /** Departments Add, Read and Update */
      Route::get('/fetch-departments', [DepartmentController::class, 'get'])->name('get.departments');
-    Route::post('/add-department', [DepartmentController::class, 'add'])->name('add.department');
+    Route::post('/add-department', [DepartmentController::class, 'create'])->name('add.department');
      Route::post('/update-department', [DepartmentController::class, 'update'])->name('update.department');
 
 });

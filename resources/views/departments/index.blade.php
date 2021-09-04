@@ -15,8 +15,8 @@
     <div class="tab-pane active dx-viewport" id="users">
         <div class="demo-container">
           <div class="top-info">
-            <div class="table-heading-custom"><h4 class="right"><i class="fas fa-bars"></i> Department List </h4></div>
-            <button id="add_department" class='custom-theme-btn'><i class='fa fa-plus'></i> Department</button>
+            <div class="table-heading-custom"><h4 class="right"><i class="fas fa-building"></i> Department List </h4></div>
+            <button id="add_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Department</button>
           </div>
             
             <div id="department-list-div" style="height:600px"></div>
@@ -36,13 +36,13 @@
                 </div>
                 <div class="modal-body">
         
-                <form id="add-department-frm" method="post">
+                <form id="add-frm" method="post">
                     <div class="row">
                         <div class="col-lg-4 pt-2">
                             <input type="text" name="department_name" id="department_name" class="form-control" placeholder="Enter permission name">
                         </div>                       
                         <div class="col-lg-4 pt-2">
-                            <button class='btn btn-primary' type="submit" id="add-department-btn" name='add-department-btn'><i class='fas fa-plus'></i> Add</button>
+                            <button class='btn btn-primary' type="submit" id="add-btn" name='add-btn'><i class='fas fa-plus'></i> Add</button>
                         </div>
                     </div>
                 </form>
@@ -68,18 +68,18 @@
                 </div>
                 <div class="modal-body">
         
-                <form id="department-update-frm" method="post">
+                <form id="update-frm" method="post">
                     <div class="row">
                         <div class="col-lg-4 pt-2">
-                        <input type="hidden" name="department_id" id="edepartment_id">
+                        <input type="hidden" name="edepartment_id" id="edepartment_id">
                              <label for="permission_name">
                                 Department Name
                             </label> 
-                           <input type="text" name="edepartment_name" class="form-control">
+                           <input type="text" name="edepartment_name" id="edepartment_name" class="form-control">
                         </div>
 
-                        <div class="col-lg-4 pt-2">
-                            <button class='btn btn-primary' type="submit" id="update-department-btn" name='update-department-btn'>Update</button>
+                        <div class="col-lg-4 pt-4">
+                            <button class='btn btn-primary' type="submit" id="update-btn" name='update-btn'>Update</button>
                         </div>
                     </div>
                 
@@ -108,15 +108,15 @@
         
       
 
-$(document).on('click','#add_department', ()=> {
+$(document).on('click','#add_btn', ()=> {
    // //'inn')
     $("#add-modal").modal('show');
 });
 
 
-$(document).on('click','#update-department-btn', ()=> {
+$(document).on('click','#update-btn', ()=> {
 
-$("#department-update-frm").validate({
+$("#update-frm").validate({
     rules:{
         edepartment_name:{
             required:true
@@ -127,21 +127,21 @@ $("#department-update-frm").validate({
         var url = "{{  route('update.department') }}"
         $.ajax({
             url:url,
-            data:$("#department-update-frm").serialize(),
+            data:$("#update-frm").serialize(),
             type:"POST",
             headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             },
             beforeSend:(r) => {
-                $("#update-department-btn").prop('disabled',true);
+                $("#update-btn").prop('disabled',true);
             },
             error:(r) => {
-                $("#update-department-btn").prop('disabled',false);
+                $("#update-btn").prop('disabled',false);
                 toastr.error('Something went wrong');
             },
             success:(r) => {
-                $("#update-department-btn").prop('disabled',false);
-                toastr.success('Module Updated successfully');
+                $("#update-btn").prop('disabled',false);
+                toastr.success(r.message);
                 $("#edit-modal").modal('hide');
                 fetch_data();
             }
@@ -150,40 +150,34 @@ $("#department-update-frm").validate({
     }
 });
 })
-$(document).on('click','#add-department-btn', ()=> {
-$("#add-department-frm").validate({
+$(document).on('click','#add-btn', ()=> {
+$("#add-frm").validate({
     rules:{
-        permission_name:{
+        department_name:{
             required:true
         },
-        permission_type:{
-            required:true
-        },
-        permission_code:{
-            required:true
-        }
     },
     submitHandler:(r) => {
         var url = "{{  route('add.department') }}"
         $.ajax({
             url:url,
-            data:$("#add-department-frm").serialize(),
+            data:$("#add-frm").serialize(),
             type:"POST",
             headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             },
             beforeSend:(r) => {
-                $("#add-department-btn").prop('disabled',true);
+                $("#add-btn").prop('disabled',true);
             },
             error:(r) => {
                 //r.responseJSON)
-                $("#add-department-btn").prop('disabled',false);
+                $("#add-btn").prop('disabled',false);
                 toastr.error(r.responseJSON.message);
             },
             success:(r) => {
-                $("#add-department-btn").prop('disabled',false);
-                toastr.success('Department Added successfully');
-                $("#add-department-modal").modal('hide');
+                $("#add-btn").prop('disabled',false);
+                toastr.success(r.message);
+                $("#add-modal").modal('hide');
                 fetch_data();
             }
 

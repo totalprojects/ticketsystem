@@ -19,7 +19,8 @@ class MenuController extends Controller {
     }
 
     public function fetchMenus() {
-        $menus      = MenuMaster::orderBy('menu_order', 'asc')->where('parent_id', 0)->get();
+        //->where('parent_id', 0)
+        $menus      = MenuMaster::orderBy('menu_order', 'asc')->get();
         $totalCount = count($menus);
         return response(['data' => $menus, 'totalCount' => $totalCount]);
     }

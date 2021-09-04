@@ -13,6 +13,7 @@ use App\Http\Controllers\Storage\StorageController;
 use App\Http\Controllers\SO\SOController;
 use App\Http\Controllers\Permission\PermissionController;
 use App\Http\Controllers\Moderator\ModeratorController;
+use App\Http\Controllers\DepartmentController;
 
 
 /*
@@ -61,9 +62,14 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'Logs']
 
     Route::get('/module-approval-stages',[ModuleController::class, 'approval_matrix'])->name('approval.matrix');
 
+    /** Critical T codes */
     Route::get('/critical-tcodes-list',[ModuleController::class, 'critical_tcodes'])->name('critical.tcodes.list');
 
+    /** Moderators */
     Route::get('/moderators',[ModeratorController::class, 'index'])->name('view.moderators');
+
+    /** Departments */
+    Route::get('/departments',[DepartmentController::class, 'index'])->name('view.departments');
 });
 
 /** Ajax Calls */
@@ -147,9 +153,13 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
     Route::get('/review-sap-request', [SapController::class, 'reviewRequest'])->name('review.sap.request');
     
     Route::get('/fetch-request', [SapController::class, 'fetchSelfRequest'])->name('fetch.self.request');
+
     Route::get('/fetch-moderator', [ModeratorController::class, 'fetchModerators'])->name('fetch.moderators');
+
     Route::post('/edit-moderator', [ModeratorController::class, 'updateModerator'])->name('edit.moderator');
+
     Route::get('/fetch-team-request', [SapController::class, 'fetchTeamRequest'])->name('fetch.team.request');
+
     Route::get('/fetch-stages', [ModuleController::class, 'fetchStages'])->name('fetch.stages');
 
     Route::get('/fetch-module-tcodes', [PermissionController::class, 'fetchModuleTCodes'])->name('fetch.module.tcodes');
@@ -174,11 +184,18 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
 
     /* Role wise standard tcode access */
     Route::get('/role-wise-standard-tcode-access',[RoleController::class, 'roleTcodeAccess'])->name('role.tcode.access');
+    
     /** Role wise tcode update / add */
     Route::post('/submit-role-wise-standard-tcode-access',[RoleController::class, 'submitRoleTcodeAccess'])->name('submit.selected.tcodes');
 
     /** Exixisting tcode role wise access */
     Route::get('/current-tcodes',[RoleController::class, 'getCurrentTcodes'])->name('get.current.tcodes');
+
+     /** Departments Add, Read and Update */
+     Route::get('/fetch-departments', [DepartmentController::class, 'get'])->name('get.departments');
+    Route::post('/add-department', [DepartmentController::class, 'add'])->name('add.department');
+     Route::post('/update-department', [DepartmentController::class, 'update'])->name('update.department');
+
 });
 
 /** Migration Routes */

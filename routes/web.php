@@ -10,7 +10,7 @@ use App\Http\Controllers\Module\ModuleController;
 use App\Http\Controllers\Area\AreaController;
 use App\Http\Controllers\Plant\PlantController;
 use App\Http\Controllers\Storage\StorageController;
-use App\Http\Controllers\SO\SOController;
+use App\Http\Controllers\SO\SoController;
 use App\Http\Controllers\Permission\PermissionController;
 use App\Http\Controllers\Moderator\ModeratorController;
 use App\Http\Controllers\DepartmentController;

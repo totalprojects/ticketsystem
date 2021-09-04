@@ -252,6 +252,7 @@ return [
         'BusinessArea'      => App\Models\Business\tbl_business_area_masters::class,
         'PO'                => App\Models\PO\tbl_purchase_org_masters::class,
         'PORelease'         => App\Models\PO\tbl_purchase_org_release::class,
+        'POGroup'           => App\Models\PO\tbl_purchase_group_masters::class,
         'ActionMasters'     => App\Models\tbl_action_masters::class,
         'TCodes'            => App\Models\tbl_tcode_masters::class,
         'ModuleHead'        => App\Models\tbl_module_head_masters::class,

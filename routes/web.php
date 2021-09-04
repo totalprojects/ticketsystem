@@ -10,7 +10,13 @@ use App\Http\Controllers\Module\ModuleController;
 use App\Http\Controllers\Area\AreaController;
 use App\Http\Controllers\Plant\PlantController;
 use App\Http\Controllers\Storage\StorageController;
-use App\Http\Controllers\SO\SOController;
+use App\Http\Controllers\SO\SoController;
+use App\Http\Controllers\SO\SalesOrgController;
+use App\Http\Controllers\SO\DistributionController;
+use App\Http\Controllers\SO\DivisionController;
+use App\Http\Controllers\PO\PoController;
+use App\Http\Controllers\PO\PoReleaseController;
+use App\Http\Controllers\PO\PoGroupController;
 use App\Http\Controllers\Permission\PermissionController;
 use App\Http\Controllers\Moderator\ModeratorController;
 use App\Http\Controllers\DepartmentController;
@@ -88,6 +94,24 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'Logs']
 
     /** Sales Office */
     Route::get('/sales-office',[SOController::class, 'index'])->name('view.sales.office');
+
+    /** Sales Org */
+    Route::get('/sales-organization',[SalesOrgController::class, 'index'])->name('view.sales.org');
+
+    /** Distribution Channel */
+    Route::get('/distribution-channel',[DistributionController::class, 'index'])->name('view.distributions');
+
+    /** Distribution Channel */
+    Route::get('/divisions',[DivisionController::class, 'index'])->name('view.divisions');
+
+    /** Purhcase Organization */
+    Route::get('/purchase-org',[POController::class, 'index'])->name('view.purchase.org');
+
+    /** PO Release */
+    Route::get('/po-release',[PoReleaseController::class, 'index'])->name('view.po.release');
+
+    /** PO Group */
+    Route::get('/po-group',[PoGroupController::class, 'index'])->name('view.po.group');
 });
 
 /** Ajax Calls */
@@ -243,6 +267,36 @@ Route::group(['prefix' => 'ajax', 'middleware' => ['auth']], function () {
      Route::get('/fetch-sales-office', [SOController::class, 'get'])->name('get.sales.office');
      Route::post('/add-sales-office', [SOController::class, 'create'])->name('add.sales.office');
      Route::post('/update-sales-office', [SOController::class, 'update'])->name('update.sales.office');
+
+     /** Sales Org Add, Read and Update */
+     Route::get('/fetch-sales-org', [SalesOrgController::class, 'get'])->name('get.sales.org');
+     Route::post('/add-sales-org', [SalesOrgController::class, 'create'])->name('add.sales.org');
+     Route::post('/update-sales-org', [SalesOrgController::class, 'update'])->name('update.sales.org');
+
+     /** Distribution Channel Add, Read and Update */
+     Route::get('/fetch-distributions', [DistributionController::class, 'get'])->name('get.distributions');
+     Route::post('/add-distributions', [DistributionController::class, 'create'])->name('add.distributions');
+     Route::post('/update-distributions', [DistributionController::class, 'update'])->name('update.distributions');
+
+     /** Division Add, Read and Update */
+     Route::get('/fetch-division', [DivisionController::class, 'get'])->name('get.division');
+     Route::post('/add-division', [DivisionController::class, 'create'])->name('add.division');
+     Route::post('/update-division', [DivisionController::class, 'update'])->name('update.division');
+
+     /** Purhcase Org Add, Read and Update */
+     Route::get('/fetch-purchase-org', [POController::class, 'get'])->name('get.purchase.org');
+     Route::post('/add-purchase-org', [POController::class, 'create'])->name('add.purchase.org');
+     Route::post('/update-purchase-org', [POController::class, 'update'])->name('update.purchase.org');
+
+     /** PO Release Add, Read and Update */
+     Route::get('/fetch-po-release', [POReleaseController::class, 'get'])->name('get.po.release');
+     Route::post('/add-po-release', [POReleaseController::class, 'create'])->name('add.po.release');
+     Route::post('/update-po-release', [POReleaseController::class, 'update'])->name('update.po.release');
+
+      /** PO Group Add, Read and Update */
+      Route::get('/fetch-po-group', [PoGroupController::class, 'get'])->name('get.po.group');
+      Route::post('/add-po-group', [PoGroupController::class, 'create'])->name('add.po.group');
+      Route::post('/update-po-group', [PoGroupController::class, 'update'])->name('update.po.group');
 
 });
 

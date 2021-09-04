@@ -9,4 +9,5 @@ class tbl_purchase_org_release extends Model {
     use HasFactory;
 
     public $table = 'tbl_purchase_org_release';
+    protected $guarded = [];
 }

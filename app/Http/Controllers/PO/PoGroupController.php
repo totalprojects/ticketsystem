@@ -4,40 +4,40 @@ namespace App\Http\Controllers\PO;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use PO;
+use POGroup;
 
-class PoController extends Controller
+class PoGroupController extends Controller
 {
     //
     public function index() {
-        $data['page_title'] = 'Purchase Organization';
+        $data['page_title'] = 'PO Group';
       
-        return view('po.index')->with($data);
+        return view('po.group')->with($data);
     }
 
     public function get(Request $request) {
 
         $take = $request->take ?? 10000;
         $skip = $request->skip ?? 0;
-        $companies = PO::orderBy('id', 'asc');
+        $companies = POGroup::orderBy('id', 'asc');
         $totalCount = $companies->get()->Count();
         return response(['data' => $companies->get(), 'totalCount' => $totalCount]);
     }
 
     public function create(Request $request) {
 
-        $po_name = $request->po_name;
-        $po_code = $request->po_code;
+        $pg_description = $request->pg_description;
+        $pg_code = $request->pg_code;
        
         try {
-            $deaprtment_description = PO::create([
-                'po_name' => $po_name,
-                'po_code' => $po_code,
+            $deaprtment_description = POGroup::create([
+                'pg_description' => $pg_description,
+                'pg_code' => $pg_code,
                 'created_at' => NOW(),
                 'updated_at' => NOW()
             ]);
 
-            return response(['message' => 'Purchase Org Added Successfully', 'status' => 200], 200);
+            return response(['message' => 'PO Group Added Successfully', 'status' => 200], 200);
 
         } catch(\Exception $e) {
             return response(['message' => $e->getMessage()], 500);
@@ -46,19 +46,19 @@ class PoController extends Controller
 
     public function update(Request $request) {
 
-        $po_name = $request->epo_name;
-        $po_code = $request->epo_code;
+        $pg_description = $request->epg_description;
+        $pg_code = $request->epg_code;
         $so_id = $request->eso_id;
 
 
         try {
-            $update = PO::where('id', $so_id)->update([
-                'po_name' => $po_name,
-                'po_code' => $po_code,
+            $update = POGroup::where('id', $so_id)->update([
+                'pg_description' => $pg_description,
+                'pg_code' => $pg_code,
                 'updated_at' => NOW()
             ]);
 
-            return response(['message' => 'Purchase Org Updated Successfully', 'status' => 200], 200);
+            return response(['message' => 'PO Group Updated Successfully', 'status' => 200], 200);
 
         } catch(\Exception $e) {
             return response(['message' => $e->getMessage()], 500);

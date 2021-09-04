@@ -88,156 +88,170 @@
 
     .dashboard-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/monitor.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/monitor.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
+        background-repeat: no-repeat;
         background-position:center;
-        background-size:cover;
+        background-size:contain;
         position: relative;
         
     }
     .role-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/Roles.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/roles.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
        
     }
     .sap-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/sap.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/sap.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .manage-users-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/users.svg') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/users.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .menu-set-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/Menu.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/menu.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .request-access-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/Request-access.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/request-access.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .modules-approval-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/Modules-Approval.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/modules-approval.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .app-permission-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/App-Permission.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/app-permission.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .critical-code-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/Critical-tCodes.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/critical-tcodes.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .sap-request-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/sap-request.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/sap-request.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .team-request-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/team-request.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/team-request.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .user-list-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/user-list.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/user-list.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
     .user-permission-icon {
         content:"";
-        background-image:url("{{ asset('assets/images/user-permission.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/user-permission.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }
 
     .moderator {
         content:"";
-        background-image:url("{{ asset('assets/images/moderator.png') }}") !important;
+        background-image:url("{{ asset('assets/images/svg/moderator.svg') }}") !important;
         width: 25px;
         height: 25px; 
         display: inline-block;
         background-position:center;
-        background-size:cover;
+        background-repeat: no-repeat;
+        background-size:contain;
         position: relative;
         
     }

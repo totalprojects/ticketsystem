@@ -31,6 +31,6 @@ class SapRequestMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.sap.request')->with('data', $this->data);
+        return $this->from('no-reply-shyamcrm@shyamsteel.com')->markdown('emails.sap.request')->with('data', $this->data);
     }
 }

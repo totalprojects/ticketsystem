@@ -28,20 +28,21 @@ use PurchaseGroup;
 use DepartmentMasters;
 use Employees;
 use Mail;
-use App\Mail\SapRequestMail;
+use App\Traits\SendMail;
 
 class SapController extends Controller {
     /**
      * @return view of users
      */
+    use SendMail;
+
     public function index() {
 
         /* test mail */
-        $myEmail = 'joydeep@shyamfuture.com';
-        $data = ['name' => 'Joydeep'];
-        Mail::to($myEmail)->send(new SapRequestMail($data));
-        
-        return $mail;
+        // $data = ['name' => 'Joydeep Banerjee', 'email' => 'joydeep@shyamfuture.com'];
+        // $mail = SendMail::send($data, 'SapRequestMail');
+        // return $mail;
+
         $companies     = CompanyMasters::all();
         $divisions     = Divisions::all();
         $distributions = Distributions::all();

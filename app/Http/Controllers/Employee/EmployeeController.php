@@ -269,6 +269,12 @@ class EmployeeController extends Controller {
                         'password'    => \Hash::make('password'),
                         'employee_id' => $id
                     ]);
+                } else {
+                    
+                    $update = \Users::where('employee_id', $id)->update([
+                        'name' => $request->first_name1. ' '.$request->lastname1,
+                        'email' => $request->email1
+                    ]);
                 }
 
                 $user->syncRoles($request->role1);

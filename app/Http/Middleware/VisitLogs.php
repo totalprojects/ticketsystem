@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Route;
 
-class Logs {
+class VisitLogs {
     /**
      * Handle an incoming request.
      *
@@ -18,18 +18,19 @@ class Logs {
 
         $rn            = $request->path();
         $activity_name = explode('/', $rn);
-        $activity  = 'Accessed ';
+        $activity = 'Visited ';
         foreach($activity_name as $each) {
+            
             $activity .= $each. ' ';
         }
-    
+        
         try {
 
             \ActivityLog::create([
                 'user_id'          => \Auth::user()->id,
                 'activity_type'    => ucwords($activity),
                 'ip'               => $request->ip(),
-                'visit_type'       => 1,
+                'visit_type' => 0,
                 'description_meta' => json_encode([])
             ]);
 

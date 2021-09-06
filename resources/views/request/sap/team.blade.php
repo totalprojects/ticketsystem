@@ -451,12 +451,12 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                       ` : '';
                       break;
                     case 'IT_HEAD':
-                      (IS_IT_HEAD === 'true' && logs[i-4] !== undefined && logs[i-5] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      (IS_IT_HEAD === 'true' && logs[i-4] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
                       <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a> <br>
                       <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>` : '';
                       break;
                     case 'BASIS':
-                      (IS_BASIS === 'true' && logs[i-5] !== undefined && logs[i-6] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      (IS_BASIS === 'true' && logs[i-5] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
                       <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br><textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>` : '';
                       break;

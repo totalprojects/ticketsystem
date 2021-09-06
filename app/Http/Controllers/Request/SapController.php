@@ -65,7 +65,7 @@ class SapController extends Controller {
 
         $roles = Role::all();
         $approval_stages =  requestApprovalStages();
-
+        //return $this->isModerator();
         return view('request.sap.team')->with(['roles' => $roles, 'approval_stages' => $approval_stages, 'moderators' => $this->isModerator()]);
     }
 

@@ -812,6 +812,7 @@ class SapController extends Controller {
         foreach ($userIds as $each) {
             $userId[] = $each->id;
         }
+       // return $module_permissions;
         //return $userId;
         $data       = SAPRequest::when(empty($module_permissions), function($Q) use($userId) {
                         $Q->whereIn('user_id', $userId);
@@ -824,7 +825,7 @@ class SapController extends Controller {
         //return $data->get();
         $subArray = [];
         $i        = 1;
-        foreach ($data->take($take)->skip($skip)->get() as $each) {
+        foreach ($data->get() as $each) {
 
             $company_name = $each->company['company_name'] ?? '-';
             $company_code = $each['company_code'] ?? '-';
@@ -884,7 +885,8 @@ class SapController extends Controller {
                 'action'     => json_encode($each->action)
             ];
         }
-       
+        
+       // return $subArray;
         return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $i, 'apporval_stages' => requestApprovalStages()], 200);
     }
 

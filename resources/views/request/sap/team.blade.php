@@ -417,7 +417,7 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
 
                 if(stages[i] == approval_stages[stages[i] - 1].id) {
 
-                  status_text = `Not Approved By <br> (${approval_stages[stages[i] - 1].approval_type})`;
+                  status_text = `Pending Approval from <br> (${approval_stages[stages[i] - 1].approval_type})`;
 
                   let type = approval_stages[stages[i] - 1].approval_type.replace(" ", "_").toUpperCase();
             
@@ -431,7 +431,7 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                       ` : '';
                       break;
                     case 'MODULE_HEAD':
-                      (IS_MH === true && logs[i-2] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      (IS_MH === true && logs[i-2] !== undefined && logs[i-2].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
                       <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br>
 
@@ -439,24 +439,24 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                       ` : '';
                       break;
                     case 'SAP_LEAD':
-                      (IS_SAP_LEAD === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      (IS_SAP_LEAD === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
                       <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>
                       ` : '';
                       break;
                     case 'DIRECTOR':
-                      (IS_DIRECTOR === 'true' && logs[i-3] !== undefined && logs[i-4] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      (IS_DIRECTOR === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
                       <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br><textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>
                       ` : '';
                       break;
                     case 'IT_HEAD':
-                      (IS_IT_HEAD === 'true' && logs[i-4] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      (IS_IT_HEAD === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
                       <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a> <br>
                       <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>` : '';
                       break;
                     case 'BASIS':
-                      (IS_BASIS === 'true' && logs[i-5] !== undefined) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      (IS_BASIS === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
                       <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br><textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>` : '';
                       break;

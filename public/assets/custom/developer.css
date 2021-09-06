@@ -447,6 +447,7 @@ aside.main-sidebar.sidebar-custom a.nav-link.active {
 }
 .small-box {
     background-color: #ffffff !important;
+    border: 2px solid #255e61;
     padding: 0.22em;
     color: #255e61 !important;
     box-shadow: 0 0 10px #ccc;
@@ -500,7 +501,10 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
     margin-bottom: 10px;
     align-items: center;
 }
-
+.small-box .icon i {
+    color: #e4ff55;
+    font-size:40px !important;
+}
 
 
 

@@ -244,12 +244,20 @@
                                                
                                             </div> 
                                             <h2 class="purple-text text-center"><strong>Final Step</strong></h2> <br>
+                                            <div class="row m-2">
+                                                <div class="col-lg-8">
+                                                     <label for="searchCustom">
+                                                         <small>Did not find the tcode?</small>
+                                                     </label><br>
+                                                     <input style="width:auto; display:inline-block" type="text" name="ctcode" id='ctcode' placeholder="Enter Exact T Code" class="form-control">
+                                                     &nbsp; <a id="search_tcode" class="btn btn-primary">Search</a>
+                                                </div>
+                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-12" id="modules_tcodes_block">
                                                     <div id="div_tree"></div>
                                                 </div>
                                             </div> 
-                                            
                                         </div>
                                         <input type="button" name="next" class="next action-button" value="Next" /> 
                                         <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
@@ -339,6 +347,11 @@
 
     <script>
 
+        $("#search_tcode").on('click', (e) => {
+            e.preventDefault();
+            loadTcodes();
+        });
+        
         $("input[name='action_type']").prop('disabled',true);
 
         $("#purchase_org").on('change', (e) => {
@@ -411,10 +424,11 @@
             $("#modules_tcodes_block").append("<h3 class='ldr_tc badge badge-warning p-1 m-1'><i class='fas fa-spinner fa-spin'></i> Loading...</h3>")
            
             var role_id = $("#role").val();
+            var tcode = $("#ctcode").val();
             $.ajax({
                 url:"{{ route('tcodes.for.user') }}",
                 type:"GET",
-                data:{role_id:role_id},
+                data:{role_id:role_id,tcode:tcode},
                 error:(r) => {
                     toastr.error('Something went wrong');
                     console.log(r);
@@ -1121,14 +1135,6 @@ $.ajax({
                 }
             })
 }
-
-
-
-
-
-
-
-
 
 
 

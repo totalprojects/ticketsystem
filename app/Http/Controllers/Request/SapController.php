@@ -113,7 +113,6 @@ class SapController extends Controller {
         if(empty($role_id)) {
             $role_id = Auth::user()->roles->pluck('id')[0];
         }
-      
         $role_based_permissions = RolePermissions::where('role_id', $role_id)->select('permission_id')->get();
         $permission_ids         = [];
         foreach ($role_based_permissions as $permission) {
@@ -126,60 +125,178 @@ class SapController extends Controller {
         $i            = 1;
         $j            = 1;
         $grandChildId = 1;
-        // return response(['data' => $modulewithTcodes], 200);
+            $customModulewithTcodes = [];
+            if(!empty($request->tcode)) {
 
-        $modulewithTcodes = Permission::when($role_id > 0, function ($Q) use ($permission_ids) {
-            $Q->whereIn('id', $permission_ids);
-        })
-            ->where('id', '!=', 12)
-        // sap department
-            ->where('type', 2)
-            ->with(['allowed_tcodes' => function ($Q) use($role_id) {
-                $Q->when($role_id > 0, function ($Q) use ($role_id) {
-                    $Q->where('role_id', $role_id);
-                });                
-                $Q->with('access_action_details', 'tcode');
-            }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
+                $tcode = $request->tcode;
 
-           // $each->tcodes = $each->tcodes->take(50)->skip(0);
+                $modulewithTcodes = Permission::when($role_id > 0, function ($Q) use ($permission_ids) {
+                    $Q->whereIn('id', $permission_ids);
+                })
+                    ->where('id', '!=', 12)
+                // sap department
+                    ->where('type', 2)
+                    ->with(['allowed_tcodes' => function ($Q) use($role_id, $tcode) {
+                        $Q->when($role_id > 0, function ($Q) use ($role_id, $tcode) {
+                            $Q->where('role_id', $role_id);
+                            $tcode = TCodes::where('t_code',$tcode)->first();
 
-            $modules[] = [
-                'n_id'       => $grandChildId,
-                'n_title'    => $each->name,
-                'n_parentid' => 0,
-                'n_addional' => ['permission_id' => $each->id],
-                'n_checked'  => false
-            ];
-
-            $childId1 = $grandChildId;
-            $grandChildId += 1;
-                //return response($each->allowed_tcodes);
-            foreach ($each->allowed_tcodes as $codes) {
-
-                $modules[] = [
-                    'n_id'       => $grandChildId,
-                    'n_title'    => $codes->tcode->description . '(' . $codes->tcode->t_code . ')',
-                    'n_parentid' => $childId1,
-                    'n_addional' => ['tcode_id' => $codes->id]
-                ];
-
-                $childId2 = $grandChildId;
-                $grandChildId += 1;
-
-                foreach ($codes->access_action_details as $eachAction) {
+                            $Q->where('tcode_id', '!=' , $tcode->t_code);
+                        });                
+                        $Q->with('access_action_details', 'tcode');
+                    }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
+        
+                   // $each->tcodes = $each->tcodes->take(50)->skip(0);
+        
                     $modules[] = [
                         'n_id'       => $grandChildId,
-                        'n_title'    => $eachAction->name,
-                        'n_parentid' => $childId2,
-                        'n_addional' => ['action_id' => $eachAction->id]
+                        'n_title'    => $each->name,
+                        'n_parentid' => 0,
+                        'n_addional' => ['permission_id' => $each->id],
+                        'n_checked'  => false
                     ];
+        
+                    $childId1 = $grandChildId;
+                    $grandChildId += 1;
+                        //return response($each->allowed_tcodes);
+                    foreach ($each->allowed_tcodes as $codes) {
+        
+                        $modules[] = [
+                            'n_id'       => $grandChildId,
+                            'n_title'    => $codes->tcode->description . '(' . $codes->tcode->t_code . ')',
+                            'n_parentid' => $childId1,
+                            'n_addional' => ['tcode_id' => $codes->id]
+                        ];
+        
+                        $childId2 = $grandChildId;
+                        $grandChildId += 1;
+        
+                        foreach ($codes->access_action_details as $eachAction) {
+                            $modules[] = [
+                                'n_id'       => $grandChildId,
+                                'n_title'    => $eachAction->name,
+                                'n_parentid' => $childId2,
+                                'n_addional' => ['action_id' => $eachAction->id]
+                            ];
+        
+                            $grandChildId++;
+                        }
+        
+                    }
+        
+                });
+        
 
-                    $grandChildId++;
-                }
-
+                
+                    //exit;
+                    $customModulewithTcodes = Permission::when($role_id > 0, function ($Q) use ($permission_ids) {
+                        $Q->whereIn('id', $permission_ids);
+                    })->where('id', '!=', 12)->where('type', 2)
+                    
+                        ->with(['tcodes' => function($Q) use($tcode) {
+                            $Q->where('t_code', $tcode);
+                        }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
+                            //echo $grandChildId.'<br>';
+                            // $each->tcodes = $each->tcodes->take(50)->skip(0);
+                 
+                            //  $modules[] = [
+                            //      'n_id'       => $grandChildId,
+                            //      'n_title'    => $each->name,
+                            //      'n_parentid' => 0,
+                            //      'n_addional' => ['permission_id' => $each->id],
+                            //      'n_checked'  => false
+                            //  ];
+               
+                             $childId1 = $grandChildId;
+                             $grandChildId += 1;
+                                 //return response($each->allowed_tcodes);
+                             foreach ($each->tcodes as $codes) {
+                 
+                                 $modules[] = [
+                                     'n_id'       => $grandChildId,
+                                     'n_title'    => $codes->description . '(' . $codes->t_code . ')',
+                                     'n_parentid' => 1,
+                                     'n_addional' => ['tcode_id' => $codes->id]
+                                 ];
+                 
+                                 $childId2 = $grandChildId;
+                                 $grandChildId += 1;
+                 
+                                 foreach ($codes->action_details as $eachAction) {
+                                     $modules[] = [
+                                         'n_id'       => $grandChildId,
+                                         'n_title'    => $eachAction->name,
+                                         'n_parentid' => $childId2,
+                                         'n_addional' => ['action_id' => $eachAction->id]
+                                     ];
+                 
+                                     $grandChildId++;
+                                 }
+                 
+                             }
+                 
+                         });
+                
+               
+            } else {
+     
+                // return response(['data' => $modulewithTcodes], 200);
+        
+                $modulewithTcodes = Permission::when($role_id > 0, function ($Q) use ($permission_ids) {
+                    $Q->whereIn('id', $permission_ids);
+                })
+                    ->where('id', '!=', 12)
+                // sap department
+                    ->where('type', 2)
+                    ->with(['allowed_tcodes' => function ($Q) use($role_id) {
+                        $Q->when($role_id > 0, function ($Q) use ($role_id) {
+                            $Q->where('role_id', $role_id);
+                        });                
+                        $Q->with('access_action_details', 'tcode');
+                    }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
+        
+                   // $each->tcodes = $each->tcodes->take(50)->skip(0);
+        
+                    $modules[] = [
+                        'n_id'       => $grandChildId,
+                        'n_title'    => $each->name,
+                        'n_parentid' => 0,
+                        'n_addional' => ['permission_id' => $each->id],
+                        'n_checked'  => false
+                    ];
+        
+                    $childId1 = $grandChildId;
+                    $grandChildId += 1;
+                        //return response($each->allowed_tcodes);
+                    foreach ($each->allowed_tcodes as $codes) {
+        
+                        $modules[] = [
+                            'n_id'       => $grandChildId,
+                            'n_title'    => $codes->tcode->description . '(' . $codes->tcode->t_code . ')',
+                            'n_parentid' => $childId1,
+                            'n_addional' => ['tcode_id' => $codes->id]
+                        ];
+        
+                        $childId2 = $grandChildId;
+                        $grandChildId += 1;
+        
+                        foreach ($codes->access_action_details as $eachAction) {
+                            $modules[] = [
+                                'n_id'       => $grandChildId,
+                                'n_title'    => $eachAction->name,
+                                'n_parentid' => $childId2,
+                                'n_addional' => ['action_id' => $eachAction->id]
+                            ];
+        
+                            $grandChildId++;
+                        }
+        
+                    }
+        
+                });
+        
             }
-
-        });
+        
 
         return response(['data' => $modules], 200);
     }

@@ -120,9 +120,12 @@ class SapController extends Controller {
         $role_id = $request->role_id;
 
         if(empty($role_id)) {
-            $role_id = Auth::user()->roles->pluck('id')[0];
+            $role_id = Auth::user()->roles->pluck('id')[0] ?? 0;
         }
-        $role_based_permissions = RolePermissions::where('role_id', $role_id)->select('permission_id')->get();
+        $role_based_permissions = RolePermissions::when($role_id > 0, function($Q) use($role_id) {
+        $Q->where('role_id', $role_id);    
+        })->select('permission_id')->get();
+
         $permission_ids         = [];
         foreach ($role_based_permissions as $permission) {
             $permission_ids[] = $permission->permission_id;
@@ -400,7 +403,13 @@ class SapController extends Controller {
                 ];
                 try {
 
-                    SAPRequest::create($array);
+                    $create = SAPRequest::create($array);
+
+                    if($create) {
+                        
+                        SendMail::send(['request_id' => $request_id], 'SapRequestMail', 'RM');
+                    }
+                    
 
                 } catch (\Exception $e) {
 

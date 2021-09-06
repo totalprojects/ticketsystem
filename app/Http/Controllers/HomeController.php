@@ -28,6 +28,9 @@ class HomeController extends Controller
         //$user->syncRoles([]);
         //$user->givePermissionTo('edit articles');
         //return $user->getPermissionNames();
-        return view('home');
+        $loginLogs = \LoginLog::where('user_id', $user->id)->latest()->get();
+        //return $loginLogs;
+        $data['login_logs'] = $loginLogs;
+        return view('home')->with($data);
     }
 }

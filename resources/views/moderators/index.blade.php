@@ -14,11 +14,11 @@
             <div class="demo-container">
                 <div class="top-info">
                   <div class="table-heading-custom"><h4 class="right"><i class="fas fa-user-friends"></i> Moderators </h4></div>
-                    @if(isset($permission))
+                    {{-- @if(isset($permission))
                         @if($permission['add'] === true)
                         <button id="add_employee_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Create Moderators</button>
                         @endif
-                    @endif
+                    @endif --}}
               </div>
                 <div id="moderators-list-div" style="height:auto"></div>
             </div>

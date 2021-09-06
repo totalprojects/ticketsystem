@@ -27,6 +27,8 @@ use SAPApprovalLogs;
 use PurchaseGroup;
 use DepartmentMasters;
 use Employees;
+use Mail;
+use App\Mail\SapRequestMail;
 
 class SapController extends Controller {
     /**
@@ -34,6 +36,12 @@ class SapController extends Controller {
      */
     public function index() {
 
+        /* test mail */
+        $myEmail = 'joydeep@shyamfuture.com';
+        $data = ['name' => 'Joydeep'];
+        Mail::to($myEmail)->send(new SapRequestMail($data));
+        
+        return $mail;
         $companies     = CompanyMasters::all();
         $divisions     = Divisions::all();
         $distributions = Distributions::all();

@@ -39,7 +39,7 @@
                 <form id="add-frm" method="post">
                     <div class="row">
                         <div class="col-lg-4 pt-2">
-                            <input type="text" name="department_name" id="department_name" class="form-control" placeholder="Enter permission name">
+                            <input type="text" name="department_name" id="department_name" class="form-control" placeholder="Enter department name">
                         </div>                       
                         <div class="col-lg-4 pt-2">
                             <button class='btn btn-primary' type="submit" id="add-btn" name='add-btn'><i class='fas fa-plus'></i> Add</button>

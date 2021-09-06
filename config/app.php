@@ -13,7 +13,7 @@ return [
     |
      */
 
-    'name'            => env('APP_NAME', 'IT Audit'),
+    'name'            => env('APP_NAME', 'Information Rights Management'),
 
     /*
     |--------------------------------------------------------------------------

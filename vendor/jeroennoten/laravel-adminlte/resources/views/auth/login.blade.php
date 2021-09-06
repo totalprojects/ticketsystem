@@ -198,7 +198,7 @@ svg#freepik_stories-search:not(.animated) .animable {opacity: 0;}svg#freepik_sto
                 <div class="wrap d-md-flex">
                    <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
                       <div class="text w-100">
-                         <h2 class="text-center"><small>Welcome to</small> <br> Audit & Complaince</h2>
+                         <h2 class="text-center"><small>Welcome to</small> <br> Information Rights Management System</h2>
                          <div class="svg-icon">
                            
                      

@@ -191,7 +191,7 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     Route::post('/update/designation', [DesignationController::class, 'update'])->name('update.designation');
     /** Company Add and Update */  
     Route::post('/add/company', [CompanyController::class, 'create'])->name('add.company');
-    Route::post('/update/company', [CompanyController::class, 'update'])->name('update.Company');
+    Route::post('/update/company', [CompanyController::class, 'update'])->name('update.company');
     /** Business Area Add and Update */  
     Route::post('/add/business/area', [BusinessAreaController::class, 'create'])->name('add.business.area');
     Route::post('/update/business/area', [BusinessAreaController::class, 'update'])->name('update.business.area');

@@ -809,7 +809,7 @@ class SapController extends Controller {
         $is_director = isModerator(2); 
         $is_it_head = isModerator(3); 
         $is_basis = isModerator(4); 
-
+       // return dd($is_basis);
         if($is_sap_lead || $is_director || $is_it_head || $is_basis)  {
             $all_permissions = \Permission::where('type', 2)->get();
             foreach($all_permissions as $each) {

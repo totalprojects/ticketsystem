@@ -113,7 +113,7 @@ function fetch_data(){
        wordWrapEnabled: true,
        columns: [
            {
-               dataField: "user.name",
+               dataField: "username",
                caption: "User Name",
            },
            {

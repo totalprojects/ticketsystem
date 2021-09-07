@@ -31,13 +31,13 @@ trait SendMail
             case 'RM':
                 $model = EmployeeMappings::where('employee_id', $userId)->with('report_employee','employee')->first();
                 if($model) {
-                    $usermail = $model->employee->email;
+                    $usermail = Auth::user()->email;
                     $username = $model->employee->first_name.' '.$model->employee->last_name;
                     $reportToEmail = $model->report_employee->email;
                     $reportToName = $model->report_employee->first_name.' '.$model->report_employee->last_name;
                     $modules = [];
                     foreach($requested as $each) {
-                        $modules[] = $each->modules->name.',';
+                        $modules[] = $each->modules->name;
                     }
                     $modules = implode(",", $modules);
 
@@ -80,7 +80,7 @@ trait SendMail
                 if( class_exists($classname)) {
                     $d = [];
                     foreach($dataArray as $e) {
-                        if(self::isValidEmail($email)) {
+                        if(self::isValidEmail($e['email'])) {
                             $mail = Mail::to($e['email'])->send(new $classname($e));
                         } else {
                             return response(['message' => 'Mail was not fired, either the mail address is invalid or empty', 'status' => 400], 400);

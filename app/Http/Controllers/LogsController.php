@@ -41,7 +41,7 @@ class LogsController extends Controller
     public function fetch_visit_logs() {
         $userID = Auth::user()->id;
         try {
-            $logs = ActivityLog::where(['user_id' => $userID, 'visit_type' => 0])->with('user')->latest()->get();
+            $logs = ActivityLog::where(['visit_type' => 0])->with('user')->latest()->get();
             return response(['message' => 'Success', 'data' => $logs],200);
 
         } catch(\Exception $e) {
@@ -52,7 +52,7 @@ class LogsController extends Controller
     public function fetch_activity_logs() {
         $userID = Auth::user()->id;
         try {
-            $logs = ActivityLog::where(['user_id' => $userID, 'visit_type' => 1])->with('user')->latest()->get();
+            $logs = ActivityLog::where(['visit_type' => 1])->with('user')->latest()->get();
             return response(['message' => 'Success', 'data' => $logs],200);
 
         } catch(\Exception $e) {

@@ -406,8 +406,8 @@ class SapController extends Controller {
                     $create = SAPRequest::create($array);
 
                     if($create) {
-                        
-                        SendMail::send(['request_id' => $request_id], 'SapRequestMail', 'RM');
+
+                        SendMail::send(['request_id' => $requestId], 'SapRequestMail', 'RM');
                     }
                     
 

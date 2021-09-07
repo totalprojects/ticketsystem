@@ -531,10 +531,7 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         min-height: 150px;
       }
       
-      .orderstatus.done:before {
-        background: #32841f;
-        
-      }
+      
       .orderstatus:before {
         /* content: '';
         height: 100%;
@@ -555,9 +552,7 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         height: 0;
       }
       
-      .orderstatus.done {
-        color: #333;
-      }
+     
       
       @media only screen and (max-width: 40em) {
         .orderstatus {
@@ -604,10 +599,7 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         color: #939393;
       }*/
       
-      .orderstatus.done time {
-        color: #368d22;
-        background: #e8ffe2;
-      }
+      
       
       @media only screen and (max-width: 40em) {
         .orderstatus-container {
@@ -645,11 +637,7 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         left: calc(50% - 17px);
       }
       
-      .done .orderstatus-check {
-        color: #fff;
-        border-color: #368d22;
-        background: #368d22;
-      }
+      
       
       @media only screen and (max-width: 40em) {
         .orderstatus-check {
@@ -663,9 +651,58 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         60% { box-shadow: 0 0 20px #368d22; }
         100% { box-shadow: 0 0 -10px #368d22; }
       }
-      
+
+      @keyframes glowingReject {
+        0% { box-shadow: 0 0 -10px #8d2222; }
+        40% { box-shadow: 0 0 20px #770f0f; }
+        60% { box-shadow: 0 0 20px #741010; }
+        100% { box-shadow: 0 0 -10px #490e0e; }
+      }
+
+      /** Done and Rejected CSS */
       .done .orderstatus-check  {
         animation: glowing 2500ms infinite;
+      }
+      .done .orderstatus-check {
+        color: #fff;
+        border-color: #368d22;
+        background: #368d22;
+      }
+      .orderstatus.done time {
+        color: #368d22;
+        background: #e8ffe2;
+      }
+      .orderstatus.done {
+        color: rgb(87, 76, 76);
+      }
+
+      .orderstatus.done:before {
+        background: #32841f;
+        
+      }
+
+      .rejected .orderstatus-check  {
+        animation: glowingReject 2500ms infinite;
+      }
+
+      .rejected .orderstatus-check {
+        color: #fff;
+        border-color: #972118;
+        background: #8d2222;
+      }
+
+      .orderstatus.rejected {
+        color: #8d2222;
+      }
+
+      .orderstatus.rejected time {
+        color: #8d2222;
+        background: #e8ffe2;
+      }
+
+      .orderstatus.rejected:before {
+        background: #8d2222;
+        
       }
       
       .orderstatus-active {

@@ -10,6 +10,7 @@
 
     display: inline-block !important;
 }     
+
 </style> 
 @stop
 
@@ -864,10 +865,6 @@
                             showBorders: true,
                             allowColumnResizing: true,
                             paging: false,
-                            // filterRow: {
-                            //     visible: true,
-                            //     applyFilter: "auto"
-                            // },
                             scrolling: {
                                 mode: "virtual"
                             },
@@ -1229,6 +1226,7 @@ $.each(stages, (i) => {
                 if(logs[pointer].status == 1) {
                   status_text = `Approved By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
                 } else {
+                    addClass = `rejected`;
                   status_text = `Rejected By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
                 }
 
@@ -1244,7 +1242,7 @@ $.each(stages, (i) => {
 
               if(stages[i] == approval_stages[stages[i] - 1].id) {
 
-                status_text = `Not Approved By <br> (${approval_stages[stages[i] - 1].approval_type})`;          
+                status_text = `Pending Approval from <br> (${approval_stages[stages[i] - 1].approval_type})`;          
                  
               }
 

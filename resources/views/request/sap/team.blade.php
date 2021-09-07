@@ -372,7 +372,7 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                   <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
                   <div class="orderstatus-text">
                     <time>${created_at}</time>
-                    <p>Your Request was placed</p>
+                    <p>Request was placed</p>
                   </div>
                 </div>`;
 
@@ -403,6 +403,7 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                   if(logs[pointer].status == 1) {
                     status_text = `Approved By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
                   } else {
+                    addClass = `rejected`;
                     status_text = `Rejected By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
                   }
 

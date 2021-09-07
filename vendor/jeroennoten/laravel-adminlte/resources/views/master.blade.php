@@ -1,3 +1,4 @@
+<?php date_default_timezone_set('Asia/Kolkata') ?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 

@@ -272,7 +272,7 @@ class EmployeeController extends Controller {
                 } else {
                     
                     $update = \Users::where('employee_id', $id)->update([
-                        'name' => $request->first_name1. ' '.$request->lastname1,
+                        'name' => $request->first_name1. ' '.$request->last_name1,
                         'email' => $request->email1
                     ]);
                 }

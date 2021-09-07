@@ -90,7 +90,7 @@ class ModuleController extends Controller
 
         $req_id = $request->request_id;
 
-        $getData = \SAPRequest::where('req_int', $req_id)->select('module_id', 'user_id')->first();
+        $getData = \SAPRequest::where('id', $req_id)->select('module_id', 'user_id')->first();
         $module_id = !empty($getData) ? $getData->module_id : NULL;
         $userID = !empty($getData) ? $getData->user_id : NULL;
         $IS_RM = false;
@@ -122,11 +122,11 @@ class ModuleController extends Controller
             }
             $getStages = \ModuleApprovalStages::where('module_id', $module_id)->select('module_id','approval_matrix_id')->orderBy('approval_matrix_id', 'asc')->get();
         }
-
+       // return $getStages;
         foreach($getStages as $stage) {
             $stages[] = $stage->approval_matrix_id;
         }
-        
+        //return $stages;
         return response(['data' => $stages, 'IS_RM' => $IS_RM, 'IS_MH' => $IS_MH],200);
 
     }

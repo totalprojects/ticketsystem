@@ -739,16 +739,7 @@ class SapController extends Controller {
 
             if ($flag == 1) {
 
-                $request_log = [];
-                foreach ($each->approval_logs as $log) {
-                    $request_log[] = [
-                        'approval_stage' => $log->approval_stage,
-                        'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
-                        'remarks'        => $log->remarks,
-                        'status'         => $log->status,
-                        'created_by'     => $log->created_by_user->name
-                    ];
-                }
+                
 
                 $dataArray[] = [
                     'id'               => $each->module_id,
@@ -767,20 +758,32 @@ class SapController extends Controller {
                     'distribution'     => json_encode($each->distributions),
                     'sales_office'     => json_encode($each->sales_office),
                     'po_release'       => json_encode($each->po_release),
-                    'status'           => $each->status,
-                    'req_log'          => json_encode($request_log),
                     'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at))
                 ];
 
                 $i++;
             }
 
+            $request_log = [];
+                foreach ($each->approval_logs as $log) {
+                    $request_log[] = [
+                        'approval_stage' => $log->approval_stage,
+                        'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
+                        'remarks'        => $log->remarks,
+                        'status'         => $log->status,
+                        'created_by'     => $log->created_by_user->name
+                    ];
+                }
+
             $subArray[] = [
                 'request_id' => $each->request_id,
+                'id'         => $each->id,
+                'status'     => $each->status,
+                'created_at' => date('F, d, Y h:i a', strtotime($each->created_at)),
+                'req_log'    => json_encode($request_log),
                 'module'     => json_encode($each->modules),
                 'tcode'      => json_encode($each->tcodes),
-                'action'     => json_encode($each->action),
-                'status'     => $each->status
+                'action'     => json_encode($each->action)
             ];
         }
 
@@ -860,16 +863,7 @@ class SapController extends Controller {
 
             if ($flag == 1) {
 
-                $request_log = [];
-                foreach ($each->approval_logs as $log) {
-                    $request_log[] = [
-                        'approval_stage' => $log->approval_stage,
-                        'remarks'        => $log->remarks,
-                        'status'         => $log->status,
-                        'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
-                        'created_by'     => $log->created_by_user->name
-                    ];
-                }
+              
 
                 $dataArray[] = [
                     'id'               => $each->module_id,
@@ -888,16 +882,29 @@ class SapController extends Controller {
                     'distribution'     => json_encode($each->distributions),
                     'sales_office'     => json_encode($each->sales_office),
                     'po_release'       => json_encode($each->po_release),
-                    'status'           => $each->status,
-                    'req_log'          => json_encode($request_log),
                     'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at))
                 ];
 
                 $i++;
             }
 
+            $request_log = [];
+            foreach ($each->approval_logs as $log) {
+                $request_log[] = [
+                    'approval_stage' => $log->approval_stage,
+                    'remarks'        => $log->remarks,
+                    'status'         => $log->status,
+                    'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
+                    'created_by'     => $log->created_by_user->name
+                ];
+            }
+
             $subArray[] = [
                 'request_id' => $each->request_id,
+                'id'         => $each->id,
+                'status'     => $each->status,
+                'created_at' => date('F, d, Y h:i a', strtotime($each->created_at)),
+                'req_log'    => json_encode($request_log),
                 'module'     => json_encode($each->modules),
                 'tcode'      => json_encode($each->tcodes),
                 'action'     => json_encode($each->action)
@@ -917,22 +924,31 @@ class SapController extends Controller {
 
 
         try {
-            $update = SAPRequest::where('req_int', $request_id)->update([
-                'status'     => 1,
+
+            # update the status to Approve / Reject 
+            $update = SAPRequest::where('id', $request_id)->update([
+                'status'     => $status,
                 'updated_at' => NOW()
             ]);
 
-            $log = SAPApprovalLogs::insert([
-                'request_id'     => $request_id,
-                'approval_stage' => $type,
-                'remarks'        => $remarks,
-                'status'         => $status,
-                'created_by'     => Auth::user()->id,
-                'created_at'     => NOW(),
-                'updated_at'     => NOW()
-            ]);
+            $isExists = SAPApprovalLogs::where(['request_id' => $request_id, 'approval_stage' => $type, 'created_by' => Auth::user()->id])->get();
+            if($isExists->Count()>0) {
+                $update = SAPApprovalLogs::where(['request_id' => $request_id, 'approval_stage' => $type, 'created_by' => Auth::user()->id])
+                ->update(['status' => $status, 'remarks' => $remarks]);
+            } else {
+                $log = SAPApprovalLogs::insert([
+                    'request_id'     => $request_id,
+                    'approval_stage' => $type,
+                    'remarks'        => $remarks,
+                    'status'         => $status,
+                    'created_by'     => Auth::user()->id,
+                    'created_at'     => NOW(),
+                    'updated_at'     => NOW()
+                ]);
+            }
+          
 
-            $req_ca      = SAPRequest::where('req_int', $request_id)->get();
+            $req_ca      = SAPRequest::where('id', $request_id)->get();
             $created_at  = date('F, d, Y h:i a', strtotime($req_ca[0]->created_at));
             $request_log = [];
             $logs        = SAPApprovalLogs::where('request_id', $request_id)->with('created_by_user')->get();

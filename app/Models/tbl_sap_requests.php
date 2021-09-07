@@ -97,7 +97,7 @@ class tbl_sap_requests extends Model {
     }
 
     public function approval_logs() {
-        return $this->hasMany(SAPApprovalLogs::class, 'request_id', 'req_int');
+        return $this->hasMany(SAPApprovalLogs::class, 'request_id', 'id');
     }
 
 }

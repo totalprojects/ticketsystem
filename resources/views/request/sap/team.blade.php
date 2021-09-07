@@ -218,21 +218,7 @@
                         container.append(html)
                     }
                 },
-                {
-                      caption: 'Status',
-                      dataField:"status",
-                      cellTemplate:(container, options) => {
-                          ////console.log(options.data.module)
-                          var status = JSON.parse(options.data.status);
-                          var request_id = options.data.req_int;
-                          var status_logs = options.data.req_log;
-                          var created_at = options.data.created_at;
-                        // //console.log(status)
-                          var html = ``;
-                          html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs}, ${request_id})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
-                          container.append(html)
-                      }
-                  },
+
                               
                 ],
                 masterDetail: {
@@ -294,6 +280,21 @@
                                             html += `<span class='badge badge-primary'>${action[i].name}</span> `;
                                         })
                                       
+                                        container.append(html)
+                                    }
+                                },
+                                {
+                                    caption: 'Status',
+                                    dataField:"status",
+                                    cellTemplate:(container, options) => {
+                                        ////console.log(options.data.module)
+                                        var status = JSON.parse(options.data.status);
+                                        var request_id = options.data.id;
+                                        var status_logs = options.data.req_log;
+                                        var created_at = options.data.created_at;
+                                      // //console.log(status)
+                                        var html = ``;
+                                        html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs}, ${request_id})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
                                         container.append(html)
                                     }
                                 },
@@ -383,7 +384,7 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
 
       let addClass = "";
 
-      let status_text = "Not Approved";
+      let status_text = "Pending Approval";
 
       pointer = i - 1;
 

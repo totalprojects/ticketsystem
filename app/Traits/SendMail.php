@@ -77,7 +77,7 @@ trait SendMail
 
 
             try {
-                if( class_exists($classname)) {
+                if(class_exists($classname)) {
                     $d = [];
                     foreach($dataArray as $e) {
                         if(self::isValidEmail($e['email'])) {

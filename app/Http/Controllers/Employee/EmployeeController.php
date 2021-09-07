@@ -57,73 +57,6 @@ class EmployeeController extends Controller {
 
     }
 
-    public function createEmployee(Request $request) {
-
-        $result = Employees::where('email', $request->email1)->orWhere('contact_no', $request->contact_no1)->get();
-
-        if ($result->Count() == 1) {
-
-            $employeeArray = [
-                'first_name'    => $request->first_name1,
-                'last_name'     => $request->last_name1,
-                'email'         => $request->email1,
-                'contact_no'    => $request->contact_no1,
-                'state_id'      => $request->state1,
-                'district_id'   => $request->district1,
-                'company_code'  => $request->company_code1,
-                'department_id' => $request->department1,
-                'pincode'       => $request->pincode1,
-                'address'       => $request->address1,
-                'status'        => 2
-            ];
-
-            try {
-
-                $employee = Employees::where('email', $request->email1)->update($employeeArray);
-
-                $eid = Employees::where('email', $request->email1)->first();
-
-                if (!empty($request->reporting_to1)) {
-
-                    $id                   = $eid->id;
-                    $employeeMappingArray = [
-                        'employee_id' => $id,
-                        'report_to'   => $request->reporting_to1
-                    ];
-
-                    $maps = EmployeeMappings::where($employeeMappingArray)->get();
-
-                    if ($maps->Count() == 0) {
-
-                        EmployeeMappings::where('employee_id', $id)->delete();
-                        EmployeeMappings::create($employeeMappingArray);
-                    }
-
-                    // $newUser = \Users::create([
-                    //     'name'        => $request->first_name1 . ' ' . $request->last_name1,
-                    //     'email'       => $request->email1,
-                    //     'password'    => \Hash::make('password'),
-                    //     'employee_id' => $id
-                    // ]);
-
-                    return response(['message' => 'User Updated Successfully', 'status' => 200], 200);
-
-                } else {
-                    return response(['message' => 'Reporting to is missing', 'status' => 500], 500);
-                }
-
-            } catch (\Exception $e) {
-
-                return response(['message' => $e->getMessage()], 500);
-            }
-
-        } else {
-
-            return response(['message' => 'Employee Already Exists', 'status' => 201]);
-        }
-
-    }
-
     public function fetchCompanies(Request $request) {
 
         $companies = CompanyMasters::all();
@@ -188,34 +121,41 @@ class EmployeeController extends Controller {
             try {
 
                 $employee = Employees::create($employeeArray);
-                $eid      = Employees::where('email', $request->email)->first();
-                $id       = $eid->id;
-                if (!empty($request->reporting_to)) {
+                if($employee) {
 
-                    $employeeMappingArray = [
-                        'employee_id' => $id,
-                        'report_to'   => $request->reporting_to
-                    ];
-                    // add report_to information
-                    EmployeeMappings::create($employeeMappingArray);
+                    $eid      = Employees::where('email', $request->email)->first();
+                    $id       = $eid->id;
+                    //return $id;
+                    if($id==0) {
+                        return response(['message' => 'Something went wrong id could not be retrived', 'status' => 500], 500);
+                    }
+                    if (!empty($request->reporting_to)) {
+
+                        $employeeMappingArray = [
+                            'employee_id' => $id,
+                            'report_to'   => $request->reporting_to
+                        ];
+                        // add report_to information
+                        EmployeeMappings::create($employeeMappingArray);
+                    }
+
+                    $newUser = \Users::create([
+                        'name'        => $request->first_name . ' ' . $request->last_name,
+                        'email'       => $request->email,
+                        'password'    => \Hash::make('password'),
+                        'employee_id' => $id
+                    ]);
+
+                    $newUser->syncRoles([$request->role]);
+
+                    # provide dashboard access (10)
+                    \MenuMapping::create([
+                        'menu_id'     => 10,
+                        'user_id'     => $newUser->id,
+                        'status'      => 1,
+                        'sub_menu_id' => 0
+                    ]);
                 }
-
-                $newUser = \Users::create([
-                    'name'        => $request->first_name . ' ' . $request->last_name,
-                    'email'       => $request->email,
-                    'password'    => \Hash::make('password'),
-                    'employee_id' => $id
-                ]);
-
-                $newUser->syncRoles([$request->role]);
-
-                # provide dashboard access (10)
-                \MenuMapping::create([
-                    'menu_id'     => 10,
-                    'user_id'     => $newUser->id,
-                    'status'      => 1,
-                    'sub_menu_id' => 0
-                ]);
                 # mail functions
 
                 return response(['message' => 'Employee Added and User Created Successfully', 'status' => 200], 200);

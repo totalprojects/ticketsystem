@@ -31,7 +31,7 @@
             <div class="small-box bg-danger">
               <div class="inner">
                 @if(!empty($login_logs))
-                <h5><strong>{{ $login_logs[0]->ip }}</strong></h5>
+                <h5><strong>{{ $login_logs[0]->ip ?? '-' }}</strong></h5>
                 @endif
                 <p>IP Address</p>
               </div>

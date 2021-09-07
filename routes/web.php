@@ -24,6 +24,7 @@ use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\BusinessAreaController;
 use App\Http\Controllers\LogsController;
+use App\Http\Controllers\TreeController;
 
 
 /*

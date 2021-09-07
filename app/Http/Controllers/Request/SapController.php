@@ -365,7 +365,7 @@ class SapController extends Controller {
 
             $i++;
         }
-
+        $create = false;
         foreach ($entryArray as $key => $each) {
 
             foreach ($each['tcode_id'] as $tcodes) {
@@ -405,12 +405,6 @@ class SapController extends Controller {
 
                     $create = SAPRequest::create($array);
 
-                    if($create) {
-
-                        SendMail::send(['request_id' => $requestId], 'SapRequestMail', 'RM');
-                    }
-                    
-
                 } catch (\Exception $e) {
 
                     return response(['message' => $e->getMessage()], 500);
@@ -419,7 +413,10 @@ class SapController extends Controller {
             }
 
         }
+         if($create) {
 
+            SendMail::send(['request_id' => $requestId], 'SapRequestMail', 'RM');
+        }
         return response(['message' => 'success'], 200);
     }
 

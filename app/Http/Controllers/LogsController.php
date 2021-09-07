@@ -30,7 +30,7 @@ class LogsController extends Controller
     public function fetch_login_logs() {
         $userID = Auth::user()->id;
         try {
-            $logs = LoginLog::where('user_id', $userID)->with('user')->latest()->get();
+            $logs = LoginLog::with('user')->latest()->get();
             return response(['message' => 'Success', 'data' => $logs],200);
 
         } catch(\Exception $e) {

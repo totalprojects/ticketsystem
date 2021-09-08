@@ -18,7 +18,7 @@ class RoleController extends Controller {
      */
     public function index() {
         $all_permissions = Permission::where('type', 2)->get();
-
+        //$all_departments = Departments::all();
         return view('roles.index')->with(['permissions' => $all_permissions]);
     }
 
@@ -32,6 +32,9 @@ class RoleController extends Controller {
             $dataArray[] = [
                 'id'              => $role->id,
                 'name'            => $role->name,
+                'short_name'      => $role->short_name,
+                'type'            => $role->type,
+                'status'          => $role->status,
                 'his_permissions' => $role->permissions,
                 'all_permissions' => $all_permissions
             ];
@@ -105,7 +108,9 @@ class RoleController extends Controller {
         //return $request->all();
         $role_id   = $request->role_id;
         $role_name = $request->erole_name;
-
+        $role_short_name = $request->erole_short_name;
+        $status = $request->estatus;
+        $type = 3;
         $permissions = $request->permissions;
 
         $rolePermissions = RolePermissions::where('role_id', $role_id)->delete();
@@ -146,11 +151,14 @@ class RoleController extends Controller {
         }
 
         //return $permissions;
-
         $updateArray = [
             'name'       => $role_name,
+            'short_name' => $role_short_name,
+            'type'       => $type,
+            'status'     => $status,
             'updated_at' => date('Y-m-d H:i:s')
         ];
+
         try {
 
             $update = Role::where('id', $role_id)->update($updateArray);
@@ -167,9 +175,15 @@ class RoleController extends Controller {
 
         //return $request->all();
         $role_name   = $request->role_name;
+        $short_name = $request->short_name;
+        $type_id = 3;
+        $status = $request->status;
         $permissions = $request->permissions1 ?? NULL;
         $insertArray = [
             'name'       => $role_name,
+            'short_name' => $short_name,
+            'type'       => $type_id,
+            'status'     => $status,
             'guard_name' => 'web',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -193,6 +207,66 @@ class RoleController extends Controller {
 
             return response(['message' => 'Success', 'data' => []], 200);
 
+        } catch (\Exception $e) {
+
+            return response(['message' => 'Server Error', 'data' => $e->getMessage()], 500);
+        }
+    }
+
+
+    public function createDuplicateRole(Request $request) {
+
+       // return $request->all();
+        $role_name = $request->new_role_name;
+        $type_id = 3;
+        $short_name = '';
+        $role_id = $request->role_id;
+        $status = 'normal';
+        $permissions = json_decode($request->permissionIds);
+        //return $permissions;
+        $insertArray = [
+            'name'       => $role_name,
+            'short_name' => $short_name,
+            'type'       => $type_id,
+            'status'     => $status,
+            'guard_name' => 'web',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+        try {
+        $role_id_new = Role::insertGetId($insertArray);
+            if (!is_null($permissions)) {
+                foreach ($permissions as $permission) {
+
+                    RolePermissions::create([
+                        'role_id'       => $role_id_new,
+                        'permission_id' => $permission->permission_id
+                    ]);
+
+                    $tcodes = RoleTcodeAccess::where([
+                        'role_id' => $role_id,
+                        'module_id' => $permission->permission_id
+                    ])->select('tcode_id','actions')->get();
+
+                    # allot new role_id with the same tcodes as selected role
+                    foreach($tcodes as $code) 
+                    {
+                        RoleTcodeAccess::create([
+                            'role_id' => $role_id_new,
+                            'module_id' => $permission->permission_id,
+                            'tcode_id' => $code->tcode_id,
+                            'actions' =>  array_map('intval', $code->actions)
+                        ]);
+                    }
+                  
+                }
+
+               
+
+                
+
+            }
+            return response(['message' => 'Success', 'data' => []], 200);
         } catch (\Exception $e) {
 
             return response(['message' => 'Server Error', 'data' => $e->getMessage()], 500);

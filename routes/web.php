@@ -221,6 +221,9 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     Route::post('/add/po/group', [PoGroupController::class, 'create'])->name('add.po.group');
     Route::post('/update/po/group', [PoGroupController::class, 'update'])->name('update.po.group');
 
+    /** Create Duplicate Role */
+    Route::post('/create/duplicate/role', [RoleController::class,'createDuplicateRole'])->name('create.duplicate.role');
+
 });
 
 /** Migration Routes */

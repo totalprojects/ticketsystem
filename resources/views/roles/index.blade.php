@@ -46,9 +46,22 @@
         
                 <form id="role-add-frm" method="post">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <label for="permissions1"> Role Name </label>
                             <input type="text" name="role_name" id="role_name" class="form-control" placeholder="Enter Role name">
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="permissions1"> Role Short Name </label>
+                            <input type="text" name="role_short_name" id="role_short_name" class="form-control" placeholder="Enter Role Short Name">
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="pe">Role Status</label>
+                            <select name="status" id="status" class="form-control select2bs4" data-placeholder="Enter Role Type">
+                                <option value=""></option>
+                                <option value="temp">Temporary</option>
+                                <option value="normal">Normal</option>
+                                <option value="auditor">Auditor</option>
+                            </select>
                         </div>
                         <div class="col-lg-12 mt-2">
                             <label for="permissions1"> Permissions </label> <br>
@@ -103,8 +116,32 @@
                     <div class="row">
                         <div class="col-lg-4">
                         <input type="hidden" name="role_id" id="erole_id">
-                        <label for="erole_name">Role / Department Name</label>
+                        <label for="erole_name">Role</label>
                             <input type="text" name="erole_name" id="erole_name" class="form-control" placeholder="Enter Role name">
+                            
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="permissions2"> Role Short Name </label>
+                            <input type="text" name="erole_short_name" id="erole_short_name" class="form-control" placeholder="Enter Role Short Name">
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="pe">Role Status</label>
+                            <select name="estatus" id="estatus" class="form-control select2bs4" data-placeholder="Role Type">
+                                <option value=""></option>
+                                <option value="temp">Temporary</option>
+                                <option value="normal">Normal</option>
+                                <option value="auditor">Auditor</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-8">
+                            <label for="duplicate_role">Duplicate this?</label> <br>
+                            <div class="checkbox-group">
+                                <input type="checkbox" name="duplicate_this_role" class="form-control">&nbsp;&nbsp;Yes
+                                <input type="hidden" id="dup_permissions">
+                            </div>
+                            <input type="text" name="duplicate_role_name" id="duplicate_role_name" placeholder="Enter Role Name" disabled>
+                            <button disabled id='submit_duplicate_role_btn' style="padding: 2px;
+                            margin-top: -5px;" class="btn btn-secondary" type="button">Create</button>
                         </div>
                         <div class="col-lg-12 pt-2">
                             <label for="erole_name">Permissions</label>
@@ -195,6 +232,25 @@
 
 @section('js')
     <script>
+        $("input[name='duplicate_this_role']").on('change', () => {
+            var checkedStatus = $("input[name='duplicate_this_role']:checked").val();
+            //console.log(checkedStatus)
+            if(checkedStatus !== undefined) {
+
+                $("#duplicate_role_name").prop('disabled', false);
+            } else {
+                $("#duplicate_role_name").prop('disabled', true);
+            }
+        });
+
+        $("#duplicate_role_name").on('keyup', () => {
+            var value = $("#duplicate_role_name").val();
+            if(value.length >0) {
+                $("#submit_duplicate_role_btn").prop('disabled',false);
+            } else {
+                $("#submit_duplicate_role_btn").prop('disabled', true);
+            }
+        });
         $("#submitSelectedTCodes").on('click', (e) => {
             e.preventDefault();
             var pid = $("#selected_permission_id").val();
@@ -222,6 +278,37 @@
                     toastr.success('Tcodes Updated successfully');
                 }
             })
+        });
+
+        /** Duplicate Role generate with different name */
+        $("#submit_duplicate_role_btn").on('click', (e) => {
+            e.preventDefault();
+            toastr.info('Creating duplcate role');
+            var permissionIds = $("#dup_permissions").val();
+            var new_role_name = $("#duplicate_role_name").val();
+            var role_id = $("#erole_id").val();
+            $.ajax({
+                url:"{{ route('create.duplicate.role') }}",
+                data:{permissionIds, new_role_name, role_id},
+                type:"POST",
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                beforeSend:(r) => {
+                    $("#submitSelectedTCodes").prop('disabled',true);
+                },
+                error:(r) => {
+                    $("#submitSelectedTCodes").prop('disabled',false);
+                    toastr.error('Something went wrong');
+                },
+                success:(r) => {
+                    
+                    //$("#submitSelectedTCodes").prop('disabled',false);
+                   console.log(r)
+                    toastr.success('Tcodes Updated successfully');
+                }
+            })
+
         })
     $(document).on('click','#add_role', ()=> {
    ////console.log('inn')
@@ -399,8 +486,17 @@ function fetch_data(){
         //        visibe: false,
         //    },
            {
+               
                dataField: "name",
                caption: "Role Name",
+           },
+           {
+               dataField: "short_name",
+               caption: "Role Short Name",
+           },
+           {
+               dataField: "status",
+               caption: "Type",
            },
            {
                 dataField:"his_permissions",
@@ -424,6 +520,8 @@ function fetch_data(){
                cellTemplate: function (container, options) {
                    var role_id = options.data.id;
                    var role_name = options.data.name;
+                   var role_short_name = options.data.short_name;
+                   var status = options.data.status;
                     var permissions = options.data.his_permissions;
                     var all_permissions = options.data.all_permissions;
                 
@@ -433,8 +531,10 @@ function fetch_data(){
                     $("#role-edit-modal").modal('show');
                     $("#erole_name").val(role_name);
                     $("#erole_id").val(role_id);
+                    $("#erole_short_name").val(role_short_name);
                     $("#selected_role_id").val(role_id);
-
+                    $("#dup_permissions").val(JSON.stringify(permissions));
+                    $("#estatus").val(status).trigger('change');
                     var html = `<div class='row'><div class='row'>`;
                     var checked = ``;
                     var flag = 0;

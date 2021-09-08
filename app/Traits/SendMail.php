@@ -64,7 +64,7 @@ trait SendMail
                 if($requested->Count() > 0) {
                     foreach($requested as $each) {
                         if(!empty($each->modules->module_head->user_details)) {
-                            array_push($dataArray, ['request_id' => $data['request_id'], 'type' => 'module_head', 'name' => $each->modules->module_head->user_details->name, 'email' => $each->modules->module_head->user_details->email]);
+                            array_push($dataArray, ['modules'=> $each->modules->name, 'request_id' => $data['request_id'], 'type' => 'module_head', 'name' => $each->modules->module_head->user_details->name, 'email' => $each->modules->module_head->user_details->email, 'for' => Auth::user()->name]);
                         }
                         
                     }

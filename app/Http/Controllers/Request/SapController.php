@@ -404,6 +404,8 @@ class SapController extends Controller {
                 try {
 
                     $create = SAPRequest::create($array);
+                    $data = SAPRequest::where(['module_id' => $each['module_id'], 'user_id' => $user_id, 'request_id' => $requestId, 'tcode_id' => $tcodes])->first();
+                    SendMail::send(['request_id' => $requestId, 'id' => $data->id], 'SapRequestMail', 'RM');
 
                 } catch (\Exception $e) {
 
@@ -413,10 +415,10 @@ class SapController extends Controller {
             }
 
         }
-         if($create) {
+        //  if($create) {
 
-            SendMail::send(['request_id' => $requestId], 'SapRequestMail', 'RM');
-        }
+            
+        // }
         return response(['message' => 'success'], 200);
     }
 
@@ -929,6 +931,7 @@ class SapController extends Controller {
             ]);
 
             $isExists = SAPApprovalLogs::where(['request_id' => $request_id, 'approval_stage' => $type, 'created_by' => Auth::user()->id])->get();
+            
             if($isExists->Count()>0) {
                 $update = SAPApprovalLogs::where(['request_id' => $request_id, 'approval_stage' => $type, 'created_by' => Auth::user()->id])
                 ->update(['status' => $status, 'remarks' => $remarks]);

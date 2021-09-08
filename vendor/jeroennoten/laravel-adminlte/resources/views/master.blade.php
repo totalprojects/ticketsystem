@@ -256,7 +256,210 @@
         
     }
 
-
+    .org-details-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/organization.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-departments-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/departments.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-companies-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/company.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-business-area-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/business-area.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-storage-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/storage.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-designation-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/designation.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .sales-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/Sales.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .sales-offices-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/sales-office.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .sales-distribution-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/sales-distribution.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .sales-division-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/sales-division.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .purchase-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/purchase.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .po-group-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/po-group.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .po-release-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/po-release.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .logs-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/logs.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .login-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/login.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .page-visit-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/page-visit.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .user-activity-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/user-activity.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
    
 </style>
 </head>

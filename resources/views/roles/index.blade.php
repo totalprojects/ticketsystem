@@ -477,6 +477,16 @@ function fetch_data(){
        scrolling: {
            scrollByContent: true,
        },
+ 
+            onCellPrepared: (cellValue) => {  
+
+                let rowData = ((cellValue || {}).row || {}).data || {};  
+                if (cellValue.rowType = 'data') {  
+
+                    cellValue.cellElement.find('.dx-select-checkbox').hide();  
+                    cellValue.cellElement.off();  
+                }  
+            }, 
        wordWrapEnabled: true,
        columns: [
         //    {
@@ -649,12 +659,12 @@ function loadStandardTCodes(permission_id){
                             text: "Loading...",
                             showPane: true,
                         },
-                        selection: {
-                            mode: "multiple",
-                        },
+                        // selection: {
+                        //     mode: "multiple",
+                        // },
                         paging: {
                             enabled:false,
-                            pageSize: 10
+                          
                         },
                         columnChooser: {
                             enabled: true,
@@ -663,42 +673,28 @@ function loadStandardTCodes(permission_id){
                         scrolling: {
                             scrollByContent: true,
                         },
-                        onContentReady: function (e) {
-                           //console.log(window.currentTCodes)
-                            var selectedIds = window.currentTCodes;
-                            var selectedRows = []
-                            $.each(selectedIds, (p) => {
-                                $.each(window.loadData, (i) => {
-                                    if(window.loadData[i].id == selectedIds[p]) {
-                                       //console.log('matched')
-                                        selectedRows.push(i);
+                        onToolbarPreparing: function(e) {
+                                e.toolbarOptions.items.unshift({
+                                location: "before",
+                                visible:true,
+                                    template: function(){
+                                        return $("<div/>")
+                                            .addClass("font-weight-bold")
+                                            .append($("</p>").addClass("mt-0 mb-0 p-0").append(`<input type='checkbox' name='checkall' id='checkall' onClick='checkAll()'> Check All`))
                                     }
                                 })
-                            });
-
-                            e.component.selectRowsByIndexes(selectedRows);
-                            
-                            
-                        },
-                        onSelectionChanged: function(selectedItems) {
-                            var data = selectedItems.selectedRowsData;
-                            var selected_tcodes = [];
-                            if(data.length > 0) 
-                            {
-                                
-                                let text = $.map(data, function(value, i) {
-                                    let action = $("#t_"+value.id).val();
-                                    selected_tcodes.push({'tcode':value.id, 'actions':action});
-                                    return value.t_code;
-                                }).join(", ");
-                               //console.log('selected tcodes spel');
-                               //console.log(selected_tcodes)
-
-                                $("#selected_tcodes").val(JSON.stringify(selected_tcodes))
-                            }
                         },
                         wordWrapEnabled: true,
-                        columns: [{
+                        columns: [
+                            {
+                                dataField:"checks",
+                                caption:"*",
+                                cellTemplate: (container, options) => {
+                                    var html = `<input type='checkbox' class='selected_row' name='selected_row' value='1' onClick='onSelectChange(${options.data.id}, this)'>`
+                                    container.append(html);
+                                }
+
+                            },{
                                 dataField: "id",
                                 caption: "Tcode Id",
                                 width:90,
@@ -720,7 +716,8 @@ function loadStandardTCodes(permission_id){
                                    var actions = options.data.action_details
                                    var id = options.data.id;
                                   ////console.log('id is '+id)
-                                   var html = `<select name='selected_actions[]' id='t_${id}' data-placeholder="Select Actions" class='form-control select2bs4' multiple>`;
+                                   var html = `<select name='selected_actions[]' id='t_${id}' data-placeholder="Select Actions" class='form-control select2bs4' multiple>
+                                   `;
                                    var checked = '';
                         
                                         $.each(actions, (j) => {
@@ -753,11 +750,6 @@ function loadStandardTCodes(permission_id){
                                                 `;
 
                                         });
-
-
-                                    
-                                    
-
                                     html += `</select>`;
 
                                     container.append(html);
@@ -765,20 +757,10 @@ function loadStandardTCodes(permission_id){
 
                             }
                         ],
+    
                     }).dxDataGrid("instance");
 
-                    // var data = ["MB51", 257];
-                    ////console.log(grid)
-                    // var employeesToSelect;
-                    
-                    // employeesToSelect = $.map($.grep(grid.option("dataSource"), function(item) {
-                    //     return item.t_code == data[0];
-                    // }), function(item) {
-                    //     return item.id;
-                    // });
-                    ////console.log('selected')
-                    ////console.log(employeesToSelect)
-                    // //grid.selectRows(employeesToSelect);
+                
 
                        
                    });
@@ -792,6 +774,28 @@ function loadStandardTCodes(permission_id){
   
 
 }
-    
+
+function checkAll() {
+    var value = $("#checkall").is(':checked');
+    console.log(value)
+ $(".selected_row").trigger('click')
+}
+   
+
+
+
+var selected_rows = [];
+    function onSelectChange(id,obj) {
+        console.log('called');
+        var checkedStatus = $(obj).is(":checked");
+        var actions = $("#t_"+id).val()
+        if(checkedStatus) {
+            selected_rows.push({id: id, actions: JSON.stringify(actions)})
+        }
+       
+
+        console.log(selected_rows)
+        console.log(id);
+    }
     </script>
 @stop

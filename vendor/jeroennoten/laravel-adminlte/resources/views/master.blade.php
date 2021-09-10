@@ -26,7 +26,7 @@
     @if(!config('adminlte.enabled_laravel_mix'))
         <!-- <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+        <!-- <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}"> -->
 
         {{-- Configured Stylesheets --}}
         @include('adminlte::plugins', ['type' => 'css'])
@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/pickletree/pickletree.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/custom/developer.css?v=') }} {{  time() }}">
     <!-- Custom Temp CSS -->
     <style>
@@ -473,12 +474,14 @@
     @if(!config('adminlte.enabled_laravel_mix'))
         <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+        <!-- <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script> -->
         <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
+        <script src="{{asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 
         {{-- Configured Scripts --}}
         @include('adminlte::plugins', ['type' => 'js'])
 
+        <!-- <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script> -->
         <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     @else
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>

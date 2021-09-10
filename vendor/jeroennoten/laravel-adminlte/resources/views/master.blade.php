@@ -26,7 +26,7 @@
     @if(!config('adminlte.enabled_laravel_mix'))
         <!-- <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+        <!-- <link rel="stylesheet" href="{{ asset('vendor/overlayScrollbars/css/OverlayScrollbars.min.css') }}"> -->
 
         {{-- Configured Stylesheets --}}
         @include('adminlte::plugins', ['type' => 'css'])
@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/pickletree/pickletree.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/custom/developer.css?v=') }} {{  time() }}">
     <!-- Custom Temp CSS -->
     <style>
@@ -256,7 +257,210 @@
         
     }
 
-
+    .org-details-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/organization.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-departments-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/departments.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-companies-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/company.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-business-area-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/business-area.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-storage-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/storage.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .org-designation-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/designation.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .sales-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/Sales.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .sales-offices-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/sales-office.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .sales-distribution-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/sales-distribution.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .sales-division-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/sales-division.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .purchase-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/purchase.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .po-group-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/po-group.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .po-release-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/po-release.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .logs-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/logs.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .login-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/login.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .page-visit-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/page-visit.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
+    .user-activity-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/user-activity.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
    
 </style>
 </head>
@@ -270,12 +474,14 @@
     @if(!config('adminlte.enabled_laravel_mix'))
         <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+        <!-- <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script> -->
         <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
+        <script src="{{asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 
         {{-- Configured Scripts --}}
         @include('adminlte::plugins', ['type' => 'js'])
 
+        <!-- <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script> -->
         <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
     @else
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>

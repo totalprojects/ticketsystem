@@ -711,6 +711,7 @@ function loadStandardTCodes(permission_id){
                             {
                                 dataField:"actions",
                                 caption:"Actions",
+                                selection:false,
                                 cellTemplate: (container, options) => {
                                     
                                    var actions = options.data.action_details

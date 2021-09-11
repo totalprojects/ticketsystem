@@ -13,74 +13,25 @@ trait SendMail
     public static function send($data = [], $class = '', $type = '') {
 
         $userId = Auth::user()->employee_id;
-
+   
+        $dataArray = self::getData($type, $class, $data);
+       // return $dataArray;
         $namespace = 'App\Mail';
         $email = [];
-        $dataArray = [];
+       // $dataArray = [];
         $classname = $namespace . '\\' . $class;
         if(empty($type)) {
             return response(['message' => 'Type not found', 'status' => 400],400);
         }
 
-        $type = strtoupper($type);
-        $request_id = $data['request_id'];
-        $requested = SAPRequest::where('request_id', $request_id)->with('user', 'modules.module_head.user_details', 'tcodes', 'action')->get();
-
-        switch($type)
-        {
-            case 'RM':
-                $model = EmployeeMappings::where('employee_id', $userId)->with('report_employee','employee')->first();
-                if($model) {
-                    $usermail = Auth::user()->email;
-                    $username = $model->employee->first_name.' '.$model->employee->last_name;
-                    $reportToEmail = $model->report_employee->email;
-                    $reportToName = $model->report_employee->first_name.' '.$model->report_employee->last_name;
-                    $modules = [];
-                    foreach($requested as $each) {
-                        $modules[] = $each->modules->name;
-                    }
-                    $modules = implode(",", $modules);
-
-                    $dataArray[0] = [
-                        'request_id' => $data['request_id'],
-                        'type'=> 'requested_by',
-                        'name' => $username,
-                        'email' => $usermail,
-                        'modules' => $modules
-                    ];
-
-                    $dataArray[1] = [
-                        'request_id' => $data['request_id'],
-                        'type'=> 'reporting_manager',
-                        'for' => $username,
-                        'name' => $reportToName,
-                        'email' => $reportToEmail,
-                        'modules' => $modules
-                    ];
-                } 
-            break;
-
-            case 'MH':
-                if($requested->Count() > 0) {
-                    foreach($requested as $each) {
-                        if(!empty($each->modules->module_head->user_details)) {
-                            array_push($dataArray, ['modules'=> $each->modules->name, 'request_id' => $data['request_id'], 'type' => 'module_head', 'name' => $each->modules->module_head->user_details->name, 'email' => $each->modules->module_head->user_details->email, 'for' => Auth::user()->name]);
-                        }
-                        
-                    }
-                }
-            break;
-            default:
-                
-
-        }
-
-
             try {
                 if(class_exists($classname)) {
                     $d = [];
+                // return $dataArray;
                     foreach($dataArray as $e) {
+                      
                         if(self::isValidEmail($e['email'])) {
+                           
                             $mail = Mail::to($e['email'])->send(new $classname($e));
                         } else {
                             return response(['message' => 'Mail was not fired, either the mail address is invalid or empty', 'status' => 400], 400);
@@ -101,6 +52,70 @@ trait SendMail
 
     public static function isValidEmail($email){ 
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+    }
+
+    public static function getData($type, $classname, $data) {
+
+        switch($classname) {
+            case 'SapRequestMail':
+                $requested = SAPRequest::where('id', $data[0]['id'])->with('user', 'modules.module_head.user_details', 'tcodes', 'action')->first();
+               // return $requested;
+                switch($type) {
+                    case 1:
+                        if(!empty($data)) {
+                            $userId = Auth::user()->employee_id;
+                            $model = EmployeeMappings::where('employee_id', $userId)->with('report_employee','employee')->first();
+                            if($model) {
+                                $usermail = Auth::user()->email;
+                                $username = $model->employee->first_name.' '.$model->employee->last_name;
+                                $reportToEmail = $model->report_employee->email;
+                                $reportToName = $model->report_employee->first_name.' '.$model->report_employee->last_name;
+                                $modules = [];
+                                $modules = $requested->modules->name ?? '-';                          
+
+                                $dataArray[0] = [
+                                    'request_id' => $data[0]['request_id'],
+                                    'type'=> 'requested_by',
+                                    'name' => $username,
+                                    'email' => $usermail,
+                                    'modules' => $modules
+                                ];
+
+                                $dataArray[1] = [
+                                    'request_id' => $data[0]['request_id'],
+                                    'type'=> 'reporting_manager',
+                                    'for' => $username,
+                                    'name' => $reportToName,
+                                    'email' => $reportToEmail,
+                                    'modules' => $modules
+                                ];
+                            } 
+                        }   
+                        break;
+
+                        case 2:
+                            foreach($requested as $each) {
+                                if(!empty($each->modules->module_head->user_details)) {
+                                    array_push($dataArray, ['modules'=> $each->modules->name, 'request_id' => $data[0]['request_id'], 'type' => 'module_head', 'name' => $each->modules->module_head->user_details->name, 'email' => $each->modules->module_head->user_details->email, 'for' => Auth::user()->name]);
+                                }
+                                
+                            }
+                            break;                
+                }
+                    break;
+
+                case 'EmailRequest':
+                    break;
+                
+                case 'CRMRequest':
+                    break;
+                
+                default:
+                    $dataArray = [];
+        }
+
+        return $dataArray;
+    
     }
 }
 

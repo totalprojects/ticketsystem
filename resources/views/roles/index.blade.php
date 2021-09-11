@@ -690,7 +690,15 @@ function loadStandardTCodes(permission_id){
                                 dataField:"checks",
                                 caption:"*",
                                 cellTemplate: (container, options) => {
-                                    var html = `<input type='checkbox' class='selected_row' name='selected_row' value='1' onClick='onSelectChange(${options.data.id}, this)'>`
+                                    var tcode_id = options.data.id;
+                                    console.log(window.currentTCodes)
+                                    var checked = '';
+                                    $.each(window.currentTCodes, (i) => {
+                                        if(tcode_id == window.currentTCodes[i]) {
+                                            checked = 'checked'
+                                        }
+                                    })
+                                    var html = `<input type='checkbox' class='selected_row' name='selected_row[]' value='1' onClick='onSelectChange(${options.data.id}, this)' ${checked}>`
                                     container.append(html);
                                 }
 
@@ -787,16 +795,36 @@ function checkAll() {
 
 var selected_rows = [];
     function onSelectChange(id,obj) {
-        console.log('called');
+        //console.log('called');
         var checkedStatus = $(obj).is(":checked");
         var actions = $("#t_"+id).val()
         if(checkedStatus) {
-            selected_rows.push({id: id, actions: JSON.stringify(actions)})
+            if(selected_rows.length > 0) {
+                let flag = 0
+                $.each(selected_rows, (i) => {
+                    if(selected_rows[i].id == id) {
+                        flag = 1
+                    } 
+                })
+                if(flag == 0) {
+                    selected_rows.push({id: id, actions: JSON.stringify(actions)})
+                }
+            } else {
+                selected_rows.push({id: id, actions: JSON.stringify(actions)})
+            }
+           
+        } else {
+            selected_rows = selected_rows.filter(function( obj ) {
+                return obj.id !== id;
+            })
         }
        
 
-        console.log(selected_rows)
-        console.log(id);
+         console.log(selected_rows)
+        // console.log(id);
     }
+
+
+    
     </script>
 @stop

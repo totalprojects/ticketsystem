@@ -37,8 +37,11 @@ class SapController extends Controller {
     use SendMail;
 
     public function index() {
-
-  
+    //     $data = SAPRequest::where(['module_id' => 7, 'user_id' => 11, 'request_id' => 'RN11/21/09/1631014452'])->get();
+    //                 $stage = \ModuleApprovalStages::where('module_id', 7)->with('module')->orderBy('approval_matrix_id','asc')->get();
+    //    //return $data;
+    //                 $mail = SendMail::send($data, 'SapRequestMail', $stage[0]->approval_matrix_id, 1);
+     //   return $mail;
         $companies     = CompanyMasters::all();
         $divisions     = Divisions::all();
         $distributions = Distributions::all();

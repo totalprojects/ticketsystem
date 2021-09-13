@@ -221,20 +221,20 @@ $(document).on('click','#add_btn', ()=> {
 });
 
 
-$(document).on('click','#update-btn', ()=> {
-
-$("#update-frm").validate({
-    rules:{
-        edesignation_name:{
-            required:true
-        },
-    },
-    submitHandler:(r) => {
-        //'next')
+$(document).on('click','#update-btn', (e)=> {
+    var etemplateValue = editorValue1.getData();
+    e.preventDefault();
+if(etemplateValue.length<1) {
+    toastr.error('You must fill the template to continue');
+    return false;
+}
+var etype_id = $("#etype_id").val();
+var eapprover_id = $("#eapprover_id").val();
+var eid = $("#eid").val();
         var url = "{{  route('update.mail.template') }}"
         $.ajax({
             url:url,
-            data:$("#update-frm").serialize(),  
+            data:{eid,etype_id,eapprover_id,etemplateValue},  
             type:"POST",
             headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -254,9 +254,8 @@ $("#update-frm").validate({
             }
 
         })
-    }
-});
-});
+    })
+
 
 
 $(document).on('click','#add-btn', (e)=> {
@@ -382,6 +381,28 @@ function fetch_data(){
                 dataField:"html_template",
                 caption:"Template",
                 encodeHtml:false
+           },
+           {
+                dataField:"type_id",
+                caption:"Mail Type",
+                cellTemplate: (container, options) => {
+                    var type_id = options.data.type_id;
+                    var html = ``;
+                    switch(type_id) {
+                        case 1:
+                            html = `<span class='badge badge-primary'>Request</span>`
+                        break;
+                        case 2:
+                            html = `<span class='badge badge-success'>Approve</span>`
+                        break;
+                        case 3:
+                            html = `<span class='badge badge-danger'>Reject</span>`
+                        break;
+
+                    }
+
+                    container.append(html);
+                }
            },
            {
                dataField: "Action",

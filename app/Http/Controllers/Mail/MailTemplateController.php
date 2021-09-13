@@ -95,4 +95,41 @@ class MailTemplateController extends Controller
         }
 
     }
+
+    public function update(Request $request) {
+
+        //return $request->all();
+        $type_id = $request->etype_id;
+        $id = $request->eid;
+        $approver_id = $request->eapprover_id;
+        $template = $request->etemplateValue;
+
+        try {
+            $isDuplicate = MailTemplates::where([
+                'type_id' => $type_id,
+                'approval_matrix_id' => $approver_id
+            ])->get();
+
+            if($isDuplicate->Count()==1) {
+
+                $create = MailTemplates::where('id',$id)->update([
+                    'type_id' => $type_id,
+                    'approval_matrix_id' => $approver_id,
+                    'html_template' => $template,
+                    'status' => 1,
+                    'created_at' => NOW(),
+                    'updated_at' => NOW()
+                ]);
+
+                return response(['message' => 'Template was updated successfully', 'status' => 200], 200);
+            
+            } else {
+                return response(['message' => 'Duplicate Template found', 'status' => 400], 200);
+            }
+
+        } catch(\Exception $e) {
+            return response(['message' => $e->getMessage(), 'status' => 500], 500);
+        }
+
+    }
 }

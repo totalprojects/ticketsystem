@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Users;
+use DB;
 
 class tbl_sap_approval_logs extends Model {
     use HasFactory;
@@ -15,5 +16,9 @@ class tbl_sap_approval_logs extends Model {
 
     public function created_by_user() {
         return $this->belongsTo(Users::class, 'created_by', 'id');
+    }
+
+    public function getTableColumns(){
+        return DB::getSchemaBuilder()->getColumnListing($this->getTable());
     }
 }

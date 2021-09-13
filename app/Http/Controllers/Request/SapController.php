@@ -38,25 +38,7 @@ class SapController extends Controller {
 
     public function index() {
 
-        /* test mail */
-        // $data = ['name' => 'Joydeep Banerjee', 'email' => 'joydeep@shyamfuture.com'];
-        // $mail = SendMail::send($data, 'SapRequestMail');
-        // return $mail;
-                    $data = SAPRequest::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->limit(1)->get();
-                    $stage = \ModuleApprovalStages::where('module_id', $data[0]->module_id)->with('module')->orderBy('approval_matrix_id','asc')->get();
-                    if(isset($stage)) {
-                        $result = SendMail::send($data, 'SapRequestMail', $stage[0]->approval_matrix_id);
-                        return $result;
-                    } 
-
-                    // storeActivity([
-                    //     'user_id' => Auth::user()->id,
-                    //     'activity_type' => 'Testing mail for module: '.$stage[0]->module->name ?? '-',
-                    //     'created_at' => NOW(),
-                    //     'updated_at' => NOW()
-                    // ]);
-
-
+  
         $companies     = CompanyMasters::all();
         $divisions     = Divisions::all();
         $distributions = Distributions::all();

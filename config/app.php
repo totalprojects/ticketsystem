@@ -267,7 +267,9 @@ return [
         'ApprovalMatrix'    => App\Models\tbl_approval_matrix_masters::class,
         'ModuleApprovalStages'=> App\Models\tbl_module_approval_stages::class,
         'RoleTcodeAccess'   => App\Models\tbl_role_wise_module_tcode_access::class,
-        'Moderators'        => App\Models\tbl_moderator_masters::class
+        'Moderators'        => App\Models\tbl_moderator_masters::class,
+        'MailTemplates'      => App\Models\tbl_mail_templates::class,
+        'MailVariables'      => App\Models\tbl_mail_variable_masters::class
 
     ]
 

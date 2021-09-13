@@ -19,6 +19,8 @@ use Permission;
 use TCodes;
 use Users;
 use SAPApprovalLogs;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class tbl_sap_requests extends Model {
     use HasFactory;
@@ -98,6 +100,10 @@ class tbl_sap_requests extends Model {
 
     public function approval_logs() {
         return $this->hasMany(SAPApprovalLogs::class, 'request_id', 'id');
+    }
+
+    public function getTableColumns(){
+        return DB::getSchemaBuilder()->getColumnListing($this->getTable());
     }
 
 }

@@ -25,7 +25,8 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\BusinessAreaController;
 use App\Http\Controllers\LogsController;
 use App\Http\Controllers\TreeController;
-
+use App\Http\Controllers\Mail\MailTemplateController;
+use App\Http\Controllers\Mail\VariableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,10 +96,15 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitL
     Route::get('/visits/logs',[LogsController::class, 'visits'])->name('view.page.visits');
     Route::get('/activities/logs',[LogsController::class, 'activities'])->name('view.user.activity.logs');
 
+
+    /** Mail Templates */
+    Route::get('/mail/templates',[MailTemplateController::class, 'index'])->name('view.mail.templates');
+    
 });
 
 /** Ajax Read Calls */
 Route::group(['prefix' => 'listings'], function () {
+    
     Route::get('/fetch/users-list/{token}', [UserController::class, 'fetchUsers'])->name('users.list');
     Route::get('/fetch/menu/list', [MenuController::class, 'fetchMenus'])->name('get.menu.list');
     Route::get('/fetch/role/list', [RoleController::class, 'fetchRoles'])->name('get.roles.list');
@@ -144,6 +150,9 @@ Route::group(['prefix' => 'listings'], function () {
     Route::get('/fetch-login-logs', [LogsController::class, 'fetch_login_logs'])->name('get.login.logs');
     Route::get('/fetch-visit-logs', [LogsController::class, 'fetch_visit_logs'])->name('get.visit.logs');
     Route::get('/fetch-activity-logs', [LogsController::class, 'fetch_activity_logs'])->name('get.activity.logs');
+
+    /** Mail Templates */
+    Route::get('/fetch-mail-templates', [MailTemplateController::class, 'fetchMailTemplates'])->name('get.mail.templates');
 
 });
 
@@ -223,6 +232,14 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
 
     /** Create Duplicate Role */
     Route::post('/create/duplicate/role', [RoleController::class,'createDuplicateRole'])->name('create.duplicate.role');
+
+    /** Mail Templates Add & Update */
+    Route::post('/add/mail/template', [MailTemplateController::class, 'create'])->name('create.mail.template');
+    Route::post('/update/mail/template', [MailTemplateController::class, 'update'])->name('update.mail.template');
+    Route::get('/generateFields', [MailTemplateController::class,'generateFields'])->name('generateFields');
+    
+
+
 
 });
 

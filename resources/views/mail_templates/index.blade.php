@@ -64,6 +64,7 @@
                             </select>
                         </div>  
                         <div class="col-lg-12 pt-2">
+                            <a href="javascript:void(0)" onclick="clearCache()">Clear Cache</a> <br>
                             <div id="templateVariables"></div>
                             <textarea class="form-control" id="editor" ondrop="drop(event)" ondragover="allowDrop(event)"></textarea>
                         </div>                     
@@ -167,7 +168,7 @@ $(document).on('change', '#type_id', (e) => {
                 var data = r.data;
                 var html = `<label for="">SAP Template Variables [Drag/Drop]</label> <br>`;
                 $.each(data, (i) => {
-                    html += `<div class="badge badge-primary p-2 m-2" draggable="true" ondragstart="drag(event)">##${data[i]}##</div>`;
+                    html += `<div class="badge badge-primary p-2 m-2" draggable="true" ondragstart="drag(event)" id="##${data[i].value}##">${data[i].name}</div>`;
                 })
 
                 $("#templateVariables").html(html)
@@ -182,12 +183,37 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
-  ev.dataTransfer.setData("text", ev.target.innerHTML);
+  ev.dataTransfer.setData("text", ev.target.id);
+  console.log(ev.target.innerHTML)
+  var data = [];
+  var flag = true
+  
+  variables = JSON.parse(localStorage.getItem('variables'));
+  if(variables) {
+  // validate
+    $.each(variables, (i) => {
+        if(variables[i] == ev.target.id) {
+            flag = false;
+        }
+    });
+
+    if(flag === true) {
+        variables.push(ev.target.id);
+        localStorage.setItem('variables', JSON.stringify(variables));
+    }
+   
+  } else {
+    data.push(ev.target.id)
+    localStorage.setItem('variables', JSON.stringify(data));
+  }
+  
 }
 
 function drop(ev) {
+   
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
+  
   ev.target.appendChild(document.getElementById(data));
 }
 
@@ -261,7 +287,11 @@ var eid = $("#eid").val();
 $(document).on('click','#add-btn', (e)=> {
     e.preventDefault();
     var templateValue = editorValue.getData();
-
+    var variables = localStorage.getItem('variables');
+    if(variables.length==0) {
+        toastr.error('There are no variables in this template!');
+        return false;
+    }
     if(templateValue.length<1) {
         toastr.error('You must fill the template to continue');
         return false;
@@ -271,7 +301,7 @@ $(document).on('click','#add-btn', (e)=> {
             var url = "{{ route('create.mail.template') }}"
             $.ajax({
                 url:url,
-                data:{type_id, approver_id, templateValue},
+                data:{type_id, approver_id, templateValue,variables},
                 type:"POST",
                 headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -443,7 +473,9 @@ function fetch_data(){
     
 }
 
-
+function clearCache() {
+    localStorage.removeItem('variables');
+}
     
 
     

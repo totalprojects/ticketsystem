@@ -66,68 +66,6 @@ trait SendMail
 
                 case 1:
                 // type says if its RM or MH or SAP Lead etc
-                switch($type) {
-                    // reporting manager 
-                    case 1:
-                            $userId = Auth::user()->employee_id;
-                            $model = EmployeeMappings::where('employee_id', $userId)->with('report_employee','employee')->first();
-                            if($model) {
-                                $usermail = Auth::user()->email;
-                                $username = $model->employee->first_name.' '.$model->employee->last_name;
-                                $reportToEmail = $model->report_employee->email;
-                                $reportToName = $model->report_employee->first_name.' '.$model->report_employee->last_name;
-                                $modules = [];
-                                $modules = $requested->modules->name ?? '-';                          
-                                // get template and variables to be replaced
-                                $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 0])->first();
-                                $templateHTML = [];
-                                if($template) {
-                                    $templateHTML['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $username, $template->html_template));
-                                    $templateHTML['email'] = $usermail;
-                                }
-                                
-                                $dataArray[0] = $templateHTML;
-
-                                $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 1])->first();
-                                $templateHTML_1 = [];
-                                if($template) {
-                                    $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
-                                    $templateHTML_1['email'] = $reportToEmail;
-                                }
-
-                                $dataArray[1] = $templateHTML_1;
-                            } 
-                           
-                        break;
-                        // module head
-                        case 2:
-                            $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 2])->first();
-                                $templateHTML_1 = [];
-                                
-                            foreach($requested as $each) {
-                                if(!empty($each->modules->module_head->user_details)) {
-                                    if($template) {
-                                        $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],
-                                            str_replace("##user_id##",
-                                                $each->modules->module_head->user_details->name,
-                                                $template->html_template
-                                            )
-                                        );
-
-                                        $templateHTML_1['email'] = $each->modules->module_head->user_details->email;
-                                        array_push($dataArray, $templateHTML_1);
-                                    }
-                                   
-                                }
-                                
-                            }
-                            break;                
-                    }
-                break;
-
-               
-                case 2:
-                    //approve
                     switch($type) {
                         // reporting manager 
                         case 1:
@@ -147,6 +85,81 @@ trait SendMail
                                         $templateHTML['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $username, $template->html_template));
                                         $templateHTML['email'] = $usermail;
                                     }
+                                    
+                                    $dataArray[0] = $templateHTML;
+
+                                    $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 1])->first();
+                                    $templateHTML_1 = [];
+                                    if($template) {
+                                        $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
+                                        $templateHTML_1['email'] = $reportToEmail;
+                                    }
+
+                                    $dataArray[1] = $templateHTML_1;
+                                } 
+                            
+                            break;
+                            // module head
+                            case 2:
+                                $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 2])->first();
+                                    $templateHTML_1 = [];
+                                    
+                                foreach($requested as $each) {
+                                    if(!empty($each->modules->module_head->user_details)) {
+                                        if($template) {
+                                            $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],
+                                                str_replace("##user_id##",
+                                                    $each->modules->module_head->user_details->name,
+                                                    $template->html_template
+                                                )
+                                            );
+
+                                            $templateHTML_1['email'] = $each->modules->module_head->user_details->email;
+                                            array_push($dataArray, $templateHTML_1);
+                                        }
+                                    
+                                    }
+                                    
+                                }
+                                break;                
+                        }
+                break;
+
+               
+                case 2:
+                    //approve
+                    switch($type) {
+                        // reporting manager 
+                        case 1:
+                                $userId = Auth::user()->employee_id;
+                                // find log for approved transactions
+                                $logs = SAPApprovalLogs::where(['request_id' => $data[0]['id'], 'status' => 1, 'approval_stage' => 1])->with('created_by_user')->get();
+                                
+                                $model = EmployeeMappings::where('employee_id', $userId)->with('report_employee','employee')->first();
+                                if($model) {
+                                    $usermail = Auth::user()->email;
+                                    $username = $model->employee->first_name.' '.$model->employee->last_name;
+                                    $reportToEmail = $model->report_employee->email;
+                                    $reportToName = $model->report_employee->first_name.' '.$model->report_employee->last_name;
+                                    $modules = [];
+                                    $modules = $requested->modules->name ?? '-';                          
+                                    // get template and variables to be replaced
+                                    $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 0])->first();
+                                    $templateHTML = [];
+                                    if($template && $logs->Count()>0) {
+                                        $status = $logs[0]->status ?? '-';
+                                        $status = 'Rejected';
+                                        if($status == 1) {
+                                            $status = 'Approved';
+                                        } 
+                                        $remarks = $logs[0]->remarks ?? '-';
+                                        $created_by = $logs[0]->created_by_user->name ?? '-';
+                                        $approval_stage = $logs[0]->approval_stage;
+                                        $approval_stage = \ApprovalMatrix::where('id', $approval_stage)->with('approval_matrix')->first();
+                                        $approval_stage = $approval_stage->approval_type ?? '-';
+                                        $templateHTML['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $username, $template->html_template))))));
+                                        $templateHTML['email'] = $usermail;
+                                    } 
                                     
                                     $dataArray[0] = $templateHTML;
     

@@ -39,9 +39,13 @@
 }
 </style>
     <div class="tab-content p-1">
-        <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-user-lock"></i> Critical Tcodes </h4></div>
         <div class="tab-pane active dx-viewport" id="users">
-            <div class="demo-container p-3">
+            <div class="demo-container">
+                <div class="top-info">
+                    <div class="table-heading-custom"><h4 class="right"><i class="fas fa-user-lock"></i> Critical Tcodes </h4></div>
+                    <div class="multibtn-sec">
+                    </div>
+                </div>
             {{-- <button id="add_permission" class='btn btn-primary p-1'><i class='fa fa-plus'></i> Module</button>
             &nbsp;
             <button id="add_tcodes" class='btn btn-primary p-1'><i class='fa fa-plus'></i> T-CODES</button> --}}
@@ -663,7 +667,7 @@ function fetch_data(){
                 caption:"Tcodes",
                 cellTemplate: (container, options) => {
                     var permission_id = options.data.id;
-                    var html = `<a href='javascript:void(0)' class='btn btn-warning p-1' onClick='showTcodes(${permission_id})'>Show TCodes</a>`;
+                    var html = `<a href='javascript:void(0)' class='btn-sm btn-warning p-1' onClick='showTcodes(${permission_id})'>Show TCodes</a>`;
                         container.append(html);
                 }
            },

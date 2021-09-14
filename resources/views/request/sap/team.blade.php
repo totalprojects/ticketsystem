@@ -10,10 +10,14 @@
 
 @section('content')
     <div class="tab-content p-1">
-        <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-copy"></i> Team SAP Requests</h4><br></div>
         <div class="tab-pane active dx-viewport" id="request_block">
-            <div class="demo-container p-3">
-                <button id="request_btn" class='btn btn-primary p-1 d-none'><i class="fas fa-fist-raised"></i> Raise Request</button>
+            <div class="demo-container">
+                <div class="top-info">
+                    <div class="table-heading-custom"><h4 class="right"><i class="fas fa-copy"></i> Team SAP Requests</h4></div>
+                    <div class="multibtn-sec">
+                       <button id="request_btn" class='custom-theme-btn'><i class='fas fa-fist-raised'></i> Raise Request</button>
+                    </div>
+                </div>
                 <div id="request-list-div" style="height:600px"></div>
             </div>
         </div>

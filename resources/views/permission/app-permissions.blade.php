@@ -39,12 +39,14 @@
 }
 </style>
     <div class="tab-content p-1">
-        <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-globe"></i> App Permissions </h4></div>
         <div class="tab-pane active dx-viewport" id="users">
-            <div class="demo-container p-3">
-            <button id="add_permission" class='btn btn-primary p-1'><i class='fa fa-plus'></i> App Permission</button>
-            &nbsp;
-           
+            <div class="demo-container">
+                <div class="top-info">
+                    <div class="table-heading-custom"><h4 class="right"><i class="fas fa-globe"></i> App Permissions </h4></div>
+                    <div class="multibtn-sec">
+                       <button id="add_permission" class='custom-theme-btn'><i class='fa fa-plus'></i> App Permission</button>
+                    </div>
+              </div>
                 <div id="roles-list-div" style="height:600px"></div>
             </div>
         </div>

@@ -535,7 +535,9 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
         min-height: 150px;
       }
       
-      
+      .setings-btn {
+    border-radius: 5px;
+}
       .orderstatus:before {
         /* content: '';
         height: 100%;

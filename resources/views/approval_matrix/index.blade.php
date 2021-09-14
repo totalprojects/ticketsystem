@@ -114,9 +114,11 @@
 </div>
 
 <div class="tab-content p-1">
-    <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right"><i class="fas fa-tasks"></i> Module List & Approval Stages </h4></div>
     <div class="tab-pane active dx-viewport" id="module-approval-stages">
-        <div class="demo-container p-3">
+        <div class="demo-container">
+            <div class="top-info">
+                    <div class="table-heading-custom"><h4 class="right"><i class="fas fa-tasks"></i> Module List & Approval Stages </h4></div>
+              </div>
             <div id="module-list-div" style="height:auto"></div>
         </div>
     </div>
@@ -318,7 +320,7 @@ function fetch_data(){
 
                    html += "<div class='col-lg-12 pt-2'><button type='submit' class='btn btn-primary' id='am_btn' style='padding:5px !important;'>Save Changes</button></div></div></form>";
                
-                var link = $(`<a href="javascript:void(0)" class='btn btn-primary' style='font-size:11px' id='link_${permission_id}' title="edit">`).html("<i class='fas fa-user-cog'></i> Settings")
+                var link = $(`<a href="javascript:void(0)" class='setings-btn btn-primary' style='font-size:11px' id='link_${permission_id}' title="edit">`).html("<i class='fas fa-user-cog'></i> Settings")
                     .attr("href", "javascript:void(0)")
 
                 link.on("click", function () {

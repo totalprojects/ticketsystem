@@ -82,7 +82,7 @@ trait SendMail
                                     $modules = $requested->modules->name ?? '-';                          
                                     // get template and variables to be replaced
                                     $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 0])->first();
-
+                                   // echo json_encode($template); exit;
                                     $templateHTML = [];
                                     if($template) {
                                         $templateID = $template->id;
@@ -121,12 +121,15 @@ trait SendMail
                                         $module_id = $requested->modules->name;
                                         $tcode_id = $requested->tcodes->t_code;
                                         $user_id = $reportToName;
+                                        $requester_id = $username;
+                                        //echo $requester_id; exit;
                                         $actions = '';
                                         foreach($requested->action as $ea) {
                                             $actions .= $ea->name.',';
                                         }
                                         $actions = substr($actions,0,-1);
                                         $templateHTML_1['template'] = $template->html_template;
+                                       // echo json_encode($variables); exit;
                                         foreach($variables as $each) {
                                             $var = str_replace("##", "", $each->variable_name);
                                             if(isset($$var)) {
@@ -140,6 +143,8 @@ trait SendMail
 
                                     $dataArray[1] = $templateHTML_1;
                                 } 
+
+                               // echo json_encode($dataArray); exit;
                             break;
 
                             // module head
@@ -363,10 +368,12 @@ trait SendMail
                                           $templateID = $template->id;
                                             // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                                             $variables = \MailVariables::where('template_id',$templateID)->get();
+                                           // echo json_encode($variables); exit;
                                             $request_id = $data[0]['request_id'];
                                             $module_id = $requested->modules->name;
                                             $tcode_id = $requested->tcodes->t_code;
                                             $user_id = $username;
+                                            $requester_id = $username;
                                             $actions = '';
                                             foreach($requested->action as $ea) {
                                                 $actions .= $ea->name.',';
@@ -430,7 +437,7 @@ trait SendMail
                                     $dataArray[1] = $templateHTML_1;
                                 } 
 
-                               // echo json_encode($dataArray); exit;
+                                //echo json_encode($dataArray); exit;
                                
                             break;
                             // module head
@@ -457,6 +464,7 @@ trait SendMail
                                             $module_id = $requested->modules->name;
                                             $tcode_id = $requested->tcodes->t_code;
                                             $user_id = $username;
+                                            $requester_id = $username;
                                             $actions = '';
                                             foreach($requested->action as $ea) {
                                                 $actions .= $ea->name.',';
@@ -539,6 +547,7 @@ trait SendMail
                                         $user = \Users::where('id',$userId)->first();
                                         $email = $user->email;
                                         $username = $user->name;
+                                        $requester_id = $username;
                                         // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                                         $variables = \MailVariables::where('template_id',$templateID)->get();
                                         $sap_lead = \Moderators::where('type_id', 1)->first();
@@ -640,6 +649,7 @@ trait SendMail
                                  $sapLeadEmail = $sapLeadEmail->email;
                                  $request_id = $data[0]['request_id'];
                                  $module_id = $requested->modules->name;
+                                 $requester_id = $username;
                                  $tcode_id = $requested->tcodes->t_code;
                                  $user_id = $reportToName;
                                  $remarks = $logs[0]->remarks ?? '-';
@@ -723,6 +733,7 @@ trait SendMail
                                  $user = \Users::where('id',$userId)->first();
                                  $email = $user->email;
                                  $username = $user->name;
+                                 $requester_id = $username;
                                  // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                                  $variables = \MailVariables::where('template_id',$templateID)->get();
                                  $sap_lead = \Moderators::where('type_id', 3)->first();
@@ -814,6 +825,7 @@ trait SendMail
                                  $user = \Users::where('id',$userId)->first();
                                  $email = $user->email;
                                  $username = $user->name;
+                                 $requester_id = $username;
                                  // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                                  $variables = \MailVariables::where('template_id',$templateID)->get();
                                  $sap_lead = \Moderators::where('type_id', 4)->first();
@@ -933,6 +945,7 @@ trait SendMail
                                         $tcode_id = $requested->tcodes->t_code;
                                         $remarks = $logs[0]->remarks ?? '-';
                                         $created_by = $username;
+                                        $requester_id = $username;
                                         $approval_stage = $logs[0]->approval_stage;
                                         $approval_stage = \ApprovalMatrix::where('id', $approval_stage)->first();
                                         $approval_stage = $approval_stage->approval_type ?? '-';
@@ -1013,6 +1026,7 @@ trait SendMail
                                         $user = \Users::where('id',$userId)->first();
                                         $email = $user->email;
                                         $username = $user->name;
+                                        $requester_id = $username;
                                         // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                                         $variables = \MailVariables::where('template_id',$templateID)->get();
                                         $request_id = $data[0]['request_id'];
@@ -1101,6 +1115,7 @@ trait SendMail
                                     $user = \Users::where('id',$userId)->first();
                                     $email = $user->email;
                                     $username = $user->name;
+                                    $requester_id = $username;
                                     // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                                     $variables = \MailVariables::where('template_id',$templateID)->get();
                                     $sap_lead = \Moderators::where('type_id', 1)->first();
@@ -1194,6 +1209,7 @@ trait SendMail
                              $user = \Users::where('id',$userId)->first();
                              $email = $user->email;
                              $username = $user->name;
+                             $requester_id = $username;
                              // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                              $variables = \MailVariables::where('template_id',$templateID)->get();
                              $sap_lead = \Moderators::where('type_id', 2)->first();
@@ -1285,6 +1301,7 @@ trait SendMail
                              $user = \Users::where('id',$userId)->first();
                              $email = $user->email;
                              $username = $user->name;
+                             $requester_id = $username;
                              // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                              $variables = \MailVariables::where('template_id',$templateID)->get();
                              $sap_lead = \Moderators::where('type_id', 3)->first();
@@ -1376,6 +1393,7 @@ trait SendMail
                              $user = \Users::where('id',$userId)->first();
                              $email = $user->email;
                              $username = $user->name;
+                             $requester_id = $username;
                              // $templateHTML_1['template'] = str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $reportToName, $template->html_template));
                              $variables = \MailVariables::where('template_id',$templateID)->get();
                              $sap_lead = \Moderators::where('type_id', 4)->first();

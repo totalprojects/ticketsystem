@@ -265,9 +265,9 @@
                                         var tcode = JSON.parse(options.data.tcode);
                                         //console.log(tcode)
                                         var html = ``;
-                                        $.each(tcode, (i) => {
-                                            html += `<span class='badge badge-primary'>${tcode[i].description} (${tcode[i].t_code})</span>`;
-                                        })
+                                      //  $.each(tcode, (i) => {
+                                            html += `<span class='badge badge-primary'>${tcode.description} (${tcode.t_code})</span>`;
+                                       // })
                                       
                                         container.append(html)
                                     }
@@ -430,40 +430,40 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                   switch(type) {
 
                     case 'REPORTING_MANAGER':
-                      (IS_RM === true) ? status_text += `<br> <a href='javascript:void(0)' class='btn btn-success p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)'><i class='fas fa-check'></i> Approve</a>
-                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
+                      (IS_RM === true) ? status_text += `<br> <a href='javascript:void(0)' class='btn btn-success p-1 text-white' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},1)'><i class='fas fa-check'></i> Approve</a>
+                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br>
                       <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>
                       ` : '';
                       break;
                     case 'MODULE_HEAD':
-                      (IS_MH === true && logs[i-2] !== undefined && logs[i-2].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
-                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
+                      (IS_MH === true && logs[i-2] !== undefined && logs[i-2].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br>
 
                       <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>
                       ` : '';
                       break;
                     case 'SAP_LEAD':
-                      (IS_SAP_LEAD === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
-                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
+                      (IS_SAP_LEAD === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>
                       ` : '';
                       break;
                     case 'DIRECTOR':
-                      (IS_DIRECTOR === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
-                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
+                      (IS_DIRECTOR === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br><textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>
                       ` : '';
                       break;
                     case 'IT_HEAD':
-                      (IS_IT_HEAD === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
-                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a> <br>
+                      (IS_IT_HEAD === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a> <br>
                       <textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>` : '';
                       break;
                     case 'BASIS':
-                      (IS_BASIS === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
-                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
+                      (IS_BASIS === 'true' && logs[i-2] !== undefined && logs[i-3] !== undefined && logs[i-2].status == 1 && logs[i-3].status == 1) ? status_text += `<br> <a href='javascript:void(0)' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},1)' class='btn btn-success p-1 text-white'><i class='fas fa-check'></i> Approve</a>
+                      <a href='javascript:void(0)' class='btn btn-danger p-1 text-white' onClick='approve(this,${approval_stages[stages[i] - 1].id},${request_id},0)'><i class='fas fa-times'></i> Reject</a>
                       <br><textarea id="r_${request_id}" name='approval_remarks' class='form-control pt-2' placeholder='Enter Remarks'></textarea>` : '';
                       break;
                      default:
@@ -495,7 +495,9 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
 
 }
 
-function approve(approver, request_id, status = 1) {
+function approve(obj, approver, request_id, status = 1) {
+  $(obj).prop('disabled', true);
+  toastr.info('Processing...');
   var remarks = $("#r_"+request_id).val();
   if(remarks.length == 0) {
     toastr.error('Remarks field is mandatory');
@@ -512,9 +514,10 @@ function approve(approver, request_id, status = 1) {
       //console.log(r)
     },
     success:(r) => {
-      //console.log(r)
+      console.log(r)
+      $(obj).prop('disabled', false);
       toastr.success('The status was changed to approved');
-      loadStatusModal(status, r.created_at, r.logs, request_id);
+     loadStatusModal(status, r.created_at, r.logs, request_id);
       //console.log(r);
     }
   })

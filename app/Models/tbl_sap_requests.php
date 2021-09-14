@@ -95,7 +95,7 @@ class tbl_sap_requests extends Model {
     }
 
     public function tcodes() {
-        return $this->belongsToJson(TCodes::class, 'tcode_id', 'id');
+        return $this->belongsTo(TCodes::class, 'tcode_id', 'id');
     }
 
     public function approval_logs() {

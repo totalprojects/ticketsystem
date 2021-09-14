@@ -64,6 +64,7 @@
                             </select>
                         </div>  
                         <div class="col-lg-12 pt-2">
+                            <a href="javascript:void(0)" onclick="clearCache()">Clear Cache</a> <br>
                             <div id="templateVariables"></div>
                             <textarea class="form-control" id="editor" ondrop="drop(event)" ondragover="allowDrop(event)"></textarea>
                         </div>                     
@@ -167,7 +168,7 @@ $(document).on('change', '#type_id', (e) => {
                 var data = r.data;
                 var html = `<label for="">SAP Template Variables [Drag/Drop]</label> <br>`;
                 $.each(data, (i) => {
-                    html += `<div class="badge badge-primary p-2 m-2" draggable="true" ondragstart="drag(event)">##${data[i]}##</div>`;
+                    html += `<div class="badge badge-primary p-2 m-2" draggable="true" ondragstart="drag(event)" id="##${data[i].value}##">${data[i].name}</div>`;
                 })
 
                 $("#templateVariables").html(html)
@@ -182,12 +183,37 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
-  ev.dataTransfer.setData("text", ev.target.innerHTML);
+  ev.dataTransfer.setData("text", ev.target.id);
+  console.log(ev.target.innerHTML)
+  var data = [];
+  var flag = true
+  
+  variables = JSON.parse(localStorage.getItem('variables'));
+  if(variables) {
+  // validate
+    $.each(variables, (i) => {
+        if(variables[i] == ev.target.id) {
+            flag = false;
+        }
+    });
+
+    if(flag === true) {
+        variables.push(ev.target.id);
+        localStorage.setItem('variables', JSON.stringify(variables));
+    }
+   
+  } else {
+    data.push(ev.target.id)
+    localStorage.setItem('variables', JSON.stringify(data));
+  }
+  
 }
 
 function drop(ev) {
+   
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
+  
   ev.target.appendChild(document.getElementById(data));
 }
 
@@ -221,20 +247,20 @@ $(document).on('click','#add_btn', ()=> {
 });
 
 
-$(document).on('click','#update-btn', ()=> {
-
-$("#update-frm").validate({
-    rules:{
-        edesignation_name:{
-            required:true
-        },
-    },
-    submitHandler:(r) => {
-        //'next')
+$(document).on('click','#update-btn', (e)=> {
+    var etemplateValue = editorValue1.getData();
+    e.preventDefault();
+if(etemplateValue.length<1) {
+    toastr.error('You must fill the template to continue');
+    return false;
+}
+var etype_id = $("#etype_id").val();
+var eapprover_id = $("#eapprover_id").val();
+var eid = $("#eid").val();
         var url = "{{  route('update.mail.template') }}"
         $.ajax({
             url:url,
-            data:$("#update-frm").serialize(),  
+            data:{eid,etype_id,eapprover_id,etemplateValue},  
             type:"POST",
             headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -254,15 +280,18 @@ $("#update-frm").validate({
             }
 
         })
-    }
-});
-});
+    })
+
 
 
 $(document).on('click','#add-btn', (e)=> {
     e.preventDefault();
     var templateValue = editorValue.getData();
-
+    var variables = localStorage.getItem('variables');
+    if(variables.length==0) {
+        toastr.error('There are no variables in this template!');
+        return false;
+    }
     if(templateValue.length<1) {
         toastr.error('You must fill the template to continue');
         return false;
@@ -272,7 +301,7 @@ $(document).on('click','#add-btn', (e)=> {
             var url = "{{ route('create.mail.template') }}"
             $.ajax({
                 url:url,
-                data:{type_id, approver_id, templateValue},
+                data:{type_id, approver_id, templateValue,variables},
                 type:"POST",
                 headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -384,6 +413,28 @@ function fetch_data(){
                 encodeHtml:false
            },
            {
+                dataField:"type_id",
+                caption:"Mail Type",
+                cellTemplate: (container, options) => {
+                    var type_id = options.data.type_id;
+                    var html = ``;
+                    switch(type_id) {
+                        case 1:
+                            html = `<span class='badge badge-primary'>Request</span>`
+                        break;
+                        case 2:
+                            html = `<span class='badge badge-success'>Approve</span>`
+                        break;
+                        case 3:
+                            html = `<span class='badge badge-danger'>Reject</span>`
+                        break;
+
+                    }
+
+                    container.append(html);
+                }
+           },
+           {
                dataField: "Action",
                caption: "Action",
                allowFiltering: false,
@@ -422,7 +473,9 @@ function fetch_data(){
     
 }
 
-
+function clearCache() {
+    localStorage.removeItem('variables');
+}
     
 
     

@@ -898,7 +898,7 @@
                                     console.log(tcode)
                                     var html = ``;
                                     $.each(tcode, (i) => {
-                                        html += `<span class='badge badge-primary'>${tcode[i].description} (${tcode[i].t_code})</span>`;
+                                        html += `<span class='badge badge-primary'>${tcode.description} (${tcode.t_code})</span>`;
                                     })
                                    
                                     container.append(html)

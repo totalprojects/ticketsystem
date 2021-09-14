@@ -517,25 +517,25 @@
                             finalCall(formData);
                             
                             //Swal.fire('Saved!', '', 'success')
-                            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+                         //   $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
                     //show the next fieldset
-                    next_fs.show();
-                    //hide the current fieldset with style
-                    current_fs.animate({opacity: 0}, {
-                    step: function(now) {
-                    // for making fielset appear animation
-                    opacity = 1 - now;
+                    // next_fs.show();
+                    // //hide the current fieldset with style
+                    // current_fs.animate({opacity: 0}, {
+                    // step: function(now) {
+                    // // for making fielset appear animation
+                    // opacity = 1 - now;
 
-                    current_fs.css({
-                    'display': 'none',
-                    'position': 'relative'
-                    });
-                    next_fs.css({'opacity': opacity});
-                    },
-                    duration: 500
-                    });
-                    setProgressBar(++current);
+                    // current_fs.css({
+                    // 'display': 'none',
+                    // 'position': 'relative'
+                    // });
+                    // next_fs.css({'opacity': opacity});
+                    // },
+                    // duration: 500
+                    // });
+                    // setProgressBar(++current);
                                 } else if (result.isDenied) {
                                     Swal.fire('Changes are not saved', '', 'info')
                                     return false;

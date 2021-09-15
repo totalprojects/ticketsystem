@@ -1535,7 +1535,7 @@ trait SendMail
             case 3: 
             // sap lead
             $head =  Moderators::where('type_id', 1)->with('employee')->first();
-            $module_email_id = $head->user_details->email;
+            $module_email_id = $head->employee->email;
             $dataArray = [
             'template' => $template,
             'email' => $module_email_id
@@ -1545,7 +1545,7 @@ trait SendMail
             case 4: 
             // director
             $head =  Moderators::where('type_id', 2)->with('employee')->first();
-            $module_email_id = $head->user_details->email;
+            $module_email_id = $head->employee->email;
             $dataArray = [
             'template' => $template,
             'email' => $module_email_id
@@ -1555,7 +1555,7 @@ trait SendMail
             case 5: 
              // IT Head
             $head =  Moderators::where('type_id', 3)->with('employee')->first();
-            $module_email_id = $head->user_details->email;
+            $module_email_id = $head->employee->email;
             $dataArray = [
             'template' => $template,
             'email' => $module_email_id
@@ -1565,7 +1565,7 @@ trait SendMail
             case 6: 
             // BASIS
             $head =  Moderators::where('type_id', 4)->with('employee')->first();
-            $module_email_id = $head->user_details->email;
+            $module_email_id = $head->employee->email;
             $dataArray = [
             'template' => $template,
             'email' => $module_email_id

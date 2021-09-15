@@ -440,7 +440,7 @@ trait SendMail
     
                                     $dataArray[1] = $templateHTML_1;
 
-                                    $dataArray[2] = SendMail::getNextModerator($requested->modules->id, $approval_stage, $templateHTML_1['template']);
+                                    $dataArray[2] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template']);
 
                                 } 
 

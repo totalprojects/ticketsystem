@@ -944,7 +944,7 @@ trait SendMail
                                         $module_id = $requested->modules->name;
                                         $tcode_id = $requested->tcodes->t_code;
                                         $remarks = $logs[0]->remarks ?? '-';
-                                        $created_by = $username;
+                                        $created_by = $logs[0]->created_by_user->name;
                                         $requester_id = $username;
                                         $approval_stage = $logs[0]->approval_stage;
                                         $approval_stage = \ApprovalMatrix::where('id', $approval_stage)->first();

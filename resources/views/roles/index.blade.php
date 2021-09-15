@@ -691,14 +691,15 @@ function loadStandardTCodes(permission_id){
                                 caption:"*",
                                 cellTemplate: (container, options) => {
                                     var tcode_id = options.data.id;
-                                    console.log(window.currentTCodes)
+                                   // console.log(window.currentTCodes)
+                                    console.log(window.currentActions)
                                     var checked = '';
                                     $.each(window.currentTCodes, (i) => {
                                         if(tcode_id == window.currentTCodes[i]) {
                                             checked = 'checked'
                                         }
                                     })
-                                    var html = `<input type='checkbox' class='selected_row' name='selected_row[]' value='1' onClick='onSelectChange(${options.data.id}, this)' ${checked}>`
+                                    var html = `<input type='checkbox' class='selected_row' name='selected_row[]' id="c_${options.data.id}" value='1' onClick='onSelectChange(${options.data.id}, this)' ${checked}>`
                                     container.append(html);
                                 }
 
@@ -719,13 +720,13 @@ function loadStandardTCodes(permission_id){
                             {
                                 dataField:"actions",
                                 caption:"Actions",
-                                selection:false,
+                                width:140,
                                 cellTemplate: (container, options) => {
                                     
                                    var actions = options.data.action_details
                                    var id = options.data.id;
                                   ////console.log('id is '+id)
-                                   var html = `<select name='selected_actions[]' id='t_${id}' data-placeholder="Select Actions" class='form-control select2bs4' multiple>
+                                   var html = `<div id='t_${id}'><div class='row'>
                                    `;
                                    var checked = '';
                         
@@ -744,7 +745,7 @@ function loadStandardTCodes(permission_id){
                                                         $.each(data[i].actions, (p) => {
                                                         
                                                             if(actions[j].id == data[i].actions[p]) {
-                                                                checked = 'selected'
+                                                                checked = 'checked'
                                                             } 
                                                         })
                                                     }
@@ -754,12 +755,13 @@ function loadStandardTCodes(permission_id){
                                             }   
                                            
                                            
-                                            html += `
-                                                <option value='${actions[j].id}' ${checked}>${actions[j].name}</option>
+                                            html += `<div class='col-lg-6'>
+                                                <input type='checkbox' name='selected_actions[]' onClick="onSelectChange(${id}, this, true)"  class='form-control' value='${actions[j].id}' ${checked}> ${actions[j].name}
+                                                    </div>
                                                 `;
 
                                         });
-                                    html += `</select>`;
+                                    html += `</div></div>`;
 
                                     container.append(html);
                                 }
@@ -794,15 +796,53 @@ function checkAll() {
 
 
 var selected_rows = [];
-    function onSelectChange(id,obj) {
+    function onSelectChange(id,obj,x=false) {
         //console.log('called');
+        let flag = 1
+        if(window.currentActions.length>0) {
+            $.each(window.currentActions, (j) => {
+                if(selected_rows.length>0) {
+                    $.each(selected_rows, (i) => {
+                        if(selected_rows[i].id == window.currentActions[j].tcode_id) {
+                            flag = 0
+                        }
+                    });
+                    
+                    if(flag) {
+                        selected_rows.push({id: window.currentActions[j].tcode_id, actions: JSON.stringify(window.currentActions[j].actions)})
+                    }
+
+                } else {
+                    selected_rows.push({id: window.currentActions[j].tcode_id, actions: JSON.stringify(window.currentActions[j].actions)})
+                }
+               
+            })
+        }
         var checkedStatus = $(obj).is(":checked");
-        var actions = $("#t_"+id).val()
+        var actions = []
+        console.log(x)
+        //console.log(actions);
         if(checkedStatus) {
+            if(x==false) {
+                $("#t_"+id).find("input[name='selected_actions[]']").attr('checked','checked');
+                
+            } else {
+                let is_chedked = $("#c_"+id).is('checked');
+                if(!is_chedked){
+                    $("#c_"+id).attr('checked','checked');
+                }
+                
+            }
+            $("#t_"+id).find("input[name='selected_actions[]']:checked").each(function (){
+                    actions.push(parseInt($(this).val()));
+                });
+            
+
             if(selected_rows.length > 0) {
                 let flag = 0
                 $.each(selected_rows, (i) => {
                     if(selected_rows[i].id == id) {
+                        selected_rows[i].actions = JSON.stringify(actions);
                         flag = 1
                     } 
                 })
@@ -814,13 +854,45 @@ var selected_rows = [];
             }
            
         } else {
-            selected_rows = selected_rows.filter(function( obj ) {
+
+            if(x==false) {
+                $("#t_"+id).find("input[name='selected_actions[]']").removeAttr('checked');
+                // $("#t_"+id).find("input[name='selected_actions[]']:checked").each(function (){
+                //     actions.push(parseInt($(this).val()));
+                // });
+                selected_rows = selected_rows.filter(function( obj ) {
                 return obj.id !== id;
-            })
+                })
+            } else {
+               
+                //$("#c_"+id).removeAttr('checked');
+            
+                $("#t_"+id).find("input[name='selected_actions[]']:checked").each(function (){
+                    actions.push(parseInt($(this).val()));
+                });
+                if(selected_rows.length > 0) {
+                let flag = 0
+                $.each(selected_rows, (i) => {
+                    if(selected_rows[i].id == id) {
+                        selected_rows[i].actions = JSON.stringify(actions);
+                        flag = 1
+                    } 
+                })
+                if(flag == 0) {
+                    selected_rows.push({id: id, actions: JSON.stringify(actions)})
+                }
+            } else {
+                selected_rows.push({id: id, actions: JSON.stringify(actions)})
+            }
+            }
+            
+          
+           
         }
        
-
+         console.log('selected rows')
          console.log(selected_rows)
+         $("#selected_tcodes").val(JSON.stringify(selected_rows));
         // console.log(id);
     }
 

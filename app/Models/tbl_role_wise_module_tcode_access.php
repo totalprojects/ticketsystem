@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use ActionMasters;
 use TCodes;
+use CriticalTCodes;
+use StandardTCodes;
 
 class tbl_role_wise_module_tcode_access extends Model
 {
@@ -25,6 +27,10 @@ class tbl_role_wise_module_tcode_access extends Model
     }
 
     public function tcode() {
-        return $this->belongsTo(TCodes::class, 'tcode_id', 'id');
+        return $this->belongsTo(StandardTCodes::class, 'tcode_id', 'id');
+    }
+
+    public function critical() {
+        return $this->belongsTo(CriticalTCodes::class, 'tcode_id', 'tcode_id');
     }
 }

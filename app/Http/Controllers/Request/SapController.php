@@ -28,6 +28,7 @@ use PurchaseGroup;
 use DepartmentMasters;
 use Employees;
 use Mail;
+use CriticalTCodes;
 use App\Traits\SendMail;
 
 class SapController extends Controller {
@@ -68,6 +69,39 @@ class SapController extends Controller {
 
         return view('request.sap.index')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release, 'pg' => $pg, 'approval_stages'=> $approval_stages]);
     }
+
+    public function critical_index() {
+        //     $data = SAPRequest::where(['module_id' => 7, 'user_id' => 11, 'id' => 5])->get();
+        //                 $stage = \ModuleApprovalStages::where('module_id', 7)->with('module')->orderBy('approval_matrix_id','asc')->get();
+        //    //return $stage[1]->approval_matrix_id;
+        //                 $mail = SendMail::send($data, 'SapRequestMail', $stage[0]->approval_matrix_id, 2);
+           //    return $mail;
+            $companies     = CompanyMasters::all();
+            $divisions     = Divisions::all();
+            $distributions = Distributions::all();
+            $business      = BusinessArea::all();
+            $po            = PO::all();
+            $po_release    = PORelease::all();
+            $empData       = Employees::where('id', Auth::user()->employee_id)->first();
+            $did           = 0;
+            if ($empData) {
+                $did = $empData->department_id;
+                $did = DepartmentMasters::where('id', $did)->first();
+                if ($did) {
+                    $did = $did->id;
+                }
+            }
+    
+            $approval_stages =  requestApprovalStages();
+            //return Auth::user()->employee_id;
+    
+            $roles = Role::when($did > 0, function ($Q) use ($did) {
+                $Q->where('type', $did);
+            })->get();
+            $pg = PurchaseGroup::all();
+    
+            return view('request.sap.critical')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release, 'pg' => $pg, 'approval_stages'=> $approval_stages]);
+        }
 
     public function team() {
 
@@ -124,7 +158,7 @@ class SapController extends Controller {
         $role_based_permissions = RolePermissions::when($role_id > 0, function($Q) use($role_id) {
         $Q->where('role_id', $role_id);    
         })->select('permission_id')->get();
-
+        $critical = $request->critical ?? '';
         $permission_ids         = [];
         foreach ($role_based_permissions as $permission) {
             $permission_ids[] = $permission->permission_id;
@@ -146,12 +180,19 @@ class SapController extends Controller {
                     ->where('id', '!=', 12)
                 // sap department
                     ->where('type', 2)
-                    ->with(['allowed_tcodes' => function ($Q) use($role_id, $tcode) {
-                        $Q->when($role_id > 0, function ($Q) use ($role_id, $tcode) {
+                    ->with(['allowed_tcodes' => function ($Q) use($role_id, $tcode,$critical) {
+                        $Q->when($role_id > 0, function ($Q) use ($role_id, $tcode, $critical) {
                             $Q->where('role_id', $role_id);
-                            $tcode = TCodes::where('t_code',$tcode)->first();
-
-                            $Q->where('tcode_id', '!=' , $tcode->t_code);
+                            //$tcode = TCodes::where('t_code',$tcode)->first();
+                            $code = \StandardTCodes::where('t_code',$tcode)->first();
+                            if(!empty($code)) {
+                                $Q->where('tcode_id', $code->id);
+                              //  $Q->where('tcode_id', '!=' , $code->id);
+                            }
+                            
+                            $Q->when(!empty($critical), function($Q) {
+                                $Q->whereHas('critical');
+                            });
                         });                
                         $Q->with('access_action_details', 'tcode');
                     }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
@@ -175,7 +216,7 @@ class SapController extends Controller {
                             'n_id'       => $grandChildId,
                             'n_title'    => $codes->tcode->description . '(' . $codes->tcode->t_code . ')',
                             'n_parentid' => $childId1,
-                            'n_addional' => ['tcode_id' => $codes->id]
+                            'n_addional' => ['tcode_id' => $codes->tcode_id]
                         ];
         
                         $childId2 = $grandChildId;
@@ -199,35 +240,45 @@ class SapController extends Controller {
                         $Q->whereIn('id', $permission_ids);
                     })->where('id', '!=', 12)->where('type', 2)
                     
-                        ->with(['tcodes' => function($Q) use($tcode) {
-                            $Q->where('t_code', $tcode);
+                        ->with(['allowed_tcodes' => function($Q) use($tcode,$critical) {
+                            $code = \StandardTCodes::where('t_code',$tcode)->first();
+                            //echo json_encode($code); exit;
+                            if(!empty($code)) {
+                                $Q->where('tcode_id', $code->id);
+                            }
+                            
+                            $Q->when(!empty($critical), function($Q) {
+                                $Q->whereHas('critical');
+                            });
                         }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
                          
                              $childId1 = $grandChildId;
                              $grandChildId += 1;
                                  //return response($each->allowed_tcodes);
-                             foreach ($each->tcodes as $codes) {
-                 
+                             foreach ($each->allowed_tcodes as $codes) {
+                                if(isset($codes->action_details)) {
                                  $modules[] = [
                                      'n_id'       => $grandChildId,
                                      'n_title'    => $codes->description . '(' . $codes->t_code . ')',
                                      'n_parentid' => 1,
-                                     'n_addional' => ['tcode_id' => $codes->id]
+                                     'n_addional' => ['tcode_id' => $codes->tcode_id]
                                  ];
                  
                                  $childId2 = $grandChildId;
                                  $grandChildId += 1;
-                 
-                                 foreach ($codes->action_details as $eachAction) {
-                                     $modules[] = [
-                                         'n_id'       => $grandChildId,
-                                         'n_title'    => $eachAction->name,
-                                         'n_parentid' => $childId2,
-                                         'n_addional' => ['action_id' => $eachAction->id]
-                                     ];
-                 
-                                     $grandChildId++;
+                                
+                                    foreach ($codes->action_details as $eachAction) {
+                                        $modules[] = [
+                                            'n_id'       => $grandChildId,
+                                            'n_title'    => $eachAction->name,
+                                            'n_parentid' => $childId2,
+                                            'n_addional' => ['action_id' => $eachAction->id]
+                                        ];
+                    
+                                        $grandChildId++;
+                                    }
                                  }
+                                
                  
                              }
                  
@@ -244,9 +295,12 @@ class SapController extends Controller {
                     ->where('id', '!=', 12)
                 // sap department
                     ->where('type', 2)
-                    ->with(['allowed_tcodes' => function ($Q) use($role_id) {
-                        $Q->when($role_id > 0, function ($Q) use ($role_id) {
+                    ->with(['allowed_tcodes' => function ($Q) use($role_id, $critical) {
+                        $Q->when($role_id > 0, function ($Q) use ($role_id ,$critical) {
                             $Q->where('role_id', $role_id);
+                            $Q->when(!empty($critical), function($Q) {
+                                $Q->whereHas('critical');
+                            });
                         });                
                         $Q->with('access_action_details', 'tcode');
                     }])->get()->map(function ($each) use (&$modules, &$grandChildId) {
@@ -270,7 +324,7 @@ class SapController extends Controller {
                             'n_id'       => $grandChildId,
                             'n_title'    => $codes->tcode->description . '(' . $codes->tcode->t_code . ')',
                             'n_parentid' => $childId1,
-                            'n_addional' => ['tcode_id' => $codes->id]
+                            'n_addional' => ['tcode_id' => $codes->tcode_id]
                         ];
         
                         $childId2 = $grandChildId;
@@ -418,7 +472,7 @@ class SapController extends Controller {
 
         $modules = json_decode($request->module);
         $user_id = Auth::user()->id;
-        // return $modules;
+         //return $modules;
         $company_name = array_map('intval', $request->company_name);
         $role_id      = $request->role;
         $role_name    = '';
@@ -490,7 +544,8 @@ class SapController extends Controller {
                 $distribution = array_map('intval', $request->distribution_channel ?? []);
                 $po_release   = array_map('intval', $request->po_release ?? []);
                 $sales_office = array_map('intval', $request->sales_office ?? []);
-
+                // echo $tcodes;
+                // exit;
                 try {
                     $companies     = CompanyMasters::whereIn('company_code', $company_name)->get();
                     $plants        = Plants::whereIn('plant_code', $plant_code)->get();
@@ -504,7 +559,7 @@ class SapController extends Controller {
                     $po_releases   = PORelease::whereIn('id', $po_release)->get();
                     $actions       = ActionMasters::whereIn('id', $actions)->get();
                     $module        = Permission::where('id', $each['module_id'])->get();
-                    $tcode         = TCodes::where('id', $tcodes)->get();
+                    $tcode         = \StandardTCodes::where('id', $tcodes)->get();
 
                 } catch (\Exception $e) {
 
@@ -704,7 +759,10 @@ class SapController extends Controller {
         $take    = $request->take;
         $skip    = $request->skip;
 
-        $data       = SAPRequest::where('user_id', $user_id)->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action');
+        $data       = SAPRequest::where('user_id', $user_id)->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action')
+        ->when(isset($request->critical), function($Q) {
+            $Q->whereHas('critical_tcodes');
+        });
         $totalCount = $data->get()->Count();
         $dataArray  = [];
         //return $data->get();
@@ -967,5 +1025,89 @@ class SapController extends Controller {
         //     return response(['message' => $e->getMessage(), 'data' => []], 500);
         // }
 
+    }
+
+    function fetchCriticalSelfRequest() {
+
+        $user_id = Auth::user()->id;
+        $take    = $request->take;
+        $skip    = $request->skip;
+
+        $data       = SAPRequest::where('user_id', $user_id)->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action')
+        ->whereHas('critical_tcodes');
+        $totalCount = $data->get()->Count();
+        $dataArray  = [];
+        //return $data->get();
+        $subArray = [];
+        $i        = 1;
+        foreach ($data->take($take)->skip($skip)->get() as $each) {
+
+            $company_name = $each->company['company_name'] ?? '-';
+            $company_code = $each['company_code'] ?? '-';
+            $flag         = 1;
+            if (!empty($dataArray)) {
+
+                //return $dataArray;
+                foreach ($dataArray as $key => $value) {
+                    // if ($value['id'] == $each->module_id) {
+                    //     $flag = 0;
+                    // }
+                    if ($value['req_int'] == $each->req_int) {
+                        $flag = 0;
+                    }
+                }
+            }
+
+            if ($flag == 1) {
+
+                
+
+                $dataArray[] = [
+                    'id'               => $each->module_id,
+                    'user_id'          => $each->user_id,
+                    'user_name'        => $each->user->name,
+                    'request_id'       => $each->request_id,
+                    'req_int'          => $each->req_int,
+                    'sl_no'            => $i,
+                    'company_name'     => json_encode($each->company),
+                    'plant_name'       => json_encode($each->plant),
+                    'storage_location' => json_encode($each->storage),
+                    'business_area'    => json_encode($each->business),
+                    'sales_org'        => json_encode($each->sales_org),
+                    'purchase_org'     => json_encode($each->purchase_org),
+                    'division'         => json_encode($each->division),
+                    'distribution'     => json_encode($each->distributions),
+                    'sales_office'     => json_encode($each->sales_office),
+                    'po_release'       => json_encode($each->po_release),
+                    'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at))
+                ];
+
+                $i++;
+            }
+
+            $request_log = [];
+                foreach ($each->approval_logs as $log) {
+                    $request_log[] = [
+                        'approval_stage' => $log->approval_stage,
+                        'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
+                        'remarks'        => $log->remarks,
+                        'status'         => $log->status,
+                        'created_by'     => $log->created_by_user->name
+                    ];
+                }
+
+            $subArray[] = [
+                'request_id' => $each->request_id,
+                'id'         => $each->id,
+                'status'     => $each->status,
+                'created_at' => date('F, d, Y h:i a', strtotime($each->created_at)),
+                'req_log'    => json_encode($request_log),
+                'module'     => json_encode($each->modules),
+                'tcode'      => json_encode($each->tcodes),
+                'action'     => json_encode($each->action)
+            ];
+        }
+
+        return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $totalCount], 200);
     }
 }

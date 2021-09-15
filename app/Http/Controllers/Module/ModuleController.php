@@ -11,7 +11,6 @@ use CriticalTCodes;
 use ActionMasters;
 use Auth;
 
-
 class ModuleController extends Controller
 {
     //
@@ -20,6 +19,13 @@ class ModuleController extends Controller
         $approval_matrix = ApprovalMatrix::all();
         $data['approval_matrix'] = $approval_matrix;
         return view('approval_matrix.index')->with($data);
+    }
+
+    public function critical_page() {
+        $data['page_title'] = "Critical Page";
+        // $critical = CriticalTCodes::all();
+        // $data['critical'] = $critical;
+        return view('request.sap.critical')->with($data);
     }
 
 

@@ -65,7 +65,7 @@ class PermissionController extends Controller {
         //return $permission_id;
         $take   = $request->take ?? 25;
         $skip   = $request->skip ?? 0;
-        $tcodes = TCodes::where('permission_id', $permission_id)
+        $tcodes = \StandardTCodes::where('permission_id', $permission_id)
             ->when(!empty($tcode), function ($Q) use ($tcode) { 
                 $Q->where('t_code', $tcode);
             })->when(!empty($desc), function ($Q) use ($desc) {

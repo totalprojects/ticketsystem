@@ -68,6 +68,7 @@ class RoleController extends Controller {
         //return $request->tcodes;
         $pid = $request->pid;
         $tcodes = json_decode($request->tcodes,true);
+       
         //return $tcodes;
         //$tcodes = explode(",", $request->tcodes);
         $role_id = $request->role_id;
@@ -79,12 +80,12 @@ class RoleController extends Controller {
         ])->delete();
 
         foreach($tcodes as $each) {
-
+           
             RoleTcodeAccess::create([
                 'role_id' => $role_id,
                 'module_id' => $pid,
-                'tcode_id' => $each['tcode'],
-                'actions' => $each['actions']
+                'tcode_id' => $each['id'],
+                'actions' => json_decode($each['actions'])
             ]);
         }
 

@@ -64,6 +64,8 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitL
     Route::get('/module/approval/stages',[ModuleController::class, 'approval_matrix'])->name('approval.matrix');
     /** Critical T codes */
     Route::get('/critical/tcodes/list',[ModuleController::class, 'critical_tcodes'])->name('critical.tcodes.list');
+
+    Route::get('/critical/tcodes',[SapController::class, 'critical_index'])->name('view.criticals');
     /** Moderators */
     Route::get('/moderators',[ModeratorController::class, 'index'])->name('view.moderators');
     /** Departments */
@@ -121,6 +123,7 @@ Route::group(['prefix' => 'listings'], function () {
     Route::get('/fetch/storage/list', [StorageController::class, 'getStorages'])->name('get.storages');
     Route::get('/fetch/sales_office/list', [SoController::class, 'getSalesOffice'])->name('get.sales_office');
     Route::get('/fetch/request', [SapController::class, 'fetchSelfRequest'])->name('fetch.self.request');
+    Route::get('/fetch/critical/request', [SapController::class, 'fetchCriticalSelfRequest'])->name('fetch.self.critical.request');
     Route::get('/fetch/moderator', [ModeratorController::class, 'fetchModerators'])->name('fetch.moderators');
     Route::get('/fetch/team-request', [SapController::class, 'fetchTeamRequest'])->name('fetch.team.request');
     Route::get('/fetch/stages', [ModuleController::class, 'fetchStages'])->name('fetch.stages');

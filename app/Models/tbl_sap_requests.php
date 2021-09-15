@@ -21,6 +21,7 @@ use Users;
 use SAPApprovalLogs;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use CriticalTCodes;
 
 class tbl_sap_requests extends Model {
     use HasFactory;
@@ -96,6 +97,10 @@ class tbl_sap_requests extends Model {
 
     public function tcodes() {
         return $this->belongsTo(TCodes::class, 'tcode_id', 'id');
+    }
+
+    public function critical_tcodes() {
+        return $this->belongsTo(CriticalTCodes::class, 'tcode_id', 'tcode_id');
     }
 
     public function approval_logs() {

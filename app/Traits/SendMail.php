@@ -440,7 +440,7 @@ trait SendMail
     
                                     $dataArray[1] = $templateHTML_1;
 
-                                    $dataArray[2] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template']);
+                                    $dataArray[2] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
 
                                 } 
 
@@ -533,6 +533,7 @@ trait SendMail
                                                  // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                                  $templateHTML_1['email'] = $email;
                                                  array_push($dataArray, $templateHTML_1);
+                                                 $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                                             }
                                         }
                                        
@@ -626,6 +627,7 @@ trait SendMail
                                              // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                              $templateHTML_1['email'] = $email;
                                              array_push($dataArray, $templateHTML_1);
+                                             $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                                         }
                                     }
                                    
@@ -720,6 +722,7 @@ trait SendMail
                                       // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                       $templateHTML_1['email'] = $email;
                                       array_push($dataArray, $templateHTML_1);
+                                      $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                                  }
                              }
                             
@@ -812,6 +815,7 @@ trait SendMail
                                       // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                       $templateHTML_1['email'] = $email;
                                       array_push($dataArray, $templateHTML_1);
+                                      $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                                  }
                              }
                             
@@ -904,6 +908,7 @@ trait SendMail
                                       // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                       $templateHTML_1['email'] = $email;
                                       array_push($dataArray, $templateHTML_1);
+                                     
                                  }
                              }
                             
@@ -1015,6 +1020,7 @@ trait SendMail
                                 }
 
                                 $dataArray[1] = $templateHTML_1;
+                                $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                             } 
                             //echo json_encode($dataArray); exit;
                         break;
@@ -1101,6 +1107,7 @@ trait SendMail
                                              // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                              $templateHTML_1['email'] = $email;
                                              array_push($dataArray, $templateHTML_1);
+                                             $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                                         }
                                     
                                    
@@ -1194,6 +1201,7 @@ trait SendMail
                                          // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                          $templateHTML_1['email'] = $email;
                                          array_push($dataArray, $templateHTML_1);
+                                         $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                                     }
                                 }
                                
@@ -1288,6 +1296,7 @@ trait SendMail
                                   // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                   $templateHTML_1['email'] = $email;
                                   array_push($dataArray, $templateHTML_1);
+                                  $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                              }
                          }
                         
@@ -1380,6 +1389,7 @@ trait SendMail
                                   // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                   $templateHTML_1['email'] = $email;
                                   array_push($dataArray, $templateHTML_1);
+                                  $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                              }
                          }
                         
@@ -1472,6 +1482,7 @@ trait SendMail
                                   // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                   $templateHTML_1['email'] = $email;
                                   array_push($dataArray, $templateHTML_1);
+                                  
                              }
                          }
                         
@@ -1500,23 +1511,24 @@ trait SendMail
     }
 
 
-    public static function getNextModerator($module_id, $index, $template) {
+    public static function getNextModerator($module_id, $index, $template, $user_id) {
 
       
         $stage = \ModuleApprovalStages::where('module_id', $module_id)->with('module')->orderBy('approval_matrix_id','asc')->get();
         
-        $stage_1 = $stage[$index+1]->approval_matrix_id;
-
+        $stage_1 = $stage[$index]->approval_matrix_id;
+      
         $dataArray = [];
 
         switch($stage_1) {
 
             case 2: 
                 // module head
-               $head =  ModuleHead::where('module_id', $module_id)->with('user_details')->first();
+               $head =  ModuleHead::where('permission_id', $module_id)->with('user_details')->first();
                $module_email_id = $head->user_details->email;
+               $mh_name = $head->user_details->name;
                $dataArray = [
-                'template' => $template,
+                'template' => str_replace($user_id, $mh_name, $template),
                 'email' => $module_email_id
                ];
                break;

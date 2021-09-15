@@ -440,7 +440,7 @@ trait SendMail
     
                                     $dataArray[1] = $templateHTML_1;
 
-                                    $dataArray[2] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template']);
+                                    $dataArray[2] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
 
                                 } 
 
@@ -1500,22 +1500,23 @@ trait SendMail
     }
 
 
-    public static function getNextModerator($module_id, $index, $template) {
+    public static function getNextModerator($module_id, $index, $template, $user_id) {
 
         $stage = \ModuleApprovalStages::where('module_id', $module_id)->with('module')->orderBy('approval_matrix_id','asc')->get();
         
-        $stage_1 = $stage[$index+1]->approval_matrix_id;
-
+        $stage_1 = $stage[$index]->approval_matrix_id;
+      
         $dataArray = [];
 
         switch($stage_1) {
 
             case 2: 
                 // module head
-               $head =  ModuleHead::where('module_id', $module_id)->with('user_details')->first();
+               $head =  ModuleHead::where('permission_id', $module_id)->with('user_details')->first();
                $module_email_id = $head->user_details->email;
+               $mh_name = $head->user_details->name;
                $dataArray = [
-                'template' => $template,
+                'template' => str_replace($user_id, $mh_name, $template),
                 'email' => $module_email_id
                ];
                break;

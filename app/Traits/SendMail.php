@@ -6,6 +6,7 @@ use EmployeeMappings;
 use ModuleHead;
 use SAPRequest;
 use SAPApprovalLogs;
+use Moderators;
 
 trait SendMail
 {
@@ -358,7 +359,10 @@ trait SendMail
                                     $reportToEmail = $model->report_employee->email;
                                     $reportToName = $model->report_employee->first_name.' '.$model->report_employee->last_name;
                                     $modules = [];
-                                    $modules = $requested->modules->name ?? '-';                          
+                                    $modules = $requested->modules->name ?? '-';
+                                                             
+                                    
+                                    
                                     // get template and variables to be replaced
                                     $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 0])->first();
                                     $templateHTML = [];
@@ -435,6 +439,9 @@ trait SendMail
                                     }
     
                                     $dataArray[1] = $templateHTML_1;
+
+                                    $dataArray[2] = $this->getNextModerator($requested->modules->id, $approval_stage, $templateHTML_1['template']);
+
                                 } 
 
                                 //echo json_encode($dataArray); exit;
@@ -1486,6 +1493,72 @@ trait SendMail
                 
                 default:
                     $dataArray = [];
+        }
+
+        return $dataArray;
+    
+    }
+
+
+    public function getNextModerator($module_id, $index, $template) {
+
+        $stage = \ModuleApprovalStages::where('module_id', $module_id)->with('module')->orderBy('approval_matrix_id','asc')->get();
+        
+        $stage_1 = $stage[$index+1]->approval_matrix_id;
+
+        $dataArray = [];
+
+        switch($stage_1) {
+
+            case 2: 
+                // module head
+               $head =  ModuleHead::where('module_id', $module_id)->with('user_details')->first();
+               $module_email_id = $head->user_details->email;
+               $dataArray = [
+                'template' => $template,
+                'email' => $module_email_id
+               ];
+               break;
+
+            case 3: 
+            // sap lead
+            $head =  Moderators::where('type_id', 1)->with('employee')->first();
+            $module_email_id = $head->user_details->email;
+            $dataArray = [
+            'template' => $template,
+            'email' => $module_email_id
+            ];
+            break;
+
+            case 4: 
+            // director
+            $head =  Moderators::where('type_id', 2)->with('employee')->first();
+            $module_email_id = $head->user_details->email;
+            $dataArray = [
+            'template' => $template,
+            'email' => $module_email_id
+            ];
+            break;
+
+            case 5: 
+             // IT Head
+            $head =  Moderators::where('type_id', 3)->with('employee')->first();
+            $module_email_id = $head->user_details->email;
+            $dataArray = [
+            'template' => $template,
+            'email' => $module_email_id
+            ];
+            break;
+
+            case 6: 
+            // BASIS
+            $head =  Moderators::where('type_id', 4)->with('employee')->first();
+            $module_email_id = $head->user_details->email;
+            $dataArray = [
+            'template' => $template,
+            'email' => $module_email_id
+            ];
+            break;
         }
 
         return $dataArray;

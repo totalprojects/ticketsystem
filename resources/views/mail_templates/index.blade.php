@@ -177,6 +177,42 @@ $(document).on('change', '#type_id', (e) => {
 })
 
 
+$(document).on('change', '#etype_id', (e) => {
+    var type_id = $("#etype_id").val();
+    var template_id = $("#eid").val();
+    $.ajax({
+        url:"{{ route('generateFields') }}",
+        data:{type_id:type_id,template_id:template_id},
+        type:"GET",
+        beforeSend:(r) => {
+               
+            },
+            error:(r) => {
+                
+                toastr.error('Something went wrong');
+            },
+            success:(r) => {
+                console.log(r)
+                var data = r.data;
+                var html = `<label for="">SAP Template Variables [Drag/Drop]</label> <br>`;
+                var vars = [];
+                if(r.variables.length>0) {
+                    $.each(r.variables, (i) => {
+                        vars.push(`${r.variables[i].variable_name}`);
+                    })
+                }
+               
+                $.each(data, (i) => {
+                   
+                    html += `<div class="badge badge-primary p-2 m-2" draggable="true" ondragstart="drag(event)" id="##${data[i].value}##">${data[i].name}</div>`;
+                })
+                localStorage.setItem('variables',JSON.stringify(vars));
+                $("#etemplateVariables").html(html)
+            }
+    })
+})
+
+
 
 function allowDrop(ev) {
   ev.preventDefault();
@@ -254,13 +290,18 @@ if(etemplateValue.length<1) {
     toastr.error('You must fill the template to continue');
     return false;
 }
+var variables = localStorage.getItem('variables');
+    if(variables.length==0) {
+        toastr.error('There are no variables in this template!');
+        return false;
+    }
 var etype_id = $("#etype_id").val();
 var eapprover_id = $("#eapprover_id").val();
 var eid = $("#eid").val();
         var url = "{{  route('update.mail.template') }}"
         $.ajax({
             url:url,
-            data:{eid,etype_id,eapprover_id,etemplateValue},  
+            data:{eid,etype_id,eapprover_id,etemplateValue, variables},  
             type:"POST",
             headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),

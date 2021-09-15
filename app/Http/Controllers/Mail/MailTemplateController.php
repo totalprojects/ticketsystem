@@ -35,8 +35,11 @@ class MailTemplateController extends Controller
     public function generateFields(Request $request){
         $bundle = '';
         $type = $request->type_id;
+        
         try {
-
+            if(isset($request->template_id)) {
+                $d = \MailVariables::where('template_id',$request->template_id)->get();
+            }
             switch($type) {
                 case 1: // Request
                     $SAPRequest = new SAPRequest;
@@ -145,7 +148,7 @@ class MailTemplateController extends Controller
             return response(['message' => $e->getMessage()], 500);
         }
 
-            return response(['data' => $columnsArray, 'status' => 200],200);
+            return response(['data' => $columnsArray, 'variables'=> $d, 'status' => 200],200);
     }
 
     public function create(Request $request) {
@@ -216,6 +219,7 @@ class MailTemplateController extends Controller
         //return $request->all();
         $type_id = $request->etype_id;
         $id = $request->eid;
+        $variables = json_decode($request->variables, true);
         $approver_id = $request->eapprover_id;
         $template = $request->etemplateValue;
 
@@ -235,6 +239,21 @@ class MailTemplateController extends Controller
                     'created_at' => NOW(),
                     'updated_at' => NOW()
                 ]);
+
+                foreach($variables as $each) {
+                    $isDuplicate = \MailVariables::where([ 'template_id' => $id,
+                    'variable_name' => $each])->get();
+
+                    if($isDuplicate->Count()==0) {
+                        \MailVariables::create([
+                            'template_id' => $id,
+                            'variable_name' => $each,
+                            'created_at' => NOW(),
+                            'updated_at' => NOW()
+                        ]);
+                    }
+                   
+                }
 
                 return response(['message' => 'Template was updated successfully', 'status' => 200], 200);
             

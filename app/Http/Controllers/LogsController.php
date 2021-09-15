@@ -35,7 +35,7 @@ class LogsController extends Controller
             foreach($logs as $log) {
                 $dataArray[] = [
                     'id' => $log->id,
-                    'username' => $log->user->name,
+                    'username' => $log->user->name ?? '-',
                     'ip' => $log->ip,
                     'agent' => $log->agent,
                     'created_at' => date('d-m-Y h:i a', strtotime($log->created_at))
@@ -56,7 +56,7 @@ class LogsController extends Controller
             foreach($logs as $log) {
                 $dataArray[] = [
                     'id' => $log->id,
-                    'username' => $log->user->name,
+                    'username' => $log->user->name ?? '-',
                     'activity_type' => $log->activity_type,
                     'ip' => $log->ip,
                     'created_at' => date('d-m-Y h:i a', strtotime($log->created_at))
@@ -77,7 +77,7 @@ class LogsController extends Controller
             foreach($logs as $log) {
                 $dataArray[] = [
                     'id' => $log->id,
-                    'username' => $log->user->name,
+                    'username' => $log->user->name ?? '-',
                     'activity_type' => $log->activity_type,
                     'ip' => $log->ip,
                     'created_at' => date('d-m-Y h:i a', strtotime($log->created_at))

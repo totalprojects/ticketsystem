@@ -440,7 +440,7 @@ trait SendMail
     
                                     $dataArray[1] = $templateHTML_1;
 
-                                    $dataArray[2] = $this->getNextModerator($requested->modules->id, $approval_stage, $templateHTML_1['template']);
+                                    $dataArray[2] = SendMail::getNextModerator($requested->modules->id, $approval_stage, $templateHTML_1['template']);
 
                                 } 
 
@@ -1500,7 +1500,7 @@ trait SendMail
     }
 
 
-    public function getNextModerator($module_id, $index, $template) {
+    public static function getNextModerator($module_id, $index, $template) {
 
         $stage = \ModuleApprovalStages::where('module_id', $module_id)->with('module')->orderBy('approval_matrix_id','asc')->get();
         

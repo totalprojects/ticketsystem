@@ -57,9 +57,14 @@ trait SendMail
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
     public static function changeStatusByModerators($type, $approval_type, $requested, $data, $status, $moderator_id) {
-
+       if($status==3) {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
         $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => $type])->first();
         $logs = SAPApprovalLogs::where(['request_id' => $data[0]['id'], 'status' => $status, 'approval_stage' => $type])->with('created_by_user')->get();
+       // echo json_encode($status); exit;
         $templateHTML_1 = [];
         $dataArray = [];
             if($template) {
@@ -568,9 +573,9 @@ trait SendMail
 
     public static function notifyNextModerator($module_id, $index, $template, $user_id) {
 
-        $stage = \ModuleApprovalStages::where('module_id', $module_id)->with('module')->orderBy('approval_matrix_id','asc')->get();
-        
-        $stage = $stage[$index]->approval_matrix_id;
+        $stage = \ModuleApprovalStages::where('module_id', $module_id)->where('approval_matrix_id', '>', $index)->with('module')->orderBy('approval_matrix_id','asc')->get();
+       // echo json_encode($stage); exit;
+        $stage = $stage[0]->approval_matrix_id ?? 0;
       
         $dataArray = [];
 
@@ -630,6 +635,8 @@ trait SendMail
             'email' => $module_email_id
             ];
             break;
+
+            default:
         }
 
         return $dataArray;

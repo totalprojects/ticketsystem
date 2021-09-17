@@ -357,7 +357,7 @@ class SapController extends Controller {
         $user_id = Auth::user()->id;
         $role_id = $request->role;
         // return $modules;
-        $company_name = array_map('intval', $request->company_name);
+        $company_name = array_map('intval', $request->company_name ?? []);
         $uniqueId     = time();
         $requestId    = 'RN' . $user_id . '/' . date('y') . '/' . date('m') . '/' . $uniqueId;
         // return $company_name;

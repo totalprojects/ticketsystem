@@ -18,6 +18,7 @@ trait SendMail
         $userId = Auth::user()->employee_id;
    
         $dataArray = self::getData($type, $class, $data, $approval_type);
+        // echo json_encode($dataArray); exit;
         $namespace = 'App\Mail';
         $email = [];
         $classname = $namespace . '\\' . $class;
@@ -28,16 +29,20 @@ trait SendMail
             try {
                 if(class_exists($classname)) {
                     $d = [];
+                  
                     foreach($dataArray as $e) {
-                      
+                       
                         if(self::isValidEmail($e['email'])) {
                            
                             $mail = Mail::to($e['email'])->send(new $classname($e));
+                            //echo 'Mail sent!';
+                           
+                           
                         } else {
                             return response(['message' => 'Mail was not fired, either the mail address is invalid or empty', 'status' => 400], 400);
                         }
                     }
-
+                   // echo 'Reached here'; exit;
                     return response(['status' => 200, 'message' => 'Success'], 200);
                 }
                 else {
@@ -51,7 +56,7 @@ trait SendMail
     public static function isValidEmail($email){ 
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
-    public static function changeStatusMyModerators($type, $approval_type, $requested, $data, $status, $moderator_id) {
+    public static function changeStatusByModerators($type, $approval_type, $requested, $data, $status, $moderator_id) {
 
         $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => $type])->first();
         $logs = SAPApprovalLogs::where(['request_id' => $data[0]['id'], 'status' => $status, 'approval_stage' => $type])->with('created_by_user')->get();
@@ -129,7 +134,7 @@ trait SendMail
                         $templateHTML_1['email'] = $email;
                         array_push($dataArray, $templateHTML_1);
                         // next moderator
-                        $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
+                        $dataArray[] = self::notifyNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                 }
             }
             
@@ -145,6 +150,8 @@ trait SendMail
                 $request_id = $data[0]['request_id'];
                 $module_id = $requested->modules->name;
                 $tcode_id = $requested->tcodes->t_code;
+                $company_code = $requested->company_code;
+                $plant_code = $requested->plant_code;
                 $sap_lead = Moderators::where('type_id',$moderator_id)->with('employee')->first();
                 $user_id = $sap_lead->employee->first_name;
                 $actions = '';
@@ -166,6 +173,8 @@ trait SendMail
 
             return $dataArray;
     }
+
+
     public static function requestMail($type, $approval_type, $requested,$data){
         $dataArray = [];
         switch($type) {
@@ -190,6 +199,8 @@ trait SendMail
                             $request_id = $data[0]['request_id'];
                             $module_id = $requested->modules->name;
                             $tcode_id = $requested->tcodes->t_code;
+                            $company_code = $requested->company_code;
+                            $plant_code = $requested->plant_code;
                             $user_id = $username;
                             $actions = '';
                             foreach($requested->action as $ea) {
@@ -253,6 +264,8 @@ trait SendMail
                                 $request_id = $data[0]['request_id'];
                                 $module_id = $requested->modules->name;
                                 $tcode_id = $requested->tcodes->t_code;
+                                $company_code = $requested->company_code;
+                                $plant_code = $requested->plant_code;
                                 $user_id = $requested->modules->module_head->user_details->name;
                                 $actions = '';
                                 foreach($requested->action as $ea) {
@@ -275,22 +288,22 @@ trait SendMail
                     break;
             // sap Lead       
             case 3:
-                $dataArray = SendMail::requestToModerators($requested, $approval_type, $type, 1);
+                $dataArray = self::requestToModerators($requested, $approval_type, $type, 1);
                 break;
 
             case 4:
                 //directors
-                $dataArray = SendMail::requestToModerators($requested, $approval_type, $type, 2);
+                $dataArray = self::requestToModerators($requested, $approval_type, $type, 2);
             break;
 
             case 5:
                 // IT Head
-                $dataArray = SendMail::requestToModerators($requested, $approval_type, $type, 3);
+                $dataArray = self::requestToModerators($requested, $approval_type, $type, 3);
             break;
 
             case 6:
                 // final approval
-                $dataArray = SendMail::requestToModerators($requested, $approval_type, $type, 4);
+                $dataArray = self::requestToModerators($requested, $approval_type, $type, 4);
             break;
 
         }
@@ -324,7 +337,7 @@ trait SendMail
                         $reportToName = $model->report_employee->first_name.' '.$model->report_employee->last_name;
                         $modules = [];
                         $modules = $requested->modules->name ?? '-';
-        
+                        
                         // get template and variables to be replaced
                         $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 0])->first();
                         $templateHTML = [];
@@ -402,8 +415,8 @@ trait SendMail
                         }
 
                         $dataArray[1] = $templateHTML_1;
-                      //  echo json_encode($logs); exit;
-                        $dataArray[2] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
+                     
+                        $dataArray[2] = self::notifyNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
 
                     }                   
                 break;
@@ -489,25 +502,25 @@ trait SendMail
                                 // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                                 $templateHTML_1['email'] = $email;
                                 array_push($dataArray, $templateHTML_1);
-                                $dataArray[] = SendMail::getNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
+                                $dataArray[] = self::notifyNextModerator($requested->modules->id, $logs[0]->approval_stage, $templateHTML_1['template'],$user_id);
                         }
                     }
                 break;
             case 3:
                 // sap lead
-                  $dataArray = SendMail::changeStatusMyModerators($type, $approval_type, $requested, $data, $status, 1);
+                  $dataArray = self::changeStatusByModerators($type, $approval_type, $requested, $data, $status, 1);
                 break;    
             case 4:
                   // director
-                  $dataArray = SendMail::changeStatusMyModerators($type, $approval_type, $requested, $data, $status, 2);
+                  $dataArray = self::changeStatusByModerators($type, $approval_type, $requested, $data, $status, 2);
                break;
             case 5: 
                   // IT head
-                  $dataArray = SendMail::changeStatusMyModerators($type, $approval_type, $requested, $data, $status, 3);
+                  $dataArray = self::changeStatusByModerators($type, $approval_type, $requested, $data, $status, 3);
               break;
             case 6:
                   // Basis
-                  $dataArray = SendMail::changeStatusMyModerators($type, $approval_type, $requested, $data, $status, 4);
+                  $dataArray = self::changeStatusByModerators($type, $approval_type, $requested, $data, $status, 4);
               break;
             
         }
@@ -525,17 +538,18 @@ trait SendMail
                switch($approval_type) {
                     case 1:
                         //request
-                        $dataArray = SendMail::requestMail($type, $approval_type, $requested, $data);
+                        $dataArray = self::requestMail($type, $approval_type, $requested, $data);
+                        //echo json_encode($dataArray); exit;
                     break;
 
                     case 2:
                         //approve
-                        $dataArray = SendMail::statusChangeMail(2, $type, $approval_type, $requested, $data);
+                        $dataArray = self::statusChangeMail(2, $type, $approval_type, $requested, $data);
                         break;
 
                     case 3:
                         //reject
-                        $dataArray = SendMail::statusChangeMail(3, $type, $approval_type, $requested, $data);
+                        $dataArray = self::statusChangeMail(3, $type, $approval_type, $requested, $data);
                         break;
                 }
             break;
@@ -548,21 +562,19 @@ trait SendMail
                 default:
                     $dataArray = [];
         }
-        //echo json_encode($dataArray); exit;
         return $dataArray;
     
     }
 
-    public static function getNextModerator($module_id, $index, $template, $user_id) {
+    public static function notifyNextModerator($module_id, $index, $template, $user_id) {
 
-      
         $stage = \ModuleApprovalStages::where('module_id', $module_id)->with('module')->orderBy('approval_matrix_id','asc')->get();
         
-        $stage_1 = $stage[$index]->approval_matrix_id;
+        $stage = $stage[$index]->approval_matrix_id;
       
         $dataArray = [];
 
-        switch($stage_1) {
+        switch($stage) {
 
             case 2: 
                 // module head
@@ -579,8 +591,9 @@ trait SendMail
             // sap lead
             $head =  Moderators::where('type_id', 1)->with('employee')->first();
             $module_email_id = $head->employee->email;
+            $m_name = $head->employee->first_name;
             $dataArray = [
-            'template' => $template,
+            'template' => str_replace($user_id, $m_name, $template),
             'email' => $module_email_id
             ];
             break;
@@ -589,8 +602,9 @@ trait SendMail
             // director
             $head =  Moderators::where('type_id', 2)->with('employee')->first();
             $module_email_id = $head->employee->email;
+            $m_name = $head->employee->first_name;
             $dataArray = [
-            'template' => $template,
+            'template' => str_replace($user_id, $m_name, $template),
             'email' => $module_email_id
             ];
             break;
@@ -599,8 +613,9 @@ trait SendMail
              // IT Head
             $head =  Moderators::where('type_id', 3)->with('employee')->first();
             $module_email_id = $head->employee->email;
+            $m_name = $head->employee->first_name;
             $dataArray = [
-            'template' => $template,
+            'template' => str_replace($user_id, $m_name, $template),
             'email' => $module_email_id
             ];
             break;
@@ -609,8 +624,9 @@ trait SendMail
             // BASIS
             $head =  Moderators::where('type_id', 4)->with('employee')->first();
             $module_email_id = $head->employee->email;
+            $m_name = $head->employee->first_name;
             $dataArray = [
-            'template' => $template,
+            'template' => str_replace($user_id, $m_name, $template),
             'email' => $module_email_id
             ];
             break;

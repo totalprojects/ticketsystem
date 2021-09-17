@@ -1,4 +1,3 @@
-@component('mail::layout')
 <head>
     <style type="text/css">
         table[class="container"] {

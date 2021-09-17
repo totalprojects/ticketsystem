@@ -160,9 +160,6 @@ class MailTemplateController extends Controller
 
         $variables = json_decode($request->variables, true);
 
-
-       // return false;
-
         try {
             $isDuplicate = MailTemplates::where([
                 'type_id' => $type_id,

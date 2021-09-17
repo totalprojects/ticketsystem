@@ -203,6 +203,7 @@ class EmployeeController extends Controller {
                 $id = $request->id1;
 
                 if (!$user) {
+                    
                     $user = \Users::create([
                         'name'        => $request->first_name1 . ' ' . $request->last_name1,
                         'email'       => $request->email1,

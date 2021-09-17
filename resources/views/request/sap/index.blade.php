@@ -858,6 +858,19 @@
                     container.append(html)
                 }
             },
+            {
+                caption: 'Created At',
+                dataField:"created_at",
+                // cellTemplate:(container, options) => {
+                //     //console.log(options)
+                //     var business = JSON.parse(options.data.business_area);
+                //     var html = ``;
+                //     $.each(business, (i) => {
+                //         html += `<span>${business[i].business_name} (${business[i].business_code})</span>`;
+                //     });
+                //     container.append(html)
+                // }
+            },
            
                            
             ],

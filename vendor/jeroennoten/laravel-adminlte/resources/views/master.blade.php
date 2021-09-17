@@ -473,6 +473,18 @@
         position: relative;
         
     }
+    .critical-tcodes-access-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/critical-tcodes-acccess.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
    
 </style>
 </head>

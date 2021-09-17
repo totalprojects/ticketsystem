@@ -318,6 +318,7 @@ trait SendMail
 
    
     public static function statusChangeMail($status,$type, $approval_type, $requested, $data){
+        $dataArray = [];
 
         switch($type) {
             // reporting manager 
@@ -467,6 +468,7 @@ trait SendMail
                         
                         // $templateHTML_1['template'] = str_replace("##remarks##", $remarks, str_replace("##status##", $status, str_replace("##approval_stage##", $approval_stage, str_replace("##created_by##", $created_by, str_replace("##request_id##",$data[0]['request_id'],str_replace("##user_id##", $each->modules->module_head->user_details->name, $template->html_template))))));
                         $templateHTML_1['email'] = $requested->modules->module_head->user_details->email;
+                        //echo json_encode($dataArray); exit;
                         array_push($dataArray, $templateHTML_1);
 
 
@@ -594,6 +596,8 @@ trait SendMail
 
             case 3: 
             // sap lead
+            echo $user_id;
+            exit;
             $head =  Moderators::where('type_id', 1)->with('employee')->first();
             $module_email_id = $head->employee->email;
             $m_name = $head->employee->first_name;

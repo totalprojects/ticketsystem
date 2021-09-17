@@ -1116,8 +1116,8 @@ $.ajax({
                     console.log(r)
                     if(r.message == 'success') {
                         toastr.success('Your Request has been saved successfully');
-                      // $("#msform")[0].reset();
-                      // $("#requestModal").modal('hide');
+                      $("#msform")[0].reset();
+                      $("#requestModal").modal('hide');
                         fetch_data();
                         //console.log(r);
                     } else {

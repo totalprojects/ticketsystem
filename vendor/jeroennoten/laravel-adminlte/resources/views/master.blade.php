@@ -578,6 +578,8 @@
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
     @endif
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     {{-- Livewire Script --}}
     @if(config('adminlte.livewire'))
         @if(app()->version() >= 7)
@@ -591,6 +593,14 @@
     @yield('adminlte_js')
     <script src="{{asset('assets/plugins/pickletree/pickletree.js')}}"></script>
     <script>
+        $("#clear-filter").on('click', (e) => {
+            e.preventDefault();
+            $("#srch-frm")[0].reset();
+            fetch_data();
+        });
+
+        $("#date").datepicker({maxDate: '0'});
+        $("input").prop('autocomplete','off');
 
         $('.select2bs4').select2({ theme: 'bootstrap4' });
         $("select").on('change', () => {

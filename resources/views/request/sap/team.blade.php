@@ -18,6 +18,26 @@
                        <button id="request_btn" class='custom-theme-btn'><i class='fas fa-fist-raised'></i> Raise Request</button>
                     </div>
                 </div>
+                <div class="container">
+                  <form id="srch-frm">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Search</label>
+                        </div>
+                        <div class="col-lg-4">
+                           
+                            <input type="text" name="requestID" class="form-control" placeholder="Request ID">
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" name="date" id='date' class="form-control" placeholder="Creation Date">
+                        </div>
+                        <div class="col-lg-4">
+                            <button type="submit" id="srch-btn" class="btn btn-primary"><i class='fa fa-search'></i> Search</button>
+                            <button id="clear-filter" class="btn btn-primary"><i class='fa fa-sync'></i> Clear</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
                 <div id="request-list-div" style="height:600px"></div>
             </div>
         </div>
@@ -67,10 +87,22 @@
       const IS_IT_HEAD = "{{ $moderators['IS_IT_HEAD'] == 1 ? 'true' : 'false'}}"
       const IS_SAP_LEAD = "{{ $moderators['IS_SAP_LEAD'] == 1 ? 'true' : 'false' }}"
     
+      $("#srch-btn").on('click', (e) => {
+            e.preventDefault();
+            var requestID = $("input[name='requestID']").val();
+            var creationDate = $("input[name='date']").val(); 
+            var params = {
+                'requestID': requestID,
+                'creationDate': creationDate
+            }
+            fetch_data(params);
+      })
 
     /** Fetch SAP Requests */
     fetch_data();
-    function fetch_data(){
+    function fetch_data(params = []){
+      var requestId = params.requestID !== undefined ? params.requestID : '';
+      var creationDate = params.creationDate !== undefined ? params.creationDate : '';
       function isNotEmpty(value) {
           return value !== undefined && value !== null && value !== "";
       }
@@ -103,7 +135,7 @@
                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                   },
                   dataType: "json",
-                  data: '&take=' + take + '&skip=' + skip,
+                  data: '&requestID=' + requestId + '&creationDate=' + creationDate + '&take=' + take + '&skip=' + skip,
                   complete: function (result) {
                       var res = result.responseJSON;
                       var data = res.data;

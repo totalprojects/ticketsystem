@@ -754,8 +754,17 @@ class SapController extends Controller {
         $user_id = Auth::user()->id;
         $take    = $request->take;
         $skip    = $request->skip;
-
-        $data       = SAPRequest::where('user_id', $user_id)->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action')
+        $requestId = $request->requestID;
+       // $username = $request->username;
+        $creationDate = $request->creationDate;
+        
+        $data       = SAPRequest::where('user_id', $user_id)
+        ->when(!empty($creationDate), function($Q) use($creationDate) {
+            $Q->whereDate('created_at', date('Y-m-d', strtotime($creationDate)));
+        })
+        ->when(!empty($requestId), function($Q) use($requestId) {
+            $Q->where('request_id', 'like' , '%'. $requestId.'%');
+        })->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action')
         ->when(isset($request->critical), function($Q) {
             $Q->whereHas('critical_tcodes');
         });
@@ -840,6 +849,9 @@ class SapController extends Controller {
         $user_id = Auth::user()->employee_id;
         $take    = $request->take;
         $skip    = $request->skip;
+        $requestId = $request->requestID;
+        // $username = $request->username;
+         $creationDate = $request->creationDate;
 
         $is_module_head = \ModuleHead::where('user_id',Auth::user()->id)->get();
         $module_permissions = [];
@@ -880,7 +892,12 @@ class SapController extends Controller {
         }
        // return $module_permissions;
         //return $userId;
-        $data       = SAPRequest::when(empty($module_permissions), function($Q) use($userId) {
+        $data       = SAPRequest::when(!empty($creationDate), function($Q) use($creationDate) {
+            $Q->whereDate('created_at', date('Y-m-d', strtotime($creationDate)));
+        })
+        ->when(!empty($requestId), function($Q) use($requestId) {
+            $Q->where('request_id', 'like' , '%'. $requestId.'%');
+        })->when(empty($module_permissions), function($Q) use($userId) {
                         $Q->whereIn('user_id', $userId);
         })->when(!empty($module_permissions), function($Q) use($module_permissions) {
                         $Q->whereIn('module_id',$module_permissions);

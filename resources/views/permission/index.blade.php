@@ -617,9 +617,9 @@ function fetch_data(){
            var deferred = $.Deferred(),
                args = {};
            [
-               "skip",
-               "take",
-               "requireTotalCount",
+            //    "skip",
+            //    "take",
+             //  "requireTotalCount",
                "sort",
                "filter",
            ].forEach(function (i) {
@@ -627,8 +627,8 @@ function fetch_data(){
                    args[i] = JSON.stringify(loadOptions[i]);
            })
 
-           let take = loadOptions.take
-           let skip = loadOptions.skip
+        //    let take = loadOptions.take
+        //    let skip = loadOptions.skip
            var dataSet = []
            var url = "{{ route('show.permissions') }}"
            $.ajax({
@@ -638,7 +638,7 @@ function fetch_data(){
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                },
                dataType: "json",
-               data: '&take=' + take + '&skip=' + skip,
+               data: null,
                complete: function (result) {
                    var res = result.responseJSON;
                    var data = res.data;
@@ -662,23 +662,20 @@ function fetch_data(){
        showBorders: true,
        showRowLines: true,
        rowAlternationEnabled: true,
-       allowColumnResizing: true,
+       allowColumnResizing: false,
+       columnAutoWidth:true,
+       columnHidingEnabled: false,
        sorting: false,
        loadPanel: {
         //indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,
         text: "Loading...",
         showPane: true,
        },
-       remoteOperations: {
-           filtering: true,
-           paging: true,
-           sorting: true,
-           groupPaging: true,
-           grouping: true,
-           summary: true
+       filterRow: { 
+         visible: true
        },
        paging: {
-           enabled: true,
+           enabled: false,
            pageSize: 10
        },
        columnChooser: {
@@ -686,6 +683,7 @@ function fetch_data(){
            mode: "select" // or "dragAndDrop"
        },
        scrolling: {
+           scroll:"virtual",
            scrollByContent: true,
        },
        wordWrapEnabled: true,
@@ -721,17 +719,17 @@ function fetch_data(){
                 }
            },
            {
-                dataField:"module_head",
+                dataField:"module_head.user_details.name",
                 caption:"Module Owner",
                 cellTemplate: (container, options) => {
                     var module_head = options.data.module_head;
                     var html = '';
                     if(module_head !== null) {
                         module_head = module_head.user_details.name
-                        html = `<span class='badge badge-primary'>${module_head}</span>`;
+                        html = `${module_head}`;
                     } else {
-                        module_head = 'Not Assigned';
-                        html = `<span class='badge badge-danger'>${module_head}</span>`;
+                        module_head = '<span class="not_assigned_text text-red text-bold">Not Assigned</span>';
+                        html = `<span class="not_assigned_text text-dark text-bold">${module_head}</span>`;
                     }
                   
                         
@@ -742,6 +740,7 @@ function fetch_data(){
            {
                 dataField:"tcodes",
                 caption:"Tcodes",
+                allowFiltering: false,
                 cellTemplate: (container, options) => {
                     var permission_id = options.data.id;
                     var html = `<a href='javascript:void(0)' class='custom-theme-btn' onClick='showTcodes(${permission_id})'> Show TCodes</a>`;
@@ -751,6 +750,7 @@ function fetch_data(){
            {
                dataField: "Action",
                caption: "Action",
+               allowFiltering: false,
                width:100,
                cellTemplate: function (container, options) {
 

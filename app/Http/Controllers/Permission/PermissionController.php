@@ -46,8 +46,8 @@ class PermissionController extends Controller {
     }
 
     public function fetchPermissions(Request $request) {
-        $take = $request->take;
-        $skip = $request->skip;
+        $take = $request->take ?? 10000;
+        $skip = $request->skip ?? 0;
         //tcodes.action_details:id,name
         // only sap module permissions
         $roles = Permission::with('model_permissions.users:id,name', 'module_head.user_details')->where('type', 2);

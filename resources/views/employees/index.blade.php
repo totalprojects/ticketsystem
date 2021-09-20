@@ -250,8 +250,13 @@
         }),
         showBorders: true,
         showRowLines:true,
+        allowColumnResizing: false,
+        columnAutoWidth:true,
+        columnHidingEnabled: false,
         rowAlternationEnabled: true,
-        allowColumnResizing: true,
+        filterRow: { 
+         visible: true
+       },
         loadPanel: {
            // indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,
             text: 'Loading...',
@@ -261,10 +266,11 @@
             mode: "single"
         },
         scrolling: {
-            mode: "virtual"
+            mode: "virtual",
+            scrollByContent: true,
         },
         paging: {
-            enabled: true,
+            enabled: false,
             pageSize:10
         },
         rowAlternationEnabled: false,
@@ -280,7 +286,7 @@
             {
                 dataField: "id",
                 caption: 'Id',
-                width:95
+                width:50
             },
             {
                 caption: 'Name',
@@ -320,6 +326,7 @@
             {
                 dataField:"report_to.report_employee.first_name",
                 caption:"Report To",
+                width:90,
                 cellTemplate:(container, options) => {
                     console.log(options)
                     var name = `-`;
@@ -334,6 +341,7 @@
             },
             {
                 dataField:"pincode",
+                dataType: "number",
             },
             {
                 dataField:"address",
@@ -341,10 +349,13 @@
             {
                 dataField: "created_at",
                 caption: 'Created At',
+                width:90,
+                dataType: "date",
+                format: "d/M/yyyy"
                
             },
-           
             {
+                allowFiltering: false,
                 dataField: "Action",
                 caption: 'Action',
                 width: 75,
@@ -371,11 +382,10 @@
                        
                         setTimeout(() => {
                         
-                            //console.log(data.district_id)
                             $("#districts1").val(data.district_id).trigger('change');
                             $(".departments").val(data.departments.id).trigger('change');
                             setTimeout(() => {
-                                //console.log(data.report_to.report_employee)
+                                
                                 if(data.report_to.report_employee !== null) {
                                     $("#reporting_tos1").val(data.report_to.report_employee.id).trigger('change');
                                 }

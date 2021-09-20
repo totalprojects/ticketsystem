@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Users')
+@section('title', 'Users Permission')
 
 @section('content_header')
     <!-- <h1>Users List</h1> -->
@@ -55,6 +55,39 @@
       </div>
     </div>
   </div>
+
+  <!-- Menu Modal -->
+  <div class="modal fade" id="showmenus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Menu Permissions <span id='for'></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="render-menus"> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+   <!-- Permissions Modal -->
+   <div class="modal fade" id="showpermissions" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Module Permissions <span id='for'></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="render-permissions"> 
+        </div>
+      </div>
+    </div>
+  </div>
 @stop
 
 @section('css')
@@ -79,7 +112,13 @@
         }),
         showBorders: true,
         showRowLines:true,
-        allowColumnResizing: true,
+        allowColumnResizing: false,
+        columnAutoWidth:true,
+        columnHidingEnabled: false,
+        rowAlternationEnabled: true,
+        filterRow: { 
+         visible: true
+       },
         loadPanel: {
            // indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,
             text: 'Loading...',
@@ -92,7 +131,7 @@
             mode: "virtual"
         },
         paging: {
-            enabled: true,
+            enabled: false,
             pageSize:10
         },
         //columnHidingEnabled: true,
@@ -129,16 +168,24 @@
             {
                 dataField:"permissions",
                 caption:"Permissions",
+                allowFiltering: false,
                 cellTemplate: function (container, options) {
                     var data = options.data;
                     var permissions = [];
                     var permissions = JSON.parse(data.his_permissions);
                     var html = '';
-                    if(permissions.length>0) {
-                       $.each(permissions, (i) => {
-                            html += `<span class='badge badge-primary'>${permissions[i].name}</span>&nbsp;`;
-                       })
-                    }
+                    var forName = data.name;
+                    //console.log(forName)
+                   // html =  html.str.replace(/,\s*$/, "");
+                    var html = `<a class='badge badge-primary text-white' onclick='loadPermissions(${JSON.stringify(permissions)}, ${JSON.stringify(forName)})'>View</a>`;
+     
+                   // container.append(html)
+
+                    // if(permissions.length>0) {
+                    //    $.each(permissions, (i) => {
+                    //         html += `<span class='badge badge-primary'>${permissions[i].name}</span>&nbsp;`;
+                    //    })
+                    //}
 
                     container.append(html)
 
@@ -148,18 +195,18 @@
             {
                 dataField:"his_menu",
                 caption:"Menus",
+                allowFiltering: false,
                 visible:(USERID==1) ? true : false,
                 cellTemplate: function (container, options) {
                     var data = options.data;
                     var menus = [];
                     var menus = JSON.parse(data.his_menus);
                     var html = '';
-                    if(menus.length>0) {
-                       $.each(menus, (i) => {
-                            html += `<span class='badge badge-primary'>${menus[i].menu.menu_name}</span>&nbsp;`;
-                       })
-                    }
-
+                    var forName = data.name;
+                    console.log(forName)
+                   // html =  html.str.replace(/,\s*$/, "");
+                    var html = `<a class='badge badge-primary text-white' onclick='loadMenus(${JSON.stringify(menus)}, ${JSON.stringify(forName)})'>View</a>`;
+     
                     container.append(html)
 
 
@@ -169,6 +216,7 @@
                 dataField: "created",
                 width:100,
                 caption: 'Created At',
+                dataType:"date"
                
             },
            
@@ -176,6 +224,7 @@
                 dataField: "Action",
                 caption: 'Action',
                 visible: true,
+                allowFiltering: false,
                 width:85,
                 alignment: 'left',
                 cssClass: '__Action',
@@ -198,6 +247,7 @@
                         // console.log(his_permissions)
                         var html_form = `<p><strong>User Roles</strong></p><form method='post' id='user-role-frm' method='post'>
                         @csrf
+                        <select name='roles' class='form-control select2bs4'>
                         `;
                         var is_checked;
                         var flag = false;
@@ -208,13 +258,13 @@
                                 return his_roles.id === roles[i].id;
                             });
                             if(flag!= -1) {
-                                is_checked = 'checked'
+                                is_checked = 'selected'
                             }
                             flag = false
-                            html_form += `<input type='radio' name='roles' ${is_checked} value='${roles[i].id}'> ${roles[i].name} &nbsp;`;
+                            html_form += `<option value='${roles[i].id}' ${is_checked}>${roles[i].name}</option>`;
                         })
                         //console.log(html_form);
-                        html_form += `<hr><input type='hidden' id='user_id_r' name='user_id_p' value="${data.id}"><button type='submit' id='role-btn' class='btn btn-primary'>Update Roles</button></form><br>`;
+                        html_form += `</select><hr><input type='hidden' id='user_id_r' name='user_id_p' value="${data.id}"><button type='submit' id='role-btn' class='btn btn-primary'>Update Roles</button></form><br>`;
                         $("#roles-block").html(html_form);
 
                         var html_form = `<p><strong>User Permissions</strong></p><form method='post' id='user-permission-frm' method='post'>
@@ -253,7 +303,7 @@
                             }
                             flag = false
                             if(all_menus[i].parent_id > 0) {
-                                html_form += `<ul><li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'> ${all_menus[i].menu_name} &nbsp;</li></ul>`;
+                                html_form += `</ul><ul><li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'> ${all_menus[i].menu_name} &nbsp;</li></ul>`;
                             } else {
                                 html_form += `<li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'> ${all_menus[i].menu_name} &nbsp;`;
                             }
@@ -387,8 +437,37 @@
         
     })
    
+    function loadMenus(menus, forName) {
+        var html = `No menus set`;
+        if(menus.length>0) {
+            html = `<div class='row'>`
+            $.each(menus, (i) => {
+                html += `<div class='col-lg-4 text-center mb-2'><span class='badge badge-primary' style='min-width:150px !important;'> ${menus[i].menu.menu_name}</span></div>`;
+            })
+
+            html += `</div>`;
+        }
+        $("#for").html(' for '+forName);
+        $("#render-menus").html(html)
+
+        $("#showmenus").modal('show');
+    }
     
-    
+    function loadPermissions(permissions, forName) {
+        var html = `No permissions set`;
+        if(permissions.length>0) {
+            html = `<div class='row'>`
+            $.each(permissions, (i) => {
+                html += `<div class='col-lg-4 text-center mb-2'><span class='badge badge-primary' style='min-width:150px !important;'> ${permissions[i].name}</span></div>`;
+            })
+
+            html += `</div>`;
+        }
+        $("#for").html(' for '+forName);
+        $("#render-permissions").html(html)
+
+        $("#showpermissions").modal('show');
+    }
     
     
      </script>

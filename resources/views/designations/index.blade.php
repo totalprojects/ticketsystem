@@ -263,7 +263,8 @@ function fetch_data(){
        },
        showRowLines: true,
        rowAlternationEnabled: true,
-       allowColumnResizing: true,
+       allowColumnResizing: false,
+       columnAutoWidth:true,
        sorting: false,
        loadPanel: {
         //indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,

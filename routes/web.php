@@ -51,7 +51,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->midd
 Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitLogs']], function () {
 
     Route::get('/change-password', [UserController::class, 'changePasswordPage'])->name('user.change.password');
-    Route::get('/users', [UserController::class, 'index'])->name('users.view');
+    Route::get('/users-permission', [UserController::class, 'index'])->name('users.view');
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.view');
     Route::get('/menus', [MenuController::class, 'index'])->name('menus.view');
     Route::get('/modules', [PermissionController::class, 'index'])->name('permissions.view');

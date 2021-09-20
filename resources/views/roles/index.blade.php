@@ -9,17 +9,7 @@
 @stop
 
 @section('content')
-<style>
-    .dx-datagrid-rowsview .dx-select-checkboxes-hidden > tbody > tr > td > .dx-select-checkbox {
-        display: block !important;
-    }
-    .dx-texteditor-input {
-        border-radius:0 !important;
-    }
-    .dx-placeholder::before {
-        content:'';
-    }
-</style>
+
     <div class="tab-content p-1">
         <div class="tab-pane active dx-viewport" id="users">
             <div class="demo-container">
@@ -225,11 +215,6 @@
         </div>
     
 @stop
-
-@section('css')
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-@stop
-
 @section('js')
     <script>
         $("input[name='duplicate_this_role']").on('change', () => {
@@ -255,8 +240,6 @@
             e.preventDefault();
             var pid = $("#selected_permission_id").val();
             var tcodes = $("#selected_tcodes").val();
-           //console.log(tcodes);
-            //return false;
             var role_id = $("#selected_role_id").val();
             $.ajax({
                 url:"{{ route('submit.selected.tcodes') }}",
@@ -312,8 +295,9 @@
         })
     $(document).on('click','#add_role', ()=> {
    ////console.log('inn')
-    $("#add-role-modal").modal('show');
+     $("#add-role-modal").modal('show');
     });
+    
     $(document).on('click','#update-role-btn', ()=> {
 
     $("#role-update-frm").validate({
@@ -348,7 +332,6 @@
                 $("#role-edit-modal").modal('hide');
                 fetch_data();
             }
-
         })
     }
 });
@@ -403,9 +386,6 @@ function fetch_data(){
            var deferred = $.Deferred(),
                args = {};
            [
-               "skip",
-               "take",
-               "requireTotalCount",
                "sort",
                "filter",
            ].forEach(function (i) {
@@ -413,8 +393,8 @@ function fetch_data(){
                    args[i] = JSON.stringify(loadOptions[i]);
            })
 
-           let take = loadOptions.take
-           let skip = loadOptions.skip
+        //    let take = loadOptions.take
+        //    let skip = loadOptions.skip
            var dataSet = []
            var url = "{{ route('get.roles.list') }}"
            $.ajax({
@@ -424,11 +404,10 @@ function fetch_data(){
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                },
                dataType: "json",
-               data: '&take=' + take + '&skip=' + skip,
+               data: null,
                complete: function (result) {
                    var res = result.responseJSON;
                    var data = res.data;
-                  //console.log(res)
                    deferred.resolve(data, {
                        totalCount: res.totalCount,
                    });
@@ -442,59 +421,39 @@ function fetch_data(){
            return deferred.promise();
        }
    });
+
+
    $("#roles-list-div").dxDataGrid({
        dataSource: jsonData,
        KeyExpr: "id",
        showBorders: true,
        showRowLines: true,
        rowAlternationEnabled: true,
-       allowColumnResizing: true,
-       sorting: false,
+       allowColumnResizing: false,
+       columnAutoWidth:true,
+       columnHidingEnabled: false,
+       filterRow: { 
+         visible: true
+       },
        loadPanel: {
-        //indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,
         text: "Loading...",
         showPane: true,
        },
-       remoteOperations: {
-           filtering: true,
-           paging: true,
-           sorting: true,
-           groupPaging: true,
-           grouping: true,
-           summary: true
-       },
        paging: {
-           enabled: true,
+           enabled: false,
            pageSize: 25
        },
        columnChooser: {
            enabled: true,
            mode: "select" // or "dragAndDrop"
        },
-       headerFilter: {
-           //visible: true
-       },
        scrolling: {
+           scroll:"virtual",
            scrollByContent: true,
        },
- 
-            onCellPrepared: (cellValue) => {  
-
-                let rowData = ((cellValue || {}).row || {}).data || {};  
-                if (cellValue.rowType = 'data') {  
-
-                    cellValue.cellElement.find('.dx-select-checkbox').hide();  
-                    cellValue.cellElement.off();  
-                }  
-            }, 
-       wordWrapEnabled: true,
+       hoverStateEnabled: true,
+       wordWrapEnabled: false,
        columns: [
-        //    {
-        //        dataField: "id",
-        //        caption: "Role Id",
-        //        width:90,
-        //        visibe: false,
-        //    },
            {
                
                dataField: "name",
@@ -507,10 +466,16 @@ function fetch_data(){
            {
                dataField: "status",
                caption: "Type",
+               width:120,
+            //    lookup: {
+            //         dataSource: ['normal', 'critical', 'auditor'],
+            //     }
            },
            {
                 dataField:"his_permissions",
                 caption:"Module Permissions",
+                width:500,
+                allowFiltering: false,
                 cellTemplate: (container, options) => {
                    //console.log(options.data.his_permissions)
                     var permissions = options.data.his_permissions;
@@ -527,6 +492,7 @@ function fetch_data(){
            {
                dataField: "Action",
                caption: "Action",
+               allowFiltering: false,
                cellTemplate: function (container, options) {
                    var role_id = options.data.id;
                    var role_name = options.data.name;

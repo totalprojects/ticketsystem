@@ -485,6 +485,33 @@
         position: relative;
         
     }
+    .load-custom{
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: 7px solid transparent;
+          border-top: 7px solid #e4ff55;
+          border-bottom: 7px solid #e4ff55;
+          animation: rotate 1.8s linear infinite;
+        }
+    .custom-loader-wrap {
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgb(0, 0, 0 , 0.5);
+    }
+
+
+    @keyframes rotate{
+      0%{transform: rotate(0deg);}
+      100%{transform: rotate(360deg);}
+    }
 
 /**
  * Tooltip Styles
@@ -557,7 +584,9 @@
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>
-
+    <div class="custom-loader-wrap d-none">
+        <span class="load-custom"></span>
+    </div>
     {{-- Body Content --}}
     @yield('body')
 

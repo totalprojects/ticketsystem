@@ -10,12 +10,13 @@ use App\Models\Model\model_has_permissions as UserPermissions;
 use ModuleApprovalStages;
 use CriticalTCodes;
 use RoleTcodeAccess;
+use StandardTCodes;
 
 class permissions extends Model {
     use HasFactory;
 
     public function tcodes() {
-        return $this->hasMany(TCodes::class, 'permission_id', 'id')->orderBy('permission_id', 'asc');
+        return $this->hasMany(StandardTCodes::class, 'permission_id', 'id')->orderBy('permission_id', 'asc');
     }
 
     public function allowed_tcodes() {

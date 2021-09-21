@@ -155,8 +155,8 @@ trait SendMail
                 $request_id = $data[0]['request_id'];
                 $module_id = $requested->modules->name;
                 $tcode_id = $requested->tcodes->t_code;
-                $company_code = $requested->company_code;
-                $plant_code = $requested->plant_code;
+                $company_code = implode(",", $requested->company_code);
+                $plant_code = implode(",", $requested->plant_code);
                 $sap_lead = Moderators::where('type_id',$moderator_id)->with('employee')->first();
                 $user_id = $sap_lead->employee->first_name;
                 $actions = '';
@@ -204,8 +204,8 @@ trait SendMail
                             $request_id = $data[0]['request_id'];
                             $module_id = $requested->modules->name;
                             $tcode_id = $requested->tcodes->t_code;
-                            $company_code = $requested->company_code;
-                            $plant_code = $requested->plant_code;
+                            $company_code = implode(",", $requested->company_code);
+                            $plant_code = implode(",", $requested->plant_code);
                             $user_id = $username;
                             $actions = '';
                             foreach($requested->action as $ea) {
@@ -269,8 +269,8 @@ trait SendMail
                                 $request_id = $data[0]['request_id'];
                                 $module_id = $requested->modules->name;
                                 $tcode_id = $requested->tcodes->t_code;
-                                $company_code = $requested->company_code;
-                                $plant_code = $requested->plant_code;
+                                $company_code = implode(",", $requested->company_code);
+                                $plant_code = implode(",",  $requested->plant_code);
                                 $user_id = $requested->modules->module_head->user_details->name;
                                 $actions = '';
                                 foreach($requested->action as $ea) {

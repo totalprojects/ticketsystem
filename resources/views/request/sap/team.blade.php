@@ -14,7 +14,7 @@
             <div class="demo-container">
                 <div class="top-info">
                     <div class="table-heading-custom"><h4 class="right"><i class="fas fa-copy"></i> Team SAP Requests</h4></div>
-                    <div class="multibtn-sec">
+                    <div class="multibtn-sec d-none">
                        <button id="request_btn" class='custom-theme-btn'><i class='fas fa-fist-raised'></i> Raise Request</button>
                     </div>
                 </div>
@@ -24,14 +24,17 @@
                         <div class="col-lg-12">
                             <label>Search</label>
                         </div>
-                        <div class="col-lg-4">
-                           
+                        <div class="col-lg-3">
                             <input type="text" name="requestID" class="form-control" placeholder="Request ID">
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
+                          <input type="text" name="username" class="form-control" placeholder="Username">
+                        </div>
+                        <div
+                         class="col-lg-3">
                             <input type="text" name="date" id='date' class="form-control" placeholder="Creation Date">
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <button type="submit" id="srch-btn" class="btn btn-primary"><i class='fa fa-search'></i> Search</button>
                             <button id="clear-filter" class="btn btn-primary"><i class='fa fa-sync'></i> Clear</button>
                         </div>
@@ -91,9 +94,11 @@
             e.preventDefault();
             var requestID = $("input[name='requestID']").val();
             var creationDate = $("input[name='date']").val(); 
+            var username = $("input[name='username']").val(); 
             var params = {
                 'requestID': requestID,
-                'creationDate': creationDate
+                'creationDate': creationDate,
+                'username' : username
             }
             fetch_data(params);
       })
@@ -103,6 +108,7 @@
     function fetch_data(params = []){
       var requestId = params.requestID !== undefined ? params.requestID : '';
       var creationDate = params.creationDate !== undefined ? params.creationDate : '';
+      var username = params.username !== undefined ? params.username : '';
       function isNotEmpty(value) {
           return value !== undefined && value !== null && value !== "";
       }
@@ -135,7 +141,7 @@
                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                   },
                   dataType: "json",
-                  data: '&requestID=' + requestId + '&creationDate=' + creationDate + '&take=' + take + '&skip=' + skip,
+                  data: '&username=' + username +'&requestID=' + requestId + '&creationDate=' + creationDate + '&take=' + take + '&skip=' + skip,
                   complete: function (result) {
                       var res = result.responseJSON;
                       var data = res.data;
@@ -179,7 +185,7 @@
           },
           paging: {
               enabled: true,
-              pageSize: 10
+              pageSize: 25
           },
           columnChooser: {
               enabled: true,
@@ -189,9 +195,6 @@
               scroll:"virtual",
               scrollByContent: true,
           },
-          sorting: {
-                mode: "none"
-            },
           wordWrapEnabled: false,
           columns: [
               {
@@ -253,6 +256,19 @@
                         });
                         container.append(html)
                     }
+                },
+                {
+                caption: 'Created At',
+                dataField:"created_at",
+                // cellTemplate:(container, options) => {
+                //     //console.log(options)
+                //     var business = JSON.parse(options.data.business_area);
+                //     var html = ``;
+                //     $.each(business, (i) => {
+                //         html += `<span>${business[i].business_name} (${business[i].business_code})</span>`;
+                //     });
+                //     container.append(html)
+                // }
                 },
 
                               
@@ -529,10 +545,12 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
 
 function approve(obj, approver, request_id, status = 1) {
   $(obj).prop('disabled', true);
-  toastr.info('Processing...');
+  //toastr.info('Processing...');
+  customLoader(1);
   var remarks = $("#r_"+request_id).val();
   if(remarks.length == 0) {
     toastr.error('Remarks field is mandatory');
+    customLoader(0);
     return false;
   }
   $.ajax({
@@ -544,8 +562,10 @@ function approve(obj, approver, request_id, status = 1) {
     },
     error:(r) => {
       //console.log(r)
+      customLoader(0);
     },
     success:(r) => {
+      customLoader(0);
       console.log(r)
       $(obj).prop('disabled', false);
       toastr.success('The status was changed to approved');

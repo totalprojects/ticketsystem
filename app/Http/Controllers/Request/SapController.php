@@ -439,7 +439,7 @@ class SapController extends Controller {
                     'created_at'      => NOW(),
                     'updated_at'      => NOW()
                 ];
-                try {
+               // try {
 
                     $create = SAPRequest::create($array);
                     $data = SAPRequest::where(['module_id' => $each['module_id'], 'user_id' => $user_id, 'request_id' => $requestId, 'tcode_id' => $tcodes])->get();
@@ -455,10 +455,10 @@ class SapController extends Controller {
                         ]);
                     } 
 
-                } catch (\Exception $e) {
+                // } catch (\Exception $e) {
 
-                    return response(['message' => "Server ERROR : ".$e->getMessage()], 500);
-                }
+                //     return response(['message' => "Server ERROR : ".$e->getMessage()], 500);
+                // }
 
             }
         }
@@ -850,7 +850,7 @@ class SapController extends Controller {
         $take    = $request->take;
         $skip    = $request->skip;
         $requestId = $request->requestID;
-        // $username = $request->username;
+         $username = $request->username;
          $creationDate = $request->creationDate;
 
         $is_module_head = \ModuleHead::where('user_id',Auth::user()->id)->get();
@@ -890,10 +890,13 @@ class SapController extends Controller {
         foreach ($userIds as $each) {
             $userId[] = $each->id;
         }
-       // return $module_permissions;
-        //return $userId;
+
         $data       = SAPRequest::when(!empty($creationDate), function($Q) use($creationDate) {
             $Q->whereDate('created_at', date('Y-m-d', strtotime($creationDate)));
+        })->when(!empty($username), function($Q) use($username) {
+            $Q->whereHas('user', function($Q) use($username) {
+                $Q->where('name', 'like', '%'. $username .'%');
+            });
         })
         ->when(!empty($requestId), function($Q) use($requestId) {
             $Q->where('request_id', 'like' , '%'. $requestId.'%');
@@ -908,7 +911,7 @@ class SapController extends Controller {
         //return $data->get();
         $subArray = [];
         $i        = 1;
-        foreach ($data->get() as $each) {
+        foreach ($data->take($take)->skip($skip)->get() as $each) {
 
             $company_name = $each->company['company_name'] ?? '-';
             $company_code = $each['company_code'] ?? '-';
@@ -974,7 +977,7 @@ class SapController extends Controller {
         }
         
        // return $subArray;
-        return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $i, 'apporval_stages' => requestApprovalStages()], 200);
+        return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $totalCount, 'apporval_stages' => requestApprovalStages()], 200);
     }
 
     public function approve(Request $request) {

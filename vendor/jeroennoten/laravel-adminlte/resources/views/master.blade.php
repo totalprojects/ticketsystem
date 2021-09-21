@@ -505,7 +505,7 @@
         align-items: center;
         justify-content: center;
         background: rgb(0, 0, 0 , 0.5);
-        z-index: 99;
+        z-index: 10000 !important;
     }
 
 
@@ -582,6 +582,18 @@
 }
    
 </style>
+<script>
+    
+function customLoader(loadState = 'off') {
+    if(loadState == 'on' || loadState == 1) {
+        console.log('loaderon')
+        $(".custom-loader-wrap").removeClass('d-none');
+    } else {
+        console.log('loaderoff')
+        $(".custom-loader-wrap").addClass('d-none');
+    }
+}
+</script>
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>
@@ -629,7 +641,7 @@
             fetch_data();
         });
 
-        $("#date").datepicker({maxDate: '0'});
+        $("#date").datepicker({maxDate: '0', dateFormat: 'yy-mm-dd'});
         $("input").prop('autocomplete','off');
 
         $('.select2bs4').select2({ theme: 'bootstrap4' });
@@ -813,6 +825,7 @@
                 }
             })
         }
+
     </script>
 </body>
 

@@ -1137,7 +1137,10 @@ Swal.fire({
 });
 
 function finalCall(fdata) {
-$.ajax({
+    
+    customLoader(1);
+
+    $.ajax({
                 url:"{{ route('save.sap.request') }}",
                 type:"POST",
                 headers: {
@@ -1148,16 +1151,19 @@ $.ajax({
                     console.log('error');
                     toastr.error('Something went wrong');
                     console.log(r);
+                    customLoader(0);
                 },
                 success: (r) => {
                     console.log(r)
                     if(r.message == 'success') {
                         toastr.success('Your Request has been saved successfully');
-                      $("#msform")[0].reset();
-                      $("#requestModal").modal('hide');
+                        customLoader(0);
+                        $("#msform")[0].reset();
+                        $("#requestModal").modal('hide');
                         fetch_data();
                         //console.log(r);
                     } else {
+                        customLoader(0);
                         toastr.error('Something went wrong');
                     }
                     

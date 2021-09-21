@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'SAP Request')
+@section('title', 'SAP Team Request')
 
 @section('content_header')
 <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -554,11 +554,7 @@ function approve(obj, approver, request_id, status = 1) {
     }
   })
 }
-
-
-
-
-       
+  
     
     </script>
 @stop

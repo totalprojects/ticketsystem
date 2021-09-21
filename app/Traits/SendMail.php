@@ -596,11 +596,12 @@ trait SendMail
 
             case 3: 
             // sap lead
-            echo $user_id;
-            exit;
+           
             $head =  Moderators::where('type_id', 1)->with('employee')->first();
             $module_email_id = $head->employee->email;
             $m_name = $head->employee->first_name;
+            //  echo str_replace($user_id, $m_name, $template);
+            //  exit;
             $dataArray = [
             'template' => str_replace($user_id, $m_name, $template),
             'email' => $module_email_id

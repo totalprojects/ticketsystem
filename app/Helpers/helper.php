@@ -43,4 +43,8 @@ function isModerator($type) {
     return $flag;
 }
 
+function webBaseURL() {
+    return "http://125.22.105.181:33066/audit_compliance/public/";
+}
+
 ?>

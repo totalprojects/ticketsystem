@@ -570,6 +570,10 @@ function approve(obj, approver, request_id, status = 1) {
       $(obj).prop('disabled', false);
       toastr.success('The status was changed to approved');
      loadStatusModal(status, r.created_at, r.logs, request_id);
+     setTimeout(()=> {
+      $("#statusModal").modal('hide');
+     },2500);
+     fetch_data()
       //console.log(r);
     }
   })

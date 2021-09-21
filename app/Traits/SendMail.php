@@ -319,7 +319,11 @@ trait SendMail
    
     public static function statusChangeMail($status,$type, $approval_type, $requested, $data){
         $dataArray = [];
-
+        if($status==3) {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
         switch($type) {
             // reporting manager 
             case 1:
@@ -328,11 +332,7 @@ trait SendMail
                     $email = $user->email;
                     $employee_id = $user->employee_id;
                     // find log for approved transactions
-                    if($status==3) {
-                        $status = 0;
-                    } else {
-                        $status = 1;
-                    }
+                   
                     $logs = SAPApprovalLogs::where(['request_id' => $data[0]['id'], 'status' => $status, 'approval_stage' => 1])->with('created_by_user')->get();
                    // echo json_encode($logs); exit;
                     $model = EmployeeMappings::where('employee_id', $employee_id)->with('report_employee','employee')->first();
@@ -348,6 +348,7 @@ trait SendMail
                         $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 0])->first();
                         $templateHTML = [];
                         if($template && $logs->Count()>0) {
+                            
                               $status = ($logs[0]->status==1) ? 'Approved' : 'Rejected';
                             
                               $templateID = $template->id;
@@ -429,7 +430,7 @@ trait SendMail
             // module head
             case 2:
                 $template = \MailTemplates::where(['type_id' => $approval_type, 'approval_matrix_id' => 2])->first();
-                $logs = SAPApprovalLogs::where(['request_id' => $data[0]['id'], 'status' => 1, 'approval_stage' => 2])->with('created_by_user')->get(); 
+                $logs = SAPApprovalLogs::where(['request_id' => $data[0]['id'], 'status' => $status, 'approval_stage' => 2])->with('created_by_user')->get(); 
                     // to the module head                        
                     if($template) {
                         

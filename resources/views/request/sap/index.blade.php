@@ -32,17 +32,15 @@
                             <div class="col-lg-12">
                                 <label>Search</label>
                             </div>
-                            <div class="col-lg-4">
-                               
+                            <div class="search-body">
                                 <input type="text" name="requestID" class="form-control" placeholder="Request ID">
-                            </div>
-                            <div class="col-lg-4">
                                 <input type="text" name="date" id='date' class="form-control" placeholder="Creation Date">
-                            </div>
-                            <div class="col-lg-4">
-                                <button type="submit" id="srch-btn" class="btn btn-primary"><i class='fa fa-search'></i> Search</button>
                                 <button id="clear-filter" class="btn btn-primary"><i class='fa fa-sync'></i> Clear</button>
+                            
                             </div>
+                            <div class="col-lg-4 text-right">
+                                <button type="submit" id="srch-btn" class="btn btn-primary"><i class='fa fa-search'></i> Search</button>
+                               </div>
                         </div>
                     </form>
                 </div>

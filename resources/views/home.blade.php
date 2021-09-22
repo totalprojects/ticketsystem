@@ -13,7 +13,7 @@
 }
 </style>
     <div class="row">
-          <div class="col-lg-4 col-6">
+          <div class="col-lg-4">
                 <!-- small box -->
                 <div class="small-box bg-danger">
                   <div class="inner">
@@ -29,7 +29,7 @@
                 </div>
           </div>
 
-          <div class="col-lg-4 col-6">
+          <div class="col-lg-4">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">

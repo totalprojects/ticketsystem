@@ -8,12 +8,39 @@
 
 @section('content')
 <style type="text/css">
-.approval-time-chart,.request-status-chart,.approval-count-chart {
+.total-approval-sec,.approval-time-chart,.request-status-chart,.approval-count-chart {
     background: #fff;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 0 10px #e6e6e6;
     margin-bottom: 30px;
+}
+.total-approval-sec {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    height: calc(100% - 30px);
+    align-items: center;
+}
+.count-wrap .count {
+    font-size: 40px;
+    font-weight: 800;
+    color: #e4ff55;
+    height: 85px;
+    width: 85px;
+    background: #255e61;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.count-wrap p {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #7b7b7b;
 }
 </style>
     <div class="row">
@@ -82,6 +109,19 @@
       <div class="col-md-4">
         <div class="total-approval-sec">
           <!-- place for counter js -->
+          <div class="count-wrap">
+            <div class="count">16</div>
+            <p>CRM</p>
+          </div>
+          <div class="count-wrap">
+            <div class="count">78</div>
+            <p>SAP</p>
+          </div>
+          <div class="count-wrap">
+            <div class="count">45</div>
+            <p>EMAIL</p>
+          </div>
+          
         </div>
       </div> 
       <div class="col-md-4">
@@ -187,7 +227,30 @@ function loadChart2() {
         var chart3 = new ApexCharts(document.querySelector("#chart3"), options);
         chart3.render();
 }
+$(document).ready(function() {
 
+  var counters = $(".count");
+  var countersQuantity = counters.length;
+  var counter = [];
+
+  for (i = 0; i < countersQuantity; i++) {
+    counter[i] = parseInt(counters[i].innerHTML);
+  }
+
+  var count = function(start, value, id) {
+    var localStart = start;
+    setInterval(function() {
+      if (localStart < value) {
+        localStart++;
+        counters[id].innerHTML = localStart;
+      }
+    }, 40);
+  }
+
+  for (j = 0; j < countersQuantity; j++) {
+    count(0, counter[j], j);
+  }
+});
 
 
     </script>

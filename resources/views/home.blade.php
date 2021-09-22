@@ -7,9 +7,12 @@
 @stop
 
 @section('content')
-   
+<style type="text/css">
+  .approval-time-wrap #chart {
+    height: 500px !important;
+}
+</style>
     <div class="row">
-
           <div class="col-lg-4 col-6">
                 <!-- small box -->
                 <div class="small-box bg-danger">
@@ -60,7 +63,13 @@
           </div>
           <!-- ./col -->
     </div>
-
+    <div class="approval-time-wrap row">
+      <div class="col-md-12">
+        <div id="chart" style="height: 500px !important;">
+      </div>
+      </div>  
+      
+    </div>  
 
 @stop
 
@@ -69,5 +78,49 @@
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+<script type="text/javascript">
+  var options = {
+  chart: {
+    height: 450,
+    type: "area"
+  },
+  dataLabels: {
+    enabled: false
+  },
+  series: [
+    {
+      name: "Series 1",
+      data: [45, 52, 38, 45, 19, 23, 2]
+    }
+  ],
+  fill: {
+    type: "gradient",
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.7,
+      opacityTo: 0.9,
+      stops: [37, 94, 97]
+    }
+  },
+  colors: ['#255e61', '#66DA26'],
+  xaxis: {
+    categories: [
+      "01 Jan",
+      "02 Jan",
+      "03 Jan",
+      "04 Jan",
+      "05 Jan",
+      "06 Jan",
+      "07 Jan"
+    ]
+  }
+};
+
+var chart = new ApexCharts(document.querySelector("#chart"), options);
+
+chart.render();
+
+
+
+    </script>
 @stop

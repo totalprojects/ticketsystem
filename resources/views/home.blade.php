@@ -8,8 +8,12 @@
 
 @section('content')
 <style type="text/css">
-  .approval-time-wrap #chart {
-    height: 500px !important;
+.approval-time-chart,.request-status-chart,.approval-count-chart {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #e6e6e6;
+    margin-bottom: 30px;
 }
 </style>
     <div class="row">
@@ -66,14 +70,27 @@
 
     <div class="approval-time-wrap row">
       <div class="col-md-12">
-        <div id="chart"></div>
+        <div class="approval-time-chart">
+          <div id="chart"></div>
+        </div>
+      </div>  
+      <div class="col-md-4">
+        <div class="approval-count-chart">
+          <div id="chart2"></div>
+        </div>
+      </div> 
+      <div class="col-md-4">
+        <div class="total-approval-sec">
+          <!-- place for counter js -->
+        </div>
+      </div> 
+      <div class="col-md-4">
+        <div class="request-status-chart">
+          <div id="chart3"></div>
+        </div>
       </div>  
    </div> 
-   <div class="approval-time-wrap row">
-    <div class="col-md-12">
-      <div id="chart2"></div>
-    </div>  
- </div>  
+     
 
 @stop
 
@@ -148,7 +165,7 @@ function loadChart2() {
   var options = {
           series: [44, 55, 13, 43, 22],
           chart: {
-          width: 380,
+          width: '100%',
           type: 'pie',
         },
         labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
@@ -167,6 +184,8 @@ function loadChart2() {
 
         var chart = new ApexCharts(document.querySelector("#chart2"), options);
         chart.render();
+        var chart3 = new ApexCharts(document.querySelector("#chart3"), options);
+        chart3.render();
 }
 
 

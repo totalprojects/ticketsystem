@@ -65,7 +65,7 @@
     </div>
     <div class="approval-time-wrap row">
       <div class="col-md-12">
-        <div id="chart" style="height: 500px !important;">
+        <div id="chart">
       </div>
       </div>  
       
@@ -94,7 +94,7 @@ $.ajax({
   success:(r) => {
     var options = {
   chart: {
-    height: 450,
+    height: 350,
     type: "area"
   },
   dataLabels: {

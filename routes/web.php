@@ -241,7 +241,8 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     Route::post('/update/mail/template', [MailTemplateController::class, 'update'])->name('update.mail.template');
     Route::get('/generateFields', [MailTemplateController::class,'generateFields'])->name('generateFields');
     
-
+    /** Dashboard Analytics */
+    Route::get('/approval/analytics',[App\Http\Controllers\HomeController::class, 'approvalTimeAnalytics'])->name('approval.analytics');
 
 
 });

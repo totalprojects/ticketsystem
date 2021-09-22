@@ -27,7 +27,7 @@ class tbl_sap_requests extends Model {
     use HasFactory;
     use \Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
     protected $casts = [
-        'created_at'      => 'datetime:d-m-Y',
+        'created_at'      => 'datetime:d-m-Y h:i a',
         'company_code'    => 'array',
         'plant_code'      => 'array',
         'business_id'     => 'array',

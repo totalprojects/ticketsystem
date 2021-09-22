@@ -79,18 +79,34 @@
 
 @section('js')
 <script type="text/javascript">
-  var options = {
+loadChart();
+
+
+function loadChart() {
+
+$.ajax({
+  url:"{{ route('approval.analytics') }}",
+  type:"GET",
+  data:null,
+  error:(r) => {
+    console.log(r)
+  },
+  success:(r) => {
+    var options = {
   chart: {
     height: 450,
     type: "area"
   },
   dataLabels: {
-    enabled: false
+    enabled: true
+  },
+  legend: {
+    show: true
   },
   series: [
     {
-      name: "Series 1",
-      data: [45, 52, 38, 45, 19, 23, 2]
+      name: "Time",
+      data: r
     }
   ],
   fill: {
@@ -103,22 +119,27 @@
     }
   },
   colors: ['#255e61', '#66DA26'],
-  xaxis: {
-    categories: [
-      "01 Jan",
-      "02 Jan",
-      "03 Jan",
-      "04 Jan",
-      "05 Jan",
-      "06 Jan",
-      "07 Jan"
-    ]
-  }
+  // xaxis: {
+  //   categories: [
+  //     "01 Jan",
+  //     "02 Jan",
+  //     "03 Jan",
+  //     "04 Jan",
+  //     "05 Jan",
+  //     "06 Jan",
+  //     "07 Jan"
+  //   ]
+  // }
 };
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 
 chart.render();
+
+  }
+});
+
+}
 
 
 

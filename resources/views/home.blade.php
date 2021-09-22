@@ -45,7 +45,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 col-6">
+          <div class="col-lg-4">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">

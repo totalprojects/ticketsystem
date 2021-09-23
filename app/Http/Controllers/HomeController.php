@@ -40,7 +40,7 @@ class HomeController extends Controller
         $logs = \SAPApprovalLogs::selectRaw('DATE(created_at) as datetime, count(*) as total_approvals, status')->groupBy(\DB::raw('DATE(created_at), status'))->orderBy(\DB::raw('DATE(created_at)', 'asc'))->limit(30)->get();
         $dataSetA = [];
         $dataSetR = [];
-    
+        $last_Datetime = '';
         foreach($logs as $each) {
             if($each->status == 1) {
                 $dataSetA[] = [
@@ -53,7 +53,28 @@ class HomeController extends Controller
                     'y' => $each->total_approvals
                 ];
             }
-                           
+                $last_Datetime = date('F, d', strtotime($each->datetime));          
+        }
+
+        if(count($dataSetA) > count($dataSetR)) {
+            $diff = count($dataSetA) - count($dataSetR);
+            for($i=0;$i<$diff;$i++) {
+
+                $dataSetR[] = [
+                    'x' => $last_Datetime,
+                    'y' => 0
+                ];
+            }
+        } else {
+
+            $diff = count($dataSetR) - count($dataSetA);
+            for($i=0;$i<$diff;$i++) {
+
+                $dataSetA[] = [
+                    'x' => $last_Datetime,
+                    'y' => 0
+                ];
+            }
         }
 
         return response(['approval_set' => $dataSetA, 'rejection_set' => $dataSetR]);

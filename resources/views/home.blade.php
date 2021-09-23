@@ -185,7 +185,7 @@ $.ajax({
     {
       name: "No of Approvals",
       data: r.approval_set,
-      color: 'green'
+      color: '#255e61'
     },
     {
       name: "No of Rejections",

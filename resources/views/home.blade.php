@@ -20,7 +20,6 @@
     justify-content: space-between;
     flex-wrap: wrap;
     height: calc(100% - 30px);
-    align-items: center;
 }
 .count-wrap .count {
     font-size: 40px;
@@ -42,9 +41,12 @@
     font-weight: 600;
     color: #7b7b7b;
 }
-.legends{
-  width:100% !important;
-  font-weight: 600;
+.legends {
+    width: 100% !important;
+    font-weight: 700;
+    color: #255e61;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 </style>
     <div class="row">
@@ -185,12 +187,12 @@ $.ajax({
     {
       name: "No of Approvals",
       data: r.approval_set,
-      color: '#255e61'
+      color: '#42b127'
     },
     {
       name: "No of Rejections",
       data: r.rejection_set,
-      color: 'red'
+      color: '#f44336'
     }
   ],
   fill: {

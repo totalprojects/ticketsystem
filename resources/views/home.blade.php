@@ -48,6 +48,28 @@
     font-size: 18px;
     margin-bottom: 10px;
 }
+.lastlogsblock.row {
+    max-height: 300px !important;
+    overflow: auto;
+}
+
+.lastlogsblock .col-sm-3.mb-2 {
+    border: 0.5px solid #ccc;
+    padding: 5px;
+    text-align: center;
+    font-weight: 600;
+    background-color: #255e61;
+    color: #e4ff55;
+    font-size: 12.5px;
+}
+
+.lastlogsblock .col-sm-9.mb-2 {
+    border-bottom: 0.5px solid #ccc;
+    border-top: 0.5px solid #ccc;
+    padding: 5px;
+    font-weight: 600;
+    font-size: 12.5px;
+}
 </style>
     <div class="row">
           <div class="col-lg-4">
@@ -144,9 +166,9 @@
         <div class="request-status-chart">
          
           <div class="legends">
-            Responds to Requests
+            Last 3 SAP Status Change Logs
          </div>
-          <div id="chart3"></div>
+          <div id="statusLog"></div>
         </div>
       </div>  
     </div> 
@@ -160,12 +182,12 @@
 
 @section('js')
 <script type="text/javascript">
-loadChart1();
+loadLogChart();
 loadLogCounterChart();
-loadApprovalCounts();
+loadLast5Logs();
 loadRequestCounts()
 
-function loadChart1() {
+function loadLogChart() {
 
   $.ajax({
     url:"{{ route('approval.analytics') }}",
@@ -177,6 +199,9 @@ function loadChart1() {
     success:(r) => {
         var options = {
           chart: {
+            toolbar: {
+              show: false,
+            },
             height: 350,
             type: "area"
           },
@@ -237,7 +262,7 @@ function loadRequestCounts() {
   });
 }
 
-function loadApprovalCounts() {
+function loadLast5Logs() {
   $.ajax({
     url:"{{ route('load.approval.counts') }}",
     type:"GET",
@@ -246,29 +271,24 @@ function loadApprovalCounts() {
       console.log(r)
     },
     success:(r) => {
-        if(r.crm !== undefined) {
-          var options = {
-            series: [r.crm, r.sap, r.email],
-            chart: {
-            width: '100%',
-            type: 'pie',
-          },
-          labels: ['CRM', 'SAP', 'Email'],
-          responsive: [{
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200
-              },
-              legend: {
-                position: 'bottom'
-              }
-            }
-          }],
-          colors: ['#52074f', '#032b2d','#a10b24'],
-          };
-          var chart3 = new ApexCharts(document.querySelector("#chart3"), options);
-          chart3.render();
+        if(r.data !== undefined) {
+
+            var html = `<div class='lastlogsblock row'>`;
+            $.each(r.data, (i) => {
+              html += `<div class='col-sm-9 mb-2'>
+                          Raised By : ${r.data[i].requester} <br>
+                          Status Updated By: ${r.data[i].approver} <br>
+                          <span class='badge badge-primary'>${r.data[i].module}</span>&nbsp;
+                          <span class='badge badge-primary'>${r.data[i].tcode}</span>
+                       </div>
+                       <div class='col-sm-3 mb-2'>
+                        <p>${(r.data[i].status=='Approved') ? '<span class="badge badge-success">Approved</span>' : '<span class="badge badge-danger">Rejected</span>'}</p>
+                        <p><muted>${r.data[i].datetime}</muted></p>
+                       </div>`;
+            })
+            html += '</div>';
+
+            $("#statusLog").html(html);
         }
     }
   });

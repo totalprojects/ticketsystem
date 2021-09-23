@@ -83,11 +83,22 @@ class HomeController extends Controller
 
     public function approvalCounts(Request $request) {
 
-        $sap_logs = \SAPApprovalLogs::select('id')->get()->Count();
-        $crm_logs = 0;
-        $email_logs = 0;
+        $sap_logs = \SAPApprovalLogs::orderBy('id','desc')->with('request_details.user','request_details.modules','request_details.tcodes','created_by_user', 'stage')->limit(3)->get();
+        $data = [];
+
+        foreach($sap_logs as $each) {
+            $data[] = [
+                'approver' => $each->created_by_user->name. ' (<strong>'.$each->stage->approval_type.'</strong>)',
+                'requester' => $each->request_details->user->name ?? '-',
+                'datetime' => date('d M', strtotime($each->created_at)),
+                'status' => ($each->status == 1) ? 'Approved' : 'Rejected',
+                'request_id' => $each->request_details->request_id,
+                'module' => $each->request_details->modules->name,
+                'tcode' => $each->request_details->tcodes->t_code,
+            ];
+        }
         
-        return response(['sap' => $sap_logs, 'email' => $email_logs, 'crm' => $crm_logs]);
+        return response(['data' => $data]);
     }
 
     public function requestCounts(Request $request) {

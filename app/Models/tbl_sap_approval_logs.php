@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Users;
 use DB;
+use ApprovalMatrix;
 use SAPRequest;
 
 class tbl_sap_approval_logs extends Model {
@@ -18,8 +19,13 @@ class tbl_sap_approval_logs extends Model {
     public function request_details() {
         return $this->belongsTo(SAPRequest::class, 'request_id', 'id');
     }
+
     public function created_by_user() {
         return $this->belongsTo(Users::class, 'created_by', 'id');
+    }
+
+    public function stage() {
+        return $this->belongsTo(ApprovalMatrix::class, 'approval_stage', 'id');
     }
 
     public function getTableColumns(){

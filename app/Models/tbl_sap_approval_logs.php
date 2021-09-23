@@ -14,9 +14,7 @@ class tbl_sap_approval_logs extends Model {
         'created_at'      => 'datetime:d-m-Y h:i a',
         'updated_at'      => 'datetime:d-m-Y h:i a',
     ];
-    // protected $casts = [
-    //     'created_at' => 'datetime:F, d, Y'
-    // ];
+
     public function request_details() {
         return $this->belongsTo(SAPRequest::class, 'request_id', 'id');
     }

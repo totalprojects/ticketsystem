@@ -42,6 +42,10 @@
     font-weight: 600;
     color: #7b7b7b;
 }
+.legends{
+  width:100% !important;
+  font-weight: 600;
+}
 </style>
     <div class="row">
           <div class="col-lg-4">
@@ -98,16 +102,26 @@
     <div class="approval-time-wrap row">
       <div class="col-md-12">
         <div class="approval-time-chart">
+          <div class="legends">
+             Last 30 days SAP Approval/Reject Log Report
+          </div>
           <div id="chart"></div>
         </div>
       </div>  
       <div class="col-md-4">
         <div class="approval-count-chart">
+          <div class="legends">
+            Request Counts
+         </div>
           <div id="chart2"></div>
         </div>
       </div> 
       <div class="col-md-4">
+      
         <div class="total-approval-sec">
+          <div class="legends">
+            Total Request Counts
+          </div>
           <!-- place for counter js -->
           <div class="count-wrap">
             <div class="count">16</div>
@@ -126,6 +140,9 @@
       </div> 
       <div class="col-md-4">
         <div class="request-status-chart">
+          <div class="legends">
+            Compare Log Status
+          </div>
           <div id="chart3"></div>
         </div>
       </div>  
@@ -166,7 +183,7 @@ $.ajax({
   },
   series: [
     {
-      name: "Time",
+      name: "No of Approvals",
       data: r
     }
   ],

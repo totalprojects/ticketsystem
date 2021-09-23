@@ -37,37 +37,15 @@ class HomeController extends Controller
     public function approvalTimeAnalytics(Request $request) {
 
         // find out the difference time span betweeen approvals and request place
-        $logs = \SAPApprovalLogs::orderBy(\DB::raw('DATE(created_at)', 'desc'))->limit(30)->get();
+        $logs = \SAPApprovalLogs::selectRaw('DATE(created_at) as datetime, count(*) as total_approvals')->groupBy(\DB::raw('DATE(created_at)'))->orderBy(\DB::raw('DATE(created_at)', 'asc'))->limit(30)->get();
         $dataSet = [];
 
         foreach($logs as $each) {
-            $date1=date_create(date('Y-m-d h:i:s a', strtotime($each->created_at)));
-            $date2=date_create(date('Y-m-d h:i:s a', strtotime($each->updated_at)));
-            //echo date('Y-m-d', strtotime($each->created_at)). ' ----- '.date('Y-m-d', strtotime($each->updated_at)).PHP_EOL;
-            $interval = date_diff($date1,$date2);
-            $difference = $interval->format('%i');
-            if(!empty($dataSet)) {
-                foreach($dataSet as $e) {
-                    if($e['x'] != date('Y-m-d', strtotime($each->created_at))) {
-                        if($difference>0) {
-                            $dataSet[] = [
-                                'x' => date('Y-m-d', strtotime($each->created_at)),
-                                'y' => $difference
-                            ];
-                        }
-                    }
-                }
-            } else {
-                
-                if($difference>0) {
-                    $dataSet[] = [
-                        'x' => date('Y-m-d', strtotime($each->created_at)),
-                        'y' => $difference
-                    ];
-                }
-            }
-          
            
+                            $dataSet[] = [
+                                'x' => date('F, d', strtotime($each->datetime)),
+                                'y' => $each->total_approvals
+                            ];
         }
 
         return $dataSet;

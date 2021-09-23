@@ -103,7 +103,7 @@
       <div class="col-md-12">
         <div class="approval-time-chart">
           <div class="legends">
-             Last 30 days SAP Approval/Reject Log Report
+             Last 30 days SAP Status Change Log Report
           </div>
           <div id="chart"></div>
         </div>
@@ -124,15 +124,15 @@
           </div>
           <!-- place for counter js -->
           <div class="count-wrap">
-            <div class="count">16</div>
+            <div class="count" id="crm_count">0</div>
             <p>CRM</p>
           </div>
           <div class="count-wrap">
-            <div class="count">78</div>
+            <div class="count" id="sap_count">0</div>
             <p>SAP</p>
           </div>
           <div class="count-wrap">
-            <div class="count">45</div>
+            <div class="count" id="email_count">0</div>
             <p>EMAIL</p>
           </div>
           
@@ -158,7 +158,7 @@
 @section('js')
 <script type="text/javascript">
 loadChart1();
-
+loadChart2();
 
 function loadChart1() {
 
@@ -184,7 +184,13 @@ $.ajax({
   series: [
     {
       name: "No of Approvals",
-      data: r
+      data: r.approval_set,
+      color: 'green'
+    },
+    {
+      name: "No of Rejections",
+      data: r.rejection_set,
+      color: 'red'
     }
   ],
   fill: {
@@ -197,17 +203,6 @@ $.ajax({
     }
   },
   colors: ['#255e61', '#66DA26'],
-  // xaxis: {
-  //   categories: [
-  //     "01 Jan",
-  //     "02 Jan",
-  //     "03 Jan",
-  //     "04 Jan",
-  //     "05 Jan",
-  //     "06 Jan",
-  //     "07 Jan"
-  //   ]
-  // }
 };
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
@@ -217,7 +212,7 @@ chart.render();
 }
 });
 }
-loadChart2();
+// loadChart2();
 function loadChart2() {
   var options = {
           series: [44, 55, 13, 43, 22],

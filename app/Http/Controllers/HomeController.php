@@ -37,18 +37,26 @@ class HomeController extends Controller
     public function approvalTimeAnalytics(Request $request) {
 
         // find out the difference time span betweeen approvals and request place
-        $logs = \SAPApprovalLogs::selectRaw('DATE(created_at) as datetime, count(*) as total_approvals')->groupBy(\DB::raw('DATE(created_at)'))->orderBy(\DB::raw('DATE(created_at)', 'asc'))->limit(30)->get();
-        $dataSet = [];
-
+        $logs = \SAPApprovalLogs::selectRaw('DATE(created_at) as datetime, count(*) as total_approvals, status')->groupBy(\DB::raw('DATE(created_at), status'))->orderBy(\DB::raw('DATE(created_at)', 'asc'))->limit(30)->get();
+        $dataSetA = [];
+        $dataSetR = [];
+    
         foreach($logs as $each) {
-           
-                            $dataSet[] = [
-                                'x' => date('F, d', strtotime($each->datetime)),
-                                'y' => $each->total_approvals
-                            ];
+            if($each->status == 1) {
+                $dataSetA[] = [
+                    'x' => date('F, d', strtotime($each->datetime)),
+                    'y' => $each->total_approvals
+                ];
+            } else {
+                $dataSetR[] = [
+                    'x' => date('F, d', strtotime($each->datetime)),
+                    'y' => $each->total_approvals
+                ];
+            }
+                           
         }
 
-        return $dataSet;
+        return response(['approval_set' => $dataSetA, 'rejection_set' => $dataSetR]);
 
     
     }

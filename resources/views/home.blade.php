@@ -14,6 +14,7 @@
     border-radius: 10px;
     box-shadow: 0 0 10px #e6e6e6;
     margin-bottom: 30px;
+    min-height: 333px !important;
 }
 .total-approval-sec {
     display: flex;
@@ -283,7 +284,7 @@ function loadLast5Logs() {
                        </div>
                        <div class='col-sm-3 mb-2'>
                         <p>${(r.data[i].status=='Approved') ? '<span class="badge badge-success">Approved</span>' : '<span class="badge badge-danger">Rejected</span>'}</p>
-                        <p><muted>${r.data[i].datetime}</muted></p>
+                        <small><muted>${r.data[i].datetime}</muted></small>
                        </div>`;
             })
             html += '</div>';

@@ -90,7 +90,7 @@ class HomeController extends Controller
             $data[] = [
                 'approver' => $each->created_by_user->name. ' (<strong>'.$each->stage->approval_type.'</strong>)',
                 'requester' => $each->request_details->user->name ?? '-',
-                'datetime' => date('d M', strtotime($each->created_at)),
+                'datetime' => date('d M, h:i a', strtotime($each->created_at)),
                 'status' => ($each->status == 1) ? 'Approved' : 'Rejected',
                 'request_id' => $each->request_details->request_id,
                 'module' => $each->request_details->modules->name,

@@ -14,8 +14,7 @@
     border-radius: 10px;
     box-shadow: 0 0 10px #e6e6e6;
     margin-bottom: 30px;
-    min-height: 333px !important;
-    max-height: 333px !important;
+   
 }
 .total-approval-sec {
     display: flex;

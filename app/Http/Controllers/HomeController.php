@@ -57,7 +57,52 @@ class HomeController extends Controller
         }
 
         return response(['approval_set' => $dataSetA, 'rejection_set' => $dataSetR]);
-
     
+    }
+
+    public function approvalCounts(Request $request) {
+
+        $sap_logs = \SAPApprovalLogs::select('id')->get()->Count();
+        $crm_logs = 0;
+        $email_logs = 0;
+        
+        return response(['sap' => $sap_logs, 'email' => $email_logs, 'crm' => $crm_logs]);
+    }
+
+    public function requestCounts(Request $request) {
+
+        $sap_logs = \SAPRequest::select('id')->get()->Count();
+        $crm_logs = 0;
+        $email_logs = 0;
+        
+        return response(['sap' => $sap_logs, 'email' => $email_logs, 'crm' => $crm_logs]);
+    }
+
+    public function logStatus(Request $request) {
+        $sap_requests = \SAPRequest::selectRaw('count(*) as total, status')->groupBy(\DB::raw('status'))->get();
+        $statusArray['pending'] = 0;
+        $statusArray['approved'] = 0;
+        $statusArray['rejected'] = 0;
+
+        foreach($sap_requests as $each) {
+
+                switch($each->status) {
+                    case 0:
+                        // pending
+                        $statusArray['pending'] = $each->total;
+                    break;
+                    case 1:
+                        // pending
+                        $statusArray['approved'] = $each->total;
+                    break;
+                    case 2:
+                        // pending
+                        $statusArray['rejected'] = $each->total;
+                    break;
+
+                }
+        }
+
+        return response($statusArray, 200);
     }
 }

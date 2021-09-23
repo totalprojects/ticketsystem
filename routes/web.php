@@ -243,6 +243,9 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     
     /** Dashboard Analytics */
     Route::get('/approval/analytics',[App\Http\Controllers\HomeController::class, 'approvalTimeAnalytics'])->name('approval.analytics');
+    Route::get('/approval/counts',[App\Http\Controllers\HomeController::class, 'approvalCounts'])->name('load.approval.counts');
+    Route::get('/log/status',[App\Http\Controllers\HomeController::class, 'logStatus'])->name('log.status');
+    Route::get('/req/count',[App\Http\Controllers\HomeController::class, 'requestCounts'])->name('load.req.counts');
 
 
 });

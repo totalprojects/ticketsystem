@@ -1009,12 +1009,15 @@ class SapController extends Controller {
         $remarks = $request->remarks;
         $status = $request->status;
 
-
         // try {
 
             # update the status to Approve / Reject 
+            $sstatus = 1;
+            if($status == 0) {
+                $sstatus = 2;
+            }
             $update = SAPRequest::where('id', $request_id)->update([
-                'status'     => $status,
+                'status'     => $sstatus,
                 'updated_at' => NOW()
             ]);
 

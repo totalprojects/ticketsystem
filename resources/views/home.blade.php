@@ -110,9 +110,9 @@
       </div>  
       <div class="col-md-4">
         <div class="approval-count-chart">
-          <div class="legends">
-            Request Counts
-         </div>
+           <div class="legends">
+            Compare SAP Log Status
+          </div>
           <div id="chart2"></div>
         </div>
       </div> 
@@ -120,7 +120,7 @@
       
         <div class="total-approval-sec">
           <div class="legends">
-            Total Request Counts
+            Total Requests made
           </div>
           <!-- place for counter js -->
           <div class="count-wrap">
@@ -140,9 +140,10 @@
       </div> 
       <div class="col-md-4">
         <div class="request-status-chart">
+         
           <div class="legends">
-            Compare Log Status
-          </div>
+            Responds to Requests
+         </div>
           <div id="chart3"></div>
         </div>
       </div>  
@@ -158,69 +159,138 @@
 @section('js')
 <script type="text/javascript">
 loadChart1();
-loadChart2();
+loadLogCounterChart();
+loadApprovalCounts();
+loadRequestCounts()
 
 function loadChart1() {
 
-$.ajax({
-  url:"{{ route('approval.analytics') }}",
-  type:"GET",
-  data:null,
-  error:(r) => {
-    console.log(r)
-  },
-  success:(r) => {
-    var options = {
-  chart: {
-    height: 350,
-    type: "area"
-  },
-  dataLabels: {
-    enabled: true
-  },
-  legend: {
-    show: true
-  },
-  series: [
-    {
-      name: "No of Approvals",
-      data: r.approval_set,
-      color: '#255e61'
+  $.ajax({
+    url:"{{ route('approval.analytics') }}",
+    type:"GET",
+    data:null,
+    error:(r) => {
+      console.log(r)
     },
-    {
-      name: "No of Rejections",
-      data: r.rejection_set,
-      color: 'red'
+    success:(r) => {
+        var options = {
+          chart: {
+            height: 350,
+            type: "area"
+          },
+          dataLabels: {
+            enabled: true
+          },
+          legend: {
+            show: true
+          },
+          series: [
+            {
+              name: "No of Approvals",
+              data: r.approval_set,
+              color: '#255e61'
+            },
+            {
+              name: "No of Rejections",
+              data: r.rejection_set,
+              color: 'red'
+            }
+          ],
+          fill: {
+            type: "gradient",
+            gradient: {
+              shadeIntensity: 1,
+              opacityFrom: 0.7,
+              opacityTo: 0.9,
+              stops: [37, 94, 97]
+            }
+          },
+          colors: ['#255e61', '#66DA26'],
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+
+        chart.render();
+
     }
-  ],
-  fill: {
-    type: "gradient",
-    gradient: {
-      shadeIntensity: 1,
-      opacityFrom: 0.7,
-      opacityTo: 0.9,
-      stops: [37, 94, 97]
+  });
+}
+
+function loadRequestCounts() {
+
+  $.ajax({
+    url:"{{ route('load.req.counts') }}",
+    type:"GET",
+    data:null,
+    error:(r) => {
+      console.log(r)
+    },
+    success:(r) => {
+        if(r.crm !== undefined) {
+          $("#crm_count").text(r.crm);
+          $("#sap_count").text(r.sap);
+          $('#email_count').text(r.email);
+        }
     }
-  },
-  colors: ['#255e61', '#66DA26'],
-};
-
-var chart = new ApexCharts(document.querySelector("#chart"), options);
-
-chart.render();
-
+  });
 }
-});
+
+function loadApprovalCounts() {
+  $.ajax({
+    url:"{{ route('load.approval.counts') }}",
+    type:"GET",
+    data:null,
+    error:(r) => {
+      console.log(r)
+    },
+    success:(r) => {
+        if(r.crm !== undefined) {
+          var options = {
+            series: [r.crm, r.sap, r.email],
+            chart: {
+            width: '100%',
+            type: 'pie',
+          },
+          labels: ['CRM', 'SAP', 'Email'],
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200
+              },
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }]
+          };
+          var chart3 = new ApexCharts(document.querySelector("#chart3"), options);
+          chart3.render();
+        }
+    }
+  });
 }
+
+
 // loadChart2();
-function loadChart2() {
+function loadLogCounterChart() {
+
+  $.ajax({
+    url:"{{ route('log.status') }}",
+    type:"GET",
+    data:null,
+    error:(r) => {
+      console.log(r)
+    },
+    success:(r) => {
+
   var options = {
-          series: [44, 55, 13, 43, 22],
+          series: [r.pending, r.approved, r.rejected],
           chart: {
           width: '100%',
           type: 'pie',
         },
-        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+        labels: ['Pending', 'Approved', 'Rejected'],
         responsive: [{
           breakpoint: 480,
           options: {
@@ -236,9 +306,12 @@ function loadChart2() {
 
         var chart = new ApexCharts(document.querySelector("#chart2"), options);
         chart.render();
-        var chart3 = new ApexCharts(document.querySelector("#chart3"), options);
-        chart3.render();
+       
+
+    }
+  })
 }
+
 $(document).ready(function() {
 
   var counters = $(".count");
@@ -264,6 +337,5 @@ $(document).ready(function() {
   }
 });
 
-
-    </script>
+</script>
 @stop

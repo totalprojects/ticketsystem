@@ -262,7 +262,8 @@ function loadApprovalCounts() {
                 position: 'bottom'
               }
             }
-          }]
+          }],
+          colors: ['#52074f', '#032b2d','#a10b24'],
           };
           var chart3 = new ApexCharts(document.querySelector("#chart3"), options);
           chart3.render();
@@ -301,7 +302,9 @@ function loadLogCounterChart() {
               position: 'bottom'
             }
           }
-        }]
+        }],
+        colors: ['#e6d503', '#032b2d','#a10b24'],
+        
         };
 
         var chart = new ApexCharts(document.querySelector("#chart2"), options);

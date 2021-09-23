@@ -100,7 +100,7 @@
           </div>
           <!-- ./col -->
     </div>
-
+    @if(\Auth::user()->id == 1)
     <div class="approval-time-wrap row">
       <div class="col-md-12">
         <div class="approval-time-chart">
@@ -149,8 +149,8 @@
           <div id="chart3"></div>
         </div>
       </div>  
-   </div> 
-     
+    </div> 
+    @endif
 
 @stop
 

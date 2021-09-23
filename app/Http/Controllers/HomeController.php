@@ -44,16 +44,16 @@ class HomeController extends Controller
         foreach($logs as $each) {
             if($each->status == 1) {
                 $dataSetA[] = [
-                    'x' => date('F, d', strtotime($each->datetime)),
+                    'x' => date('d M', strtotime($each->datetime)),
                     'y' => $each->total_approvals
                 ];
             } else {
                 $dataSetR[] = [
-                    'x' => date('F, d', strtotime($each->datetime)),
+                    'x' => date('d M', strtotime($each->datetime)),
                     'y' => $each->total_approvals
                 ];
             }
-                $last_Datetime = date('F, d', strtotime($each->datetime));          
+                $last_Datetime = date('d M', strtotime($each->datetime));          
         }
 
         if(count($dataSetA) > count($dataSetR)) {

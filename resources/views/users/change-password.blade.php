@@ -63,7 +63,9 @@
         var current_password = $("#current_password").val();
         var new_password = $("#new_password").val();
         var confirm_new_password = $("#confirm_password").val();
-
+        if(new_password.length == 0 || confirm_new_password.length == 0 || current_password.length == 0) {
+            toastr.error('All fields are mandatory');
+        }
         if(new_password != confirm_new_password)  {
             toastr.error('New password must match with confirm password, try again');
             return false;

@@ -147,4 +147,32 @@ class UserController extends Controller {
     public function settings() {
 
     }
+
+    public function changePassword(Request $request) 
+    {
+        $new_password = $request->new_password;
+        $current_password = $request->current_password;
+        $user_id = Auth::user()->id;
+        $check_current_password = Auth::user()->password;
+     
+        try {
+            # verify old password
+            $isVerified = \Hash::check($current_password, $check_current_password);
+          //return dd($isVerified);
+            if($isVerified == 1) {
+
+                # change password
+                $changePwd = Users::where('id', $user_id)->update([
+                    'password' => \Hash::make($new_password)
+                ]);
+                
+                return response(['status' =>  200, 'data' => [], 'message' => 'Password has been changed successfully'], 200);
+
+            } else {
+                return response(['status' =>  400, 'data' => [], 'message' => 'Invalid Current Password'], 200);
+            }
+        } catch(\Exception $e) {
+            return response(['message' => $e->getMessage(), 'data' => []], 500);
+        }
+    }
 }

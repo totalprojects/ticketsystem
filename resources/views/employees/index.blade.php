@@ -19,7 +19,7 @@
                         <button id="add_employee_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Create User</button>
                         @endif
                     @endif
-              </div>
+               </div>
                 <div id="employee-list-div" style="height:auto"></div>
             </div>
         </div>

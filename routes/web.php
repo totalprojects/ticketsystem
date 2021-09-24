@@ -247,6 +247,8 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     Route::get('/log/status',[App\Http\Controllers\HomeController::class, 'logStatus'])->name('log.status');
     Route::get('/req/count',[App\Http\Controllers\HomeController::class, 'requestCounts'])->name('load.req.counts');
 
+    /** User password change */
+    Route::post('/user/password/change',[UserController::class, 'changePassword'])->name('change.password');
 
 });
 

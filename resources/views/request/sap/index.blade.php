@@ -13,7 +13,6 @@
 
 </style> 
 @stop
-
 @section('content')
     <div class="tab-content p-1">
         {{-- <div class="loading loadr d-none">Loading&#8230;</div> --}}

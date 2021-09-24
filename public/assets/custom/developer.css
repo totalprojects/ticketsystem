@@ -520,10 +520,63 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
 .btn {
     min-width: 120px;
 }
+.search-body {
+    transition: all ease 0.3s;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 8px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    z-index: 999;
+    padding: 35px 15px 15px 15px;
+    background: #fff;
+    box-shadow: 0 0 10px #ccc;
+    border-radius: 10px;
 
+}
+.search-body .close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 19px;
+    width: 23px;
+    height: 23px;
+    background: #255e61;
+    opacity: 1;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    border-radius: 30px;
+}
+.search-body input {
+    flex: 0 0 31%;
+    max-width: 31%;
+    margin-right: 10px;
+}
+form#srch-frm {
+    position: relative;
+}
+.search-icon {
+    display: inline-block;
+    background: #255e61;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+}
 
+.search-icon label {
+    margin: 0;
+    font-weight: 400 !important;
+    cursor: pointer;
+}
 
-
+.search-icon i {
+    color: #e4ff55;
+}
 
 
 

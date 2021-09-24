@@ -13,15 +13,16 @@
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 0 10px #e6e6e6;
-    margin-bottom: 30px;
-    min-height: 333px !important;
-    max-height: 333px !important;
+    height: 100%;
 }
 .total-approval-sec {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    height: calc(100% - 30px);
+    
+}
+.approval-time-wrap.row > div {
+    margin-bottom: 25px;
 }
 .count-wrap .count {
     font-size: 40px;
@@ -41,7 +42,7 @@
     text-align: center;
     font-size: 18px;
     font-weight: 600;
-    color: #7b7b7b;
+    color: #255e61;
 }
 .legends {
     width: 100% !important;
@@ -55,7 +56,7 @@
     overflow: auto;
 }
 
-.lastlogsblock .col-sm-3.mb-2 {
+.lastlogsblock .col-sm-3 {
     border: 0.5px solid #ccc;
     padding: 5px;
     text-align: center;
@@ -64,8 +65,11 @@
     color: #e4ff55;
     font-size: 12.5px;
 }
+.lastlogsblock .col-sm-3 p{
+   margin-bottom: 0;
+}
 
-.lastlogsblock .col-sm-9.mb-2 {
+.lastlogsblock .col-sm-9 {
     border-bottom: 0.5px solid #ccc;
     border-top: 0.5px solid #ccc;
     padding: 5px;
@@ -217,7 +221,7 @@ function loadLogChart() {
             {
               name: "No of Approvals",
               data: r.approval_set,
-              color: '#255e61'
+              color: '#1f9809'
             },
             {
               name: "No of Rejections",

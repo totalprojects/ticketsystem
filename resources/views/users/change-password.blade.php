@@ -10,39 +10,29 @@
     
     <div class="tab-content p-1">
         <div class="font-weight-bold m-2 font-italic text-primary"><h4 class="right">Change Password </h4></div>
-        <div class="tab-pane active dx-viewport" id="users">
-            <div class="demo-container p-3">
-                <div id="user-list-div1" style="height:600px"></div>
-            </div>
+            <form method="post" id="change-password-frm">
+                <div class="row wrapper">
+                    <div class="col-lg-4">
+                        <label for="">Current Password</label>
+                        <input type="password" id="current_password" name="current_password" class="form-control">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">New Password</label>
+                        <input type="password" id="new_password" name="new_password" class="form-control">
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control">
+                    </div>
+                    <div class="col-lg-12 mt-2">
+                        <button id="change-password-btn" class="btn btn-primary">Change</button>
+                    </div>
+                </div>
+            </form>    
         </div>
     </div>
   
-  <!-- Modal -->
-  <div class="modal fade" id="settings-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Settings</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
 
-          <div id="roles-block"></div>
-
-          <div id="permissions-block"></div>
-
-          <div id="menus-block"></div>
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-        </div>
-      </div>
-    </div>
-  </div>
 @stop
 
 @section('css')

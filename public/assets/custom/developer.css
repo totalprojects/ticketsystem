@@ -374,13 +374,16 @@ aside.main-sidebar.sidebar-custom {
 [class*=sidebar-light-] .nav-treeview>.nav-item>.nav-link:hover {
     background-color: rgb(191 251 255);
 }
+
 span.dx-datagrid-nodata {
-    min-height: 350px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: url(../images/nodata-found.png) no-repeat center;
     font-size: 0;
+    height: 150px;
+    max-width: 150px;
+    background-size: contain;
 }
 aside.main-sidebar.sidebar-custom a.nav-link {
     color: #0a0a0a !important;

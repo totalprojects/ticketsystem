@@ -298,7 +298,7 @@
                                             <h2 class="purple-text text-center"><strong>Your selections below</strong></h2> <br>
                                             <div class="row justify-content-center">
                                                 <div class="col-lg-12">
-                                                   <div id="review_selections"></div>
+                                                   <div id="review_selections" class="scrollable-table" style="overflow-y: auto; cursor: grab;"></div>
                                                 </div>
                                             </div> 
                                             
@@ -1199,6 +1199,8 @@ $.ajax({
                     
                 }
             })
+
+    setTimeout(function(){ scrollTable() }, 2000);
 }
 
 
@@ -1350,5 +1352,61 @@ $.each(stages, (i) => {
             $('.search-body').addClass('d-none');
         });
 
+    </script>
+    <script type="text/javascript">
+        function scrollTable(){
+            const slider = document.querySelector(".scrollable-table");
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener("mousedown", e => {
+              isDown = true;
+              slider.classList.add("active");
+              startX = e.pageX - slider.offsetLeft;
+              scrollLeft = slider.scrollLeft;
+            });
+            slider.addEventListener("mouseleave", () => {
+              isDown = false;
+              slider.classList.remove("active");
+            });
+            slider.addEventListener("mouseup", () => {
+              isDown = false;
+              slider.classList.remove("active");
+            });
+            slider.addEventListener("mousemove", e => {
+              if (!isDown) return;
+              e.preventDefault();
+              const x = e.pageX - slider.offsetLeft;
+              const walk = x - startX;
+              slider.scrollLeft = scrollLeft - walk;
+            });
+        }
+            const slider = document.querySelector(".scrollable-table");
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener("mousedown", e => {
+              isDown = true;
+              slider.classList.add("active");
+              startX = e.pageX - slider.offsetLeft;
+              scrollLeft = slider.scrollLeft;
+            });
+            slider.addEventListener("mouseleave", () => {
+              isDown = false;
+              slider.classList.remove("active");
+            });
+            slider.addEventListener("mouseup", () => {
+              isDown = false;
+              slider.classList.remove("active");
+            });
+            slider.addEventListener("mousemove", e => {
+              if (!isDown) return;
+              e.preventDefault();
+              const x = e.pageX - slider.offsetLeft;
+              const walk = x - startX;
+              slider.scrollLeft = scrollLeft - walk;
+            });
     </script>
 @stop

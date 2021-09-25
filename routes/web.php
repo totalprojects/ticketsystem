@@ -250,6 +250,9 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     /** User password change */
     Route::post('/user/password/change',[UserController::class, 'changePassword'])->name('change.password');
 
+    /** Import Files */
+    Route::post('/import/users', [UserController::class, 'importUsers'])->name('import.users');
+
 });
 
 /** Migration Routes */

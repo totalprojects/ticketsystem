@@ -16,7 +16,11 @@
                   <div class="table-heading-custom"><h4 class="right"><i class="fas fa-user-friends"></i> User List </h4></div>
                     @if(isset($permission))
                         @if($permission['add'] === true)
-                        <button id="add_employee_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Create User</button>
+                        <div class="wrapper">
+                            <button id="add_employee_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Create User</button>
+                            <button id="import_employees" class='custom-theme-btn'><i class='fa fa-file-import'></i> Import Users</button>
+                        </div>
+                        
                         @endif
                     @endif
                </div>
@@ -116,6 +120,38 @@
 
             
           
+        </div>
+     
+      </div>
+    </div>
+  </div>
+
+  <!-- Import User -->
+  <div class="modal fade" id="import-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Import Bulk Employees</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form id="import-user-frm" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-4 pt-2">
+                        <label for="file">File <span class="text-red">*</span></label>
+                        <input type="file" name="file" id="file" class="form-control">
+                        <a href="{{ asset('assets/samples/sample.xlsx') }}">Sample Excel (To be followed)</a>
+                    </div>
+                
+                    <div class="col-lg-4 pt-2 mt-4">
+                       
+                        <input type="submit" name="submit" class="btn btn-primary" id="import-employees">
+                    </div>
+                </div>
+            </form>
+
         </div>
      
       </div>
@@ -229,11 +265,33 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
 
-    <script> 
+    <script>
+    $("#import-employees").on('click', (e) => {
+        var formData = new FormData();
+        formData.append('file', $('#file')[0].files[0]);
+
+        $.ajax({
+            url : "{{ route('import.users') }}",
+            type : 'POST',
+            data : formData,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
+            success : function(data) {
+                console.log(data);
+                toastr.success(data)
+            }
+        });
+    });
+
+
     $("#date").datepicker();
     $("#add_employee_btn").click(()=> {
 
         $("#add-modal").modal('show');
+    })
+    $("#import_employees").click(()=> {
+
+        $("#import-modal").modal('show');
     })
 
     const EDITABLE = "{{ $permission['edit'] ? true : false }}";

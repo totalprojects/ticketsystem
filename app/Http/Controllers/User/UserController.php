@@ -13,6 +13,7 @@ use MenuMapping;
 use Spatie\Permission\Models\Role as Roles;
 use Spatie\Permission\Models\Permission as Permissions;
 use App\Models\Role\roles_has_permission as RolePermissions;
+use App\Imports\UsersImport;
 //use App\Helpers\Helper;
 
 class UserController extends Controller {
@@ -174,5 +175,10 @@ class UserController extends Controller {
         } catch(\Exception $e) {
             return response(['message' => $e->getMessage(), 'data' => []], 500);
         }
+    }
+
+    public function importUsers(Request $request) {
+
+        return Excel::import(new UsersImport, $request->file('file'));
     }
 }

@@ -326,8 +326,6 @@ class SapController extends Controller {
                         $Q->with('access_action_details', 'tcode');
                     })->get()->map(function ($each) use (&$modules, &$grandChildId) {
         
-                   // $each->tcodes = $each->tcodes->take(50)->skip(0);
-                  // if(isset($each->allowed_tcodes->tcode)) {
                    
                         $modules[] = [
                             'n_id'       => $grandChildId,
@@ -364,7 +362,7 @@ class SapController extends Controller {
                             }
             
                         }
-                   // }
+                   
                 });
         
             }
@@ -503,6 +501,7 @@ class SapController extends Controller {
         $entryArray   = [];
         $i            = 0;
         $permissionid = 0;
+        $array = [];
         foreach ($modules as $module) {
 
             if (isset($module->moduleset->permission_id)) {
@@ -516,8 +515,7 @@ class SapController extends Controller {
                 $permissionid = $module->moduleset->permission_id;
             }
 
-            //echo var_dump($entryArray);
-            //  echo $permissionid . '<br>';
+           
             if (isset($module->moduleset->tcode_id)) {
 
                 foreach ($entryArray as $key => $each) {
@@ -533,7 +531,7 @@ class SapController extends Controller {
             if (isset($module->moduleset->action_id)) {
 
                 foreach ($entryArray as $key => $each) {
-                    if ($each['module_id'] == $permissionid) {
+                    if ($each['module_id'] == $permissionid && isset($tcode_id)) {
                         $entryArray[$key]['action_id'][] = ['t_' . $tcode_id => $module->moduleset->action_id];
                     }
                 }

@@ -553,23 +553,23 @@
                             //Swal.fire('Saved!', '', 'success')
                          //   $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-                    //show the next fieldset
-                    // next_fs.show();
-                    // //hide the current fieldset with style
-                    // current_fs.animate({opacity: 0}, {
-                    // step: function(now) {
-                    // // for making fielset appear animation
-                    // opacity = 1 - now;
+                   // show the next fieldset
+                    next_fs.show();
+                    //hide the current fieldset with style
+                    current_fs.animate({opacity: 0}, {
+                    step: function(now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
 
-                    // current_fs.css({
-                    // 'display': 'none',
-                    // 'position': 'relative'
-                    // });
-                    // next_fs.css({'opacity': opacity});
-                    // },
-                    // duration: 500
-                    // });
-                    // setProgressBar(++current);
+                    current_fs.css({
+                    'display': 'none',
+                    'position': 'relative'
+                    });
+                    next_fs.css({'opacity': opacity});
+                    },
+                    duration: 500
+                    });
+                    setProgressBar(++current);
                                 } else if (result.isDenied) {
                                     Swal.fire('Changes are not saved', '', 'info')
                                     return false;
@@ -1073,6 +1073,11 @@ function stepValidation(step){
                 loadTcodes();
                 break;
                 case 5:
+                var data = tree.getSelected();
+                if(data == '') {
+                    toastr.error('You must select atleast one tcode to continue')
+                    return false
+                }
                 loadReviewSection();
                 break;
                 case 6:
@@ -1090,6 +1095,9 @@ function loadReviewSection(){
     var data = tree.getSelected();
     var formData = $("#msform").serializeArray();
     var finalArray = [];
+    console.log('data')
+    console.log(data)
+   
     $.each(data, (i) => {
         finalArray[i] = {
             moduleset : data[i].addional
@@ -1108,6 +1116,7 @@ e.preventDefault();
 var data = tree.getSelected();
 var formData = $("#msform").serializeArray();
 var finalArray = [];
+
 $.each(data, (i) => {
     finalArray[i] = {
         moduleset : data[i].addional
@@ -1160,7 +1169,6 @@ function finalCall(fdata) {
                         $("#msform")[0].reset();
                         $("#requestModal").modal('hide');
                         fetch_data();
-                        //console.log(r);
                     } else {
                         customLoader(0);
                         toastr.error('Something went wrong');

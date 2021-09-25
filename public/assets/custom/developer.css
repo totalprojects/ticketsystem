@@ -587,8 +587,31 @@ form#srch-frm {
 
 
 /** SAP Request Page CSS */
+div#review_selections table {
+    font-size: 14px;
+}
 
+div#review_selections table tr th {
+    white-space: nowrap;
+}
 
+div#review_selections table thead {
+    background: #efefef;
+}
+
+div#review_selections table tr td {
+    white-space: nowrap;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+div#review_selections::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+div#review_selections{
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 
 
     /** Approval Status */

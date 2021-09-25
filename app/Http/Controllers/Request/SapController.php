@@ -608,7 +608,7 @@ class SapController extends Controller {
 
         //return $array;
 
-        $htmlTable = "<table class='table table-bordered table-responsive' style='max-width:100%; overflow:auto'>
+        $htmlTable = "<table class='table table-bordered'>
         <thead>
 
         <th>Company</th>

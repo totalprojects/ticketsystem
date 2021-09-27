@@ -60,7 +60,6 @@ class SapController extends Controller {
         }
 
         $approval_stages =  requestApprovalStages();
-        //return Auth::user()->employee_id;
 
         $roles = Role::when($did > 0, function ($Q) use ($did) {
             $Q->where('type', $did);
@@ -103,12 +102,31 @@ class SapController extends Controller {
             return view('request.sap.critical')->with(['roles' => $roles, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release, 'pg' => $pg, 'approval_stages'=> $approval_stages]);
         }
 
+    
+    
     public function team() {
 
         $roles = Role::all();
         $approval_stages =  requestApprovalStages();
-        //return $this->isModerator();
-        return view('request.sap.team')->with(['roles' => $roles, 'approval_stages' => $approval_stages, 'moderators' => $this->isModerator()]);
+        $the_reporties = [];
+        $getReporties = getReporties();
+        $companies     = CompanyMasters::all();
+        $divisions     = Divisions::all();
+        $distributions = Distributions::all();
+        $business      = BusinessArea::all();
+        $po            = PO::all();
+        $po_release    = PORelease::all();
+        $empData       = Employees::where('id', Auth::user()->employee_id)->first();
+        $pg = PurchaseGroup::all();
+        $did           = 0;
+        if ($empData) {
+            $did = $empData->department_id;
+            $did = DepartmentMasters::where('id', $did)->first();
+            if ($did) {
+                $did = $did->id;
+            }
+        }
+        return view('request.sap.team')->with(['roles' => $roles, 'approval_stages' => $approval_stages, 'moderators' => $this->isModerator(), 'reporties' => $getReporties, 'companies' => $companies, 'divisions' => $divisions, 'distributors' => $distributions, 'business' => $business, 'po' => $po, 'po_release' => $po_release, 'pg' => $pg]);
     }
 
     public function isModerator() {
@@ -375,6 +393,10 @@ class SapController extends Controller {
 
         $modules = json_decode($request->module);
         $user_id = Auth::user()->id;
+        if(isset($request->isByRM)) {
+            $user_id = $request->user_id;
+        }
+        
         $role_id = $request->role;
         // return $modules;
         $company_name = array_map('intval', $request->company_name ?? []);
@@ -771,11 +793,11 @@ class SapController extends Controller {
     }
 
     public function fetchSelfRequest(Request $request) {
+
         $user_id = Auth::user()->id;
         $take    = $request->take;
         $skip    = $request->skip;
         $requestId = $request->requestID;
-       // $username = $request->username;
         $creationDate = $request->creationDate;
         
         $data       = SAPRequest::where('user_id', $user_id)
@@ -787,78 +809,57 @@ class SapController extends Controller {
         })->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action')
         ->when(isset($request->critical), function($Q) {
             $Q->whereHas('critical_tcodes');
-        });
+        })->orderBy('created_at','desc');
         $totalCount = $data->get()->Count();
         $dataArray  = [];
-        //return $data->get();
+  
         $subArray = [];
         $i        = 1;
+        $sl = 1;
         foreach ($data->take($take)->skip($skip)->get() as $each) {
 
             $company_name = $each->company['company_name'] ?? '-';
             $company_code = $each['company_code'] ?? '-';
-            $flag         = 1;
-            if (!empty($dataArray)) {
+            $department = getDepartment($each->user->employee_id);
 
-                //return $dataArray;
-                foreach ($dataArray as $key => $value) {
-                    // if ($value['id'] == $each->module_id) {
-                    //     $flag = 0;
-                    // }
-                    if ($value['req_int'] == $each->req_int) {
-                        $flag = 0;
-                    }
-                }
+            $request_log = [];
+            foreach ($each->approval_logs as $log) {
+                $request_log[] = [
+                    'approval_stage' => $log->approval_stage,
+                    'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
+                    'remarks'        => $log->remarks,
+                    'status'         => $log->status,
+                    'created_by'     => $log->created_by_user->name
+                ];
             }
-
-            if ($flag == 1) {
-
-                
-
+         
                 $dataArray[] = [
-                    'id'               => $each->module_id,
+                    'id'               => $each->id,
                     'user_id'          => $each->user_id,
                     'user_name'        => $each->user->name,
+                    'department'       => $department,
                     'request_id'       => $each->request_id,
                     'req_int'          => $each->req_int,
                     'sl_no'            => $i,
-                    'company_name'     => json_encode($each->company),
-                    'plant_name'       => json_encode($each->plant),
-                    'storage_location' => json_encode($each->storage),
-                    'business_area'    => json_encode($each->business),
-                    'sales_org'        => json_encode($each->sales_org),
-                    'purchase_org'     => json_encode($each->purchase_org),
-                    'division'         => json_encode($each->division),
-                    'distribution'     => json_encode($each->distributions),
-                    'sales_office'     => json_encode($each->sales_office),
-                    'po_release'       => json_encode($each->po_release),
-                    'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at))
+                    'company_name'     => getNameFromAssoc($each->company, 'company_name'),
+                    'plant_name'       => getNameFromAssoc($each->plant, 'plant_name'),
+                    'storage_location' => getNameFromAssoc($each->storage, 'storage_name'),
+                    'business_area'    => getNameFromAssoc($each->business, 'business_name'),
+                    'sales_org'        => getNameFromAssoc($each->sales_org, 'sales_org_description'),
+                    'purchase_org'     => getNameFromAssoc($each->purchase_org, 'purchase_org_description'),
+                    'division'         => getNameFromAssoc($each->division, 'division_description'),
+                    'distribution'     => getNameFromAssoc($each->distributions, 'distribution_channel_description'),
+                    'sales_office'     => getNameFromAssoc($each->sales_office, 'sales_office_name'),
+                    'po_release'       => getNameFromAssoc($each->po_release ,'rel_description'),
+                    'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at)),
+                    'status'           => $each->status,
+                    'req_log'          => json_encode($request_log),
+                    'module'           => $each->modules->name ?? '-',
+                    'tcode'            => $each->tcodes->t_code ?? '-',
+                    'action'           => getNameFromAssoc($each->action, 'name')
                 ];
 
                 $i++;
-            }
-
-            $request_log = [];
-                foreach ($each->approval_logs as $log) {
-                    $request_log[] = [
-                        'approval_stage' => $log->approval_stage,
-                        'created_at'     => date('F, d, Y h:i a', strtotime($log->created_at)),
-                        'remarks'        => $log->remarks,
-                        'status'         => $log->status,
-                        'created_by'     => $log->created_by_user->name
-                    ];
-                }
-
-            $subArray[] = [
-                'request_id' => $each->request_id,
-                'id'         => $each->id,
-                'status'     => $each->status,
-                'created_at' => date('F, d, Y h:i a', strtotime($each->created_at)),
-                'req_log'    => json_encode($request_log),
-                'module'     => json_encode($each->modules),
-                'tcode'      => json_encode($each->tcodes),
-                'action'     => json_encode($each->action)
-            ];
         }
 
         return response(['data' => $dataArray, 'subArray' => $subArray, 'message' => 'Success', 'totalCount' => $totalCount], 200);
@@ -870,9 +871,9 @@ class SapController extends Controller {
         $take    = $request->take;
         $skip    = $request->skip;
         $requestId = $request->requestID;
-         $username = $request->username;
-         $creationDate = $request->creationDate;
-
+        $username = $request->username;
+        $creationDate = $request->creationDate;
+        
         $is_module_head = \ModuleHead::where('user_id',Auth::user()->id)->get();
         $module_permissions = [];
         if($is_module_head->Count()>0) {
@@ -886,7 +887,6 @@ class SapController extends Controller {
         $is_director = isModerator(2); 
         $is_it_head = isModerator(3); 
         $is_basis = isModerator(4); 
-       // return dd($is_basis);
         if($is_sap_lead || $is_director || $is_it_head || $is_basis)  {
             $all_permissions = \Permission::where('type', 2)->get();
             foreach($all_permissions as $each) {
@@ -902,8 +902,6 @@ class SapController extends Controller {
         foreach ($team as $each) {
             $user_ids[] = $each->employee_id;
         }
-
-        //return $user_ids;
 
         $userIds = \Users::whereIn('employee_id', $user_ids)->get();
         $userId  = [];
@@ -924,54 +922,18 @@ class SapController extends Controller {
                         $Q->whereIn('user_id', $userId);
         })->when(!empty($module_permissions), function($Q) use($module_permissions) {
                         $Q->whereIn('module_id',$module_permissions);
-        })->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action');
+        })->with('approval_logs.created_by_user', 'company', 'plant', 'business', 'storage', 'sales_org', 'sales_office', 'distributions', 'divisions', 'purchase_org', 'po_release', 'modules', 'tcodes', 'action')->orderBy('created_at','desc');
         
         $totalCount = $data->get()->Count();
         $dataArray  = [];
-        //return $data->get();
         $subArray = [];
         $i        = 1;
         foreach ($data->take($take)->skip($skip)->get() as $each) {
 
             $company_name = $each->company['company_name'] ?? '-';
             $company_code = $each['company_code'] ?? '-';
-            $flag         = 1;
-            if (!empty($dataArray)) {
-
-                //return $dataArray;
-                foreach ($dataArray as $key => $value) {
-                    if ($value['req_int'] == $each->req_int) {
-                        $flag = 0;
-                    }
-                }
-            }
-
-            if ($flag == 1) {
-
-              
-
-                $dataArray[] = [
-                    'id'               => $each->module_id,
-                    'user_id'          => $each->user_id,
-                    'user_name'        => $each->user->name,
-                    'request_id'       => $each->request_id,
-                    'req_int'          => $each->req_int,
-                    'sl_no'            => $i,
-                    'company_name'     => json_encode($each->company),
-                    'plant_name'       => json_encode($each->plant),
-                    'storage_location' => json_encode($each->storage),
-                    'business_area'    => json_encode($each->business),
-                    'sales_org'        => json_encode($each->sales_org),
-                    'purchase_org'     => json_encode($each->purchase_org),
-                    'division'         => json_encode($each->division),
-                    'distribution'     => json_encode($each->distributions),
-                    'sales_office'     => json_encode($each->sales_office),
-                    'po_release'       => json_encode($each->po_release),
-                    'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at))
-                ];
-
-                $i++;
-            }
+            $department = getDepartment($each->user->employee_id);
+          
 
             $request_log = [];
             foreach ($each->approval_logs as $log) {
@@ -984,16 +946,32 @@ class SapController extends Controller {
                 ];
             }
 
-            $subArray[] = [
-                'request_id' => $each->request_id,
-                'id'         => $each->id,
+            $dataArray[] = [
+                'id'               => $each->id,
+                'user_id'          => $each->user_id,
+                'user_name'        => $each->user->name,
+                'department'       => $department,
+                'request_id'       => $each->request_id,
+                'req_int'          => $each->req_int,
+                'sl_no'            => $i,
+                'company_name'     => getNameFromAssoc($each->company, 'company_name'),
+                'plant_name'       => getNameFromAssoc($each->plant, 'plant_name'),
+                'storage_location' => getNameFromAssoc($each->storage, 'storage_name'),
+                'business_area'    => getNameFromAssoc($each->business, 'business_name'),
+                'sales_org'        => getNameFromAssoc($each->sales_org, 'sales_org_description'),
+                'purchase_org'     => getNameFromAssoc($each->purchase_org, 'purchase_org_description'),
+                'division'         => getNameFromAssoc($each->division, 'division_description'),
+                'distribution'     => getNameFromAssoc($each->distributions, 'distribution_channel_description'),
+                'sales_office'     => getNameFromAssoc($each->sales_office, 'sales_office_name'),
+                'po_release'       => getNameFromAssoc($each->po_release ,'rel_description'),
+                'created_at'       => date('F, d, Y h:i a', strtotime($each->created_at)),
                 'status'     => $each->status,
-                'created_at' => date('F, d, Y h:i a', strtotime($each->created_at)),
                 'req_log'    => json_encode($request_log),
-                'module'     => json_encode($each->modules),
-                'tcode'      => json_encode($each->tcodes),
-                'action'     => json_encode($each->action)
+                'module'     => $each->modules->name ?? '-',
+                'tcode'      => $each->tcodes->t_code ?? '-',
+                'action'     => getNameFromAssoc($each->action, 'name')
             ];
+            $i++;
         }
         
        // return $subArray;

@@ -5,7 +5,12 @@
 @section('content_header')
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+  #div_tree ul ul ul li { 
   
+      display: inline-block !important;
+  }     
+</style> 
 @stop
 
 @section('content')
@@ -14,8 +19,8 @@
             <div class="demo-container">
                 <div class="top-info">
                     <div class="table-heading-custom"><h4 class="right"><i class="fas fa-copy"></i> Team SAP Requests</h4></div>
-                    <div class="multibtn-sec d-none">
-                       <button id="request_btn" class='custom-theme-btn'><i class='fas fa-fist-raised'></i> Raise Request</button>
+                    <div class="multibtn-sec">
+                       <button id="request_btn" class='custom-theme-btn'><i class='fas fa-fist-raised'></i> Raise Request for Team Member</button>
                     </div>
                 </div>
                 <div class="container">
@@ -46,13 +51,307 @@
         </div>
     </div>
   
-
+    <!-- Team Request Modal -->
+        <div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" id="requestModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">SAP Team Requests</h5>
+                <div class="loading1 ml-2 mt-1 border border-warning rounded d-none" style="padding: 1.5px;"><i class='fas fa-spinner fa-spin'></i> Loading&#8230;</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                 
+                      <div class="row">
+                          <div class="col-12 col-md-12 col-lg-12 col-xl-12 text-center p-2 mb-2 sap-req-form">
+                              <div class="card">
+                                  <h2 id="heading">SAP Request Form</h2>
+                                  <p>Fill all form field to go to next step</p>
+                                  <form id="msform" method="post">
+                                      <!-- progressbar -->
+                                      <ul id="progressbar">
+                                          <li class="active" id="account"><i class="fas fa-user"></i><strong>Step 1</strong></li>
+                                          <li id="personal"><i class="far fa-address-card"></i><strong>Step 2</strong></li>
+                                          <li id="payment"><i class="fas fa-store-alt"></i><strong>Step 3</strong></li>
+                                          <li id="confirm"><i class="fas fa-building"></i><strong>Step 4</strong></li>
+                                          <li id="confirm2"><i class="fas fa-tasks"></i><strong>Step 5</strong></li>
+                                      </ul>
+                                      <div class="progress">
+                                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                                      </div> <br> <!-- fieldsets -->
+                                      
+                                      <fieldset>
+                                          <div class="form-card">
+                                              <div class="row">
+                                                  <div class="col-7">
+                                                      <h2 class="fs-title">Basic Information:</h2>
+                                                  </div>
+                                                  <div class="col-5">
+                                                      <h2 class="steps">Step 1 - 5</h2>
+                                                  </div>
+  
+                                              </div> 
+                                              <div class="row">
+                                                  <div class="col-lg-3 pt-2">
+                                                    <label for="company_name">For User</label>
+                                                      <input type="hidden" id="isByRM" name="isByRM" value="1">
+                                                        <select name="user_id" id="user_id" placeholder="Select Employee" class="form-control select2bs4">
+                                                            <option value="">--SELECT Employee--</option>
+                                                            @foreach($reporties as $reporty)
+                                                                <option value="{{ $reporty['id'] }}">{{ $reporty['name'] }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                  </div>
+                                                  <div class="col-lg-3 pt-2">
+                                                      <label for="company_name">Company Name</label>
+                                                          <select name="company_name[]" id="company_name" placeholder="Select Companies" class="form-control select2bs4" multiple>
+                                                              <option value="">--SELECT COMPANY--</option>
+                                                              @foreach($companies as $company)
+                                                                  <option value="{{ $company->company_code }}">{{ $company->company_name }} ({{ $company->company_code }})</option>
+                                                              @endforeach
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-lg-3 pt-2">
+                                                      <label for="plant_name">Plant Name </label>
+                                                          <select name="plant_name[]" id="plant_id" data-placeholder="Select Plant Name" class="form-control select2bs4" multiple>
+                                                              <option value="">--SELECT PLANT--</option>
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-lg-3 pt-2">
+                                                      <label for="storage_location">Storage Location </label>
+                                                          <select name="storage_location[]"  id="storage_id" data-placeholder="Select Storage Location" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-lg-3 pt-2">
+                                                      <label for="business_area"> Business Area </label>
+                                                          <select name="business_area[]"  id="business_location" data-placeholder="Select Business Area" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                              @foreach($business as $b)
+                                                                  <option value="{{ $b->business_code }}">{{ $b->business_name }} </option>
+                                                              @endforeach
+                                                          </select>
+                                                  </div>
+                                              </div>
+                                          </div> 
+                                          <input type="button" name="next" class="next action-button" value="Next" />
+                                      </fieldset>
+                                      <!-- Select Role -->
+                                      <fieldset>
+                                          <div class="form-card">
+                                              <div class="row">
+                                                  {{-- <div class="col-7">
+                                                      <h2 class="fs-title">Select Role:</h2>
+                                                  </div> --}}
+                                                  <div class="col-5">
+                                                      <h2 class="steps">Step 2 - 5</h2>
+                                                  </div>
+                                              </div>
+                                              <div class="row justify-content-center">
+                                                 
+                                                  <div class="col-lg-6 pt-2">
+                                                      
+                                                      <label for="sales_org">Role </label>
+                                                      <span><small>(This option is not mandatory)</small></span>
+                                                          <select name="role"  id="role" data-placeholder="Select Role" class="form-control select2bs4">
+                                                              <option value=""></option>
+                                                              @foreach($roles as $role)
+                                                                  <option value="{{ $role->id }}"> {{  $role->name }}</option>
+                                                              @endforeach
+                                                          </select>
+                                                  </div>
+                                                 
+                                              </div> 
+                                               
+                                          </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-card">
+                                              <div class="row">
+                                                  <div class="col-7">
+                                                      <h2 class="fs-title">Select Type:</h2>
+                                                  </div>
+                                                  <div class="col-5">
+                                                      <h2 class="steps">Step 3 - 5</h2>
+                                                  </div>
+                                              </div>
+                                              <div class="row">
+                                                  <div class="col-lg-12">
+                                                      <h5>Select any one option or both to continue</h5>
+                                                  </div>
+                                                  <div class="col-lg-4 pt-2">
+                                                      <label for="sales_org">Sales Organization </label>
+                                                          <select name="sales_org[]"  id="sales_org" data-placeholder="Select Sales Organization" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-lg-4 pt-2">
+                                                      <label for="purchase_org"> Purchase Organization </label>
+                                                          <select name="purchase_org[]"  id="purchase_org" data-placeholder="Select Purchase Organization" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                              @foreach($po as $p)
+                                                                  <option value="{{ $p->id }}">{{ $p->po_name }} ({{ $p->po_code }}) </option>
+                                                              @endforeach
+                                                          </select>
+                                                  </div>  
+                                                  <div class="col-lg-4 pt-2">
+                                                      <label for="action_type">Action</label>
+                                                      <br>
+                                                     <input type="radio" name="action_type" value="cr1"> Create &amp; 1<sup>st</sup> Release &nbsp;
+                                                     <input type="radio" name="action_type" value="c"> Create &nbsp;
+                                                     <input type="radio" name="action_type" value="r"> Release &nbsp;
+                                                  </div>   
+                                                     
+                                              </div> 
+                                               
+                                          </div> <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                      </fieldset>
+                                     
+                                      <fieldset>
+                                          <div class="form-card">
+                                              <div class="row">
+                                                  <div class="col-7">
+                                                      <h2 class="fs-title">Other Information:</h2>
+                                                  </div>
+                                                  <div class="col-5">
+                                                      <h2 class="steps">Step 4 - 5</h2>
+                                                  </div>
+                                              </div>
+                                              <div class="row">
+                                                  <div class="col-lg-4 pt-2">
+                                                      <label for="division">Division </label>
+                                                          <select name="division[]"  id="division" data-placeholder="Select Division" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                              @foreach($divisions as $division)
+                                                                  <option value="{{ $division->division_code }}">{{ $division->division_description }} </option>
+                                                              @endforeach
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-lg-4 pt-2">
+                                                      <label for="distribution_channel">Distribution Channel </label>
+                                                          <select name="distribution_channel[]"  id="distribution_channel" data-placeholder="Select Distribution Channel" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                              @foreach($distributors as $distributor)
+                                                                  <option value="{{ $distributor->distribution_channel_code }}">{{ $distributor->distribution_channel_description }} </option>
+                                                              @endforeach
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-lg-4 pt-2">
+                                                      <label for="sales_office"> Sales Office </label>
+                                                          <select name="sales_office[]"  id="sales_office" data-placeholder="Select Sales Office" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                          </select>
+                                                  </div>
+                                                  <div class="col-lg-4 pt-2">
+                                                      <label for="purchase_group"> Purchase Group </label>
+                                                          <select name="purchase_group[]"  id="purchase_group" data-placeholder="Select Purchase Group" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                              @foreach($pg as $p)
+                                                                  <option value="{{ $p->id }}">{{ $p->pg_description }} ({{ $p->pg_code }}) </option>
+                                                              @endforeach
+                                                          </select>
+                                                  </div> 
+                                                  <div class="col-lg-4 pt-2">
+                                                      <label for="po_release"> PO Release </label>
+                                                          <select name="po_release[]"  id="po_release" data-placeholder="Select PO Release" class="form-control select2bs4" multiple>
+                                                              <option value=""></option>
+                                                              @foreach($po_release as $p)
+                                                                  <option value="{{ $p->id }}">{{ $p->rel_description }} ({{ $p->rel_code }})</option>
+                                                              @endforeach
+                                                          </select>
+                                                  </div>
+  
+                                              </div>
+                                          </div> 
+                                          <input type="button" name="next" class="next action-button" value="Next" /> <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                      </fieldset>
+                                     
+                                      <fieldset>
+                                          <div class="form-card">
+                                              <div class="row">
+                                                  <div class="col-7">
+                                                      <h2 class="fs-title">Select T-Codes:</h2>
+                                                  </div>
+                                                  <div class="col-5">
+                                                      <h2 class="steps">Step 5 - 5</h2>
+                                                  </div>
+                                                 
+                                              </div> 
+                                              <h2 class="purple-text text-center"><strong>Final Step</strong></h2> <br>
+                                              <div class="row m-2">
+                                                  <div class="col-lg-8">
+                                                       <label for="searchCustom">
+                                                           <small>Did not find the tcode?</small>
+                                                       </label><br>
+                                                       <input style="width:auto; display:inline-block" type="text" name="ctcode" id='ctcode' placeholder="Enter Exact T Code" class="form-control">
+                                                       &nbsp; <a id="search_tcode" class="btn btn-primary">Search</a>
+                                                  </div>
+                                               </div>
+                                              <div class="row">
+                                                  <div class="col-lg-12" id="modules_tcodes_block">
+                                                      <div id="div_tree"></div>
+                                                  </div>
+                                              </div> 
+                                          </div>
+                                          <input type="button" name="next" class="next action-button" value="Next" /> 
+                                          <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-card">
+                                              <div class="row">
+                                                  <div class="col-12">
+                                                      <h2 class="fs-title text-center">You may review all your selections</h2>
+                                                  </div>
+                  
+                                              </div> <br><br>
+                                              <h2 class="purple-text text-center"><strong>Your selections below</strong></h2> <br>
+                                              <div class="row justify-content-center">
+                                                  <div class="col-lg-12">
+                                                     <div id="review_selections" class="scrollable-table" style="overflow-y: auto; cursor: grab;"></div>
+                                                  </div>
+                                              </div> 
+                                              
+                                          </div>
+                                          <input type="button" name="next" id="finalSubmit" class="next action-button" value="Submit" /> 
+                                          <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                         
+                                      </fieldset>
+                                      <fieldset>
+                                          <div class="form-card">
+                                              <div class="row">
+                                                  <div class="col-12">
+                                                      <h2 class="fs-title text-center">All the steps are complete!</h2>
+                                                  </div>
+                  
+                                              </div> <br><br>
+                                              <h2 class="purple-text text-center"><strong>Your request has been generated</strong></h2> <br>
+                                              <div class="row justify-content-center">
+                                                  <div class="col-lg-12">
+                                                      <h5 class="text-center">Please wait for the approval from concerned team</h5>
+                                                  </div>
+                                              </div> 
+                                              
+                                          </div>
+                                          <input type="button" name="close-modal" class="btn btn-secondary" value="Close" onclick="$('#requestModal').modal('hide')" />
+                                      </fieldset>
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+                 
+              </div>
+            </div>
+          </div>
+      </div>
+  
     <!-- Request Status Modal -->
     <div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" id="statusModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Request Status</h5>
+              <h5 class="modal-title">Request Status of <span id="fetchRequestID"></span></h5>
               <div class="loading1 ml-2 mt-1 border border-warning rounded d-none" style="padding: 1.5px;"><i class='fas fa-spinner fa-spin'></i> Loading&#8230;</div>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -63,6 +362,7 @@
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-12 col-lg-12 col-xl-12 text-center p-2 mb-2">
                             <div class="card">
+                              <div id="renderDetails"></div>
                                 {{-- <h2 id="heading">Request Status</h2> --}}
                                 <div id="drop_status"></div>
                                
@@ -81,7 +381,7 @@
 @stop
 
 @section('js')
-
+    <script src="{{ asset('assets/js/requestform.js') }}"></script>
     <script>
       var IS_REPORTING_MANAGER = false
       var IS_MODULE_HEAD = false
@@ -103,6 +403,10 @@
             fetch_data(params);
       })
 
+      
+    $("#request_btn").on('click', () => {
+      $("#requestModal").modal('show');
+    })
     /** Fetch SAP Requests */
     fetch_data();
     function fetch_data(params = []){
@@ -197,170 +501,48 @@
           },
           wordWrapEnabled: false,
           columns: [
-              {
-                caption:"Req No.",
-                dataField:"request_id",
-              },
-              {
-                caption:"User Name",
-                dataField:"user_name",
-              },
-              {
-                    caption: 'Company Names',
-                    dataField:"company_name",
-                    cellTemplate:(container, options) => {
-                        ////console.log(options)
-                        var company_names = JSON.parse(options.data.company_name);
-                        var html = ``;
-                        $.each(company_names, (i) => {
-                            html += `<span>${company_names[i].company_name} (${company_names[i].company_code})</span>`;
-                        });
-                        container.append(html)
-                    }
-                },
-                {
-                    caption: 'Plant Names',
-                    dataField:"plant_name",
-                    cellTemplate:(container, options) => {
-                        ////console.log(options)
-                        var plant = JSON.parse(options.data.plant_name);
-                        var html = ``;
-                        $.each(plant, (i) => {
-                            html += `<span>${plant[i].plant_name} (${plant[i].plant_code})</span>`;
-                        });
-                        container.append(html)
-                    }
-                },
-                {
-                    caption: 'Storage Location',
-                    dataField:"storage_location",
-                    cellTemplate:(container, options) => {
-                        ////console.log(options)
-                        var storage = JSON.parse(options.data.storage_location);
-                        var html = ``;
-                        $.each(storage, (i) => {
-                            html += `<span>${storage[i].storage_description} (${storage[i].storage_code})</span>`;
-                        });
-                        container.append(html)
-                    }
-                },
-                {
-                    caption: 'Business Area',
-                    dataField:"business_area",
-                    cellTemplate:(container, options) => {
-                        ////console.log(options)
-                        var business = JSON.parse(options.data.business_area);
-                        var html = ``;
-                        $.each(business, (i) => {
-                            html += `<span>${business[i].business_name} (${business[i].business_code})</span>`;
-                        });
-                        container.append(html)
-                    }
-                },
-                {
-                caption: 'Created At',
-                dataField:"created_at",
-                // cellTemplate:(container, options) => {
-                //     //console.log(options)
-                //     var business = JSON.parse(options.data.business_area);
-                //     var html = ``;
-                //     $.each(business, (i) => {
-                //         html += `<span>${business[i].business_name} (${business[i].business_code})</span>`;
-                //     });
-                //     container.append(html)
-                // }
-                },
-
-                              
-                ],
-                masterDetail: {
-                    enabled: true,
-                    template: function(container, options) {
-                        $("<div>")
-                            .dxDataGrid({
-                                showBorders: true,
-                                allowColumnResizing: true,
-                                paging: false,
-                                // filterRow: {
-                                //     visible: true,
-                                //     applyFilter: "auto"
-                                // },
-                                scrolling: {
-                                    mode: "virtual"
-                                },
-                                columnChooser: {
-                                    enabled: true,
-                                    mode: "select" // or "select"
-                                },
-                                columns: [
-                                    {
-                                    caption: 'Module',
-                                    dataField:"module",
-                                    cellTemplate:(container, options) => {
-                                        ////console.log(options.data.module)
-                                        var modules = JSON.parse(options.data.module);
-                                        //console.log(modules)
-                                        var html = ``;
-                                        html += `<span class='badge badge-primary'>${modules.name}</span>`;
-                                        container.append(html)
-                                    }
-                                },
-                                {
-                                    caption: 'TCode',
-                                    dataField:"tcode",
-                                    cellTemplate:(container, options) => {
-                                        ////console.log(options.data.module)
-                                        var tcode = JSON.parse(options.data.tcode);
-                                        //console.log(tcode)
-                                        var html = ``;
-                                      //  $.each(tcode, (i) => {
-                                            html += `<span class='badge badge-primary'>${tcode.description} (${tcode.t_code})</span>`;
-                                       // })
-                                      
-                                        container.append(html)
-                                    }
-                                },
-                                {
-                                    caption: 'Actions',
-                                    dataField:"action",
-                                    cellTemplate:(container, options) => {
-                                        ////console.log(options.data.module)
-                                        var action = JSON.parse(options.data.action);
-                                        //console.log(action)
-                                        var html = ``;
-                                        $.each(action, (i) => {
-                                            html += `<span class='badge badge-primary'>${action[i].name}</span> `;
-                                        })
-                                      
-                                        container.append(html)
-                                    }
-                                },
-                                {
-                                    caption: 'Status',
-                                    dataField:"status",
-                                    cellTemplate:(container, options) => {
-                                        ////console.log(options.data.module)
-                                        var status = JSON.parse(options.data.status);
-                                        var request_id = options.data.id;
-                                        var status_logs = options.data.req_log;
-                                        var created_at = options.data.created_at;
-                                      // //console.log(status)
-                                        var html = ``;
-                                        html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs}, ${request_id})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
-                                        container.append(html)
-                                    }
-                                },
-                                ],
-                                dataSource: new DevExpress.data.DataSource({
-                                    store: new DevExpress.data.ArrayStore({
-                                        key: "request_id",
-                                        data: window.subData
-                                    }),
-                                    filter: ["request_id", "=", options.key]
-                                })
-                            }).appendTo(container);
-                    }
+           {
+            caption:"Req No.",
+            dataField:"request_id",
+           },
+           {
+            caption:"User Name",
+            dataField:"user_name",
+            visible:true,
+           },
+           {
+                caption: 'Company Names',
+                dataField:"company_name",
+                cellTemplate:(container, options) => {
+                    container.append(options.data.company_name)
                 }
+           },
+            {
+                caption: 'Department',
+                dataField:"department",
+            },
+            {
+                caption: 'Request Date',
+                dataField:"created_at",
+            },
+            {
+                caption:"View Status",
+                dataField:"status",
+                cellTemplate:(container, options) => {
+
+                    var status = JSON.parse(options.data.status);
+                    var status_logs = options.data.req_log;
+                    var created_at = options.data.created_at;
+                    var req_id = options.data.id;
+                    console.log('req ud' +req_id)
+                    var html = ``;
+                    
+                    html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs}, ${req_id}, ${JSON.stringify(options.data)})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
+                    container.append(html)
+                }
+            },           
+       ]
+
       });
     }
 
@@ -405,9 +587,33 @@ function fetchStages(request_id, logs, created_at) {
 
     return true
 }
-function loadStatusModal(status,created_at, logs, request_id) {
+function loadStatusModal(status,created_at, logs, request_id, alldata = []) {
 
- fetchStages(request_id, logs, created_at, status);
+var requestID = (alldata.request_id !== undefined) ? alldata.request_id : request_id;
+
+$("#fetchRequestID").text(requestID);
+var html_table = `<table class='table table-bordered'>
+    <thead>
+        <th>Plant Code</th>
+        <th>SO</th>
+        <th>PO</th>
+        <th>Module</th>
+        <th>Tcode</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td>${alldata.plant_name}</td>
+        <td>${alldata.sales_org}</td> 
+        <td>${alldata.purchase_org}</td>
+        <td>${alldata.module}</td>
+        <td>${alldata.tcode}</td>
+        <td>${alldata.action}</td>  
+    </tr>            
+`;
+html_table += "</tbody></table>";
+$("#renderDetails").html(html_table);
+fetchStages(request_id, logs, created_at, status);
 
 }
 
@@ -474,7 +680,7 @@ function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH
                   status_text = `Pending Approval from <br> (${approval_stages[stages[i] - 1].approval_type})`;
 
                   let type = approval_stages[stages[i] - 1].approval_type.replace(" ", "_").toUpperCase();
-            
+                  console.log(IS_RM)
                   switch(type) {
 
                     case 'REPORTING_MANAGER':

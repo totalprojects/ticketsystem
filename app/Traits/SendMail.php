@@ -185,11 +185,13 @@ trait SendMail
         switch($type) {
             // EMPLOYEE & reporting manager of EMPLOYEE
             case 1:
-                    $userId = Auth::user()->employee_id;
+                    //$userId = Auth::user()->employee_id;
+                    //req placed by
+                    $userId = $requested->user->employee_id;
                     $model = EmployeeMappings::where('employee_id', $userId)->with('report_employee','employee')->first();
                     if($model) {
-                        $usermail = Auth::user()->email;
-                        $username = $model->employee->first_name.' '.$model->employee->last_name;
+                        $usermail = $requested->user->email;
+                        $username = $requested->user->name;
                         $reportToEmail = $model->report_employee->email;
                         $reportToName = $model->report_employee->first_name.' '.$model->report_employee->last_name;
                         $modules = [];

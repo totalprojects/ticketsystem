@@ -315,10 +315,10 @@
                                                 </div>
                 
                                             </div> <br><br>
-                                            <h2 class="purple-text text-center"><strong>Your request has been generated</strong></h2> <br>
+                                            <h2 class="purple-text text-center"><strong>We are preparing to submit your request</strong></h2> <br>
                                             <div class="row justify-content-center">
                                                 <div class="col-lg-12">
-                                                    <h5 class="text-center">Please wait for the approval from concerned team</h5>
+                                                    <h5 class="text-center">Please wait....</h5>
                                                 </div>
                                             </div> 
                                             
@@ -340,7 +340,7 @@
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Request Status</h5>
+              <h5 class="modal-title">Request Status of <span id="fetchRequestID"></span></h5>
               <div class="loading1 ml-2 mt-1 border border-warning rounded d-none" style="padding: 1.5px;"><i class='fas fa-spinner fa-spin'></i> Loading&#8230;</div>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -351,6 +351,7 @@
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-12 col-lg-12 col-xl-12 text-center p-2 mb-2">
                             <div class="card">
+                                <div id="renderDetails"></div>
                                 {{-- <h2 id="heading">Request Status</h2> --}}
                                 <div id="drop_status"></div>
                                
@@ -362,381 +363,40 @@
           </div>
         </div>
     </div>
-    @stop
+@stop
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/custom/main.css') }}">
 @stop
-
 @section('js')
-
-    <script>
+<script src="{{ asset('assets/js/requestform.js') }}"></script>
+<script>
         
-        $("#srch-btn").on('click', (e) => {
-            e.preventDefault();
-            var requestID = $("input[name='requestID']").val();
-            var creationDate = $("input[name='date']").val(); 
-            var params = {
-                'requestID': requestID,
-                'creationDate': creationDate
-            }
-            fetch_data(params);
-        })
-        $("#search_tcode").on('click', (e) => {
-            e.preventDefault();
-            loadTcodes();
-        });
-        
-        $("input[name='action_type']").prop('disabled',true);
+$("#srch-btn").on('click', (e) => {
+    e.preventDefault();
+    var requestID = $("input[name='requestID']").val();
+    var creationDate = $("input[name='date']").val(); 
+    var params = {
+        'requestID': requestID,
+        'creationDate': creationDate
+    }
+    fetch_data(params);
+})
+$("#search_tcode").on('click', (e) => {
+    e.preventDefault();
+    loadTcodes();
+});
 
-        $("#purchase_org").on('change', (e) => {
-            var value = $("#purchase_org").val();
+$("input[name='action_type']").prop('disabled',true);
 
-            if(value.length>0) {
-                $("input[name='action_type']").prop('disabled',false);
-            } else {
-                $("input[name='action_type']").prop('disabled',true);
-            }
-        });
+$("#request_btn").on('click', () => {
 
-        var tree;
+    $("#requestModal").modal('show');
+})
 
-        function pickerTreeRender(data) {
-            tree = new PickleTree({
-                    switchCallback: (node) => {
-
-                        //console.log(node)
-                        if(node.title  == 'Create') {
-                            if(node.checkStatus == true) {
-                                //console.log('create')
-                                let our_node = tree.getNode(node.value+4);
-                                // console.log('release check')
-                                // console.log(our_node)
-                                if(our_node){
-                                    if(our_node.title == 'Release') {
-                                        our_node.toggleCheck(false);
-                                    }
-                                }
-                                
-                            }
-                        }
-
-                        if(node.title  == 'Release') {
-                            if(node.checkStatus == true) {
-                                //console.log('Release')
-                                let our_node = {}
-                                for(let i=4; i>=1; i--) {
-                                    our_node = tree.getNode(node.value-i);
-                                    if(our_node){
-                                        our_node.toggleCheck(false);
-                                    }
-                                }   
-                            }
-                        }
-                    },
-                    c_target: 'div_tree',
-                    c_config: {
-                        logMode: false,
-                        switchMode: true,
-                        autoChild: true,
-                        autoParent: true,
-                        foldedIcon: 'fa fa-plus',
-                        unFoldedIcon: 'fa fa-minus',
-                        menuIcon: ['fa', 'fa-list-ul'],
-                        foldedStatus: true,
-                        drag: false
-                    },
-                    c_data: data
-                });
-
-                $(".ldr_tc").hide();
-        }
-
-
-       //loadTcodes();
-        function loadTcodes(dependencies = []){
-            pickerTreeRender([]);
-            $("#modules_tcodes_block").append("<h3 class='ldr_tc badge badge-warning p-1 m-1'><i class='fas fa-spinner fa-spin'></i> Loading...</h3>")
-           
-            var role_id = $("#role").val();
-            var tcode = $("#ctcode").val();
-            $.ajax({
-                url:"{{ route('tcodes.for.user') }}",
-                type:"GET",
-                data:{role_id:role_id,tcode:tcode},
-                error:(r) => {
-                    toastr.error('Something went wrong');
-                    console.log(r);
-                },
-                success:(r) => {
-                    if(r) {
-                        //toastr.success('Tcodes found');
-                        console.log(r)
-                        pickerTreeRender(r.data)
-                    }
-                }
-            })
-        }
-
-        function populateStep3(sales, purhcase) {
-            if(sales.length > 0) {
-                $("#division").parent().removeClass('d-none');
-                $("#distribution_channel").parent().removeClass('d-none');
-                $("#sales_office").parent().removeClass('d-none');
-            } else {
-                $("#division").parent().addClass('d-none');
-                $("#distribution_channel").parent().addClass('d-none');
-                $("#sales_office").parent().addClass('d-none');
-            }
-            
-            if(purhcase.length > 0) {
-                var action = $("input[name='action_type']:checked").val();
-                if(!action) {
-                    toastr.error('Provide the actions for PO to continue');
-                    flag = false
-                }
-                console.log(action)
-                if(action === 'cr1' || action === 'r') {
-                    $("#po_release").parent().removeClass('d-none');
-                } else {
-                    console.log('donone')
-                    $("#po_release").parent().addClass('d-none');
-                }
-                //$("#po_release").parent().removeClass('d-none');
-                $("#purchase_group").parent().removeClass('d-none');
-            } else {
-                $("#po_release").parent().addClass('d-none');
-                $("#purchase_group").parent().addClass('d-none');
-            }
-        }
-
-    $(document).ready(function(){
-
-        var current_fs, next_fs, previous_fs; //fieldsets
-        var opacity;
-        var current = 1;
-        var steps = $("fieldset").length;
-
-        setProgressBar(current);
-
-        $(".next").click(function(){
-
-            current_fs = $(this).parent();
-            next_fs = $(this).parent().next();
-            
-            /** Data validation for all steps */
-            if(!stepValidation(current)) {
-                return false;
-            }
-
-            if(current==6) {
-                Swal.fire({
-                    title: 'Do you want to submit the request?',
-                    showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: `Save`,
-                    denyButtonText: `Don't save`,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            var data = tree.getSelected();
-                            var formData = $("#msform").serializeArray();
-                            var finalArray = [];
-                            $.each(data, (i) => {
-                                finalArray[i] = {
-                                    moduleset : data[i].addional
-                                }
-                            });
-                            formData.push({name:'module', value: JSON.stringify(finalArray)});
-
-                            finalCall(formData);
-                            
-                            //Swal.fire('Saved!', '', 'success')
-                         //   $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-                   // show the next fieldset
-                    next_fs.show();
-                    //hide the current fieldset with style
-                    current_fs.animate({opacity: 0}, {
-                    step: function(now) {
-                    // for making fielset appear animation
-                    opacity = 1 - now;
-
-                    current_fs.css({
-                    'display': 'none',
-                    'position': 'relative'
-                    });
-                    next_fs.css({'opacity': opacity});
-                    },
-                    duration: 500
-                    });
-                    setProgressBar(++current);
-                                } else if (result.isDenied) {
-                                    Swal.fire('Changes are not saved', '', 'info')
-                                    return false;
-                                }
-                            });
-            } else {
-                    $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-                //show the next fieldset
-                next_fs.show();
-                //hide the current fieldset with style
-                current_fs.animate({opacity: 0}, {
-                step: function(now) {
-                // for making fielset appear animation
-                opacity = 1 - now;
-
-                current_fs.css({
-                'display': 'none',
-                'position': 'relative'
-                });
-                next_fs.css({'opacity': opacity});
-                },
-                duration: 500
-                });
-                setProgressBar(++current);
-            }
-          
-
-            //Add Class Active
-            
-        });
-
-        $(".previous").click(function(){
-
-        current_fs = $(this).parent();
-        previous_fs = $(this).parent().prev();
-
-        //Remove class active
-        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-        //show the previous fieldset
-        previous_fs.show();
-
-        //hide the current fieldset with style
-        current_fs.animate({opacity: 0}, {
-        step: function(now) {
-        // for making fielset appear animation
-            opacity = 1 - now;
-
-            current_fs.css({
-            'display': 'none',
-            'position': 'relative'
-            });
-            previous_fs.css({'opacity': opacity});
-            },
-            duration: 500
-        });
-        setProgressBar(--current);
-        });
-
-        function setProgressBar(curStep){
-        var percent = parseFloat(100 / steps) * curStep;
-        percent = percent.toFixed();
-        $(".progress-bar")
-        .css("width",percent+"%")
-        }
-
-        $(".submit").click(function(){
-        return false;
-        })
-
-    });
-    /** multi step form ends here */
-
-        $("#request_btn").on('click', () => {
-
-            $("#requestModal").modal('show');
-        })
-      $("#company_name").on('change', () => {
-          
-        var company_id = $("#company_name").val();
-        $.ajax({
-            url: "{{ route('get.plants') }}",
-            data: {company_id},
-            type:"GET",
-            error: (response) => {
-                console.log(response)
-                toastr.error('Something went wrong [plantjax]');
-            },
-            success: (response) => {
-                
-                var plants = response.data;
-                var html = `<option value=''>--SELECT--</option>`;
-                $.each(plants, (i) => {
-                    html += `<option value='${plants[i].plant_code}'> ${plants[i].plant_name} (${plants[i].plant_code}) </option>`;
-                });
-                $("#plant_id").html(html);
-
-                var so = response.so;
-                var html2 = `<option value=''>--SELECT--</option>`;
-                $.each(so, (i) => {
-                    html2 += `<option value='${so[i].id}'> ${so[i].so_description} (${so[i].so_code})  </option>`;
-                });
-                $("#sales_org").html(html2);
-
-                $(".loading").addClass('d-none');
-            }
-        })
-      });
-
-      $("#plant_id").on('change', () => {
-        var plant_id = $("#plant_id").val();
-        $.ajax({
-            url: "{{ route('get.storages') }}",
-            data: {plant_id},
-            type:"GET",
-            error: (response) => {
-                console.log(response)
-                toastr.error('Something went wrong [plantjax]');
-            },
-            success: (response) => {
-                
-                var storages = response.data;
-                var html = `<option value=''>--SELECT--</option>`;
-                $.each(storages, (i) => {
-                    html += `<option value='${storages[i].id}'> ${storages[i].storage_description} (${storages[i].storage_code}) </option>`;
-                });
-                $("#storage_id").html(html);
-                $(".loading").addClass('d-none');
-            }
-        })
-      });
-
-      $("#storage_id").on('change', () => {
-         
-        $(".loading").addClass('d-none');
-      });
-
-      $("#distribution_channel").on('change', () => {
-            var division_code = $("#division").val();
-            var distribution = $("#distribution_channel").val();
-            var so = $("#sales_org").val();
-
-            $.ajax({
-                url: "{{ route('get.sales_office') }}",
-                data: {division_code, distribution, so},
-                type:"GET",
-                error: (response) => {
-                    console.log(response)
-                    toastr.error('Something went wrong [sojax]');
-                },
-                success: (response) => {
-                    
-                    var storages = response.data;
-                    var html = `<option value=''>--SELECT--</option>`;
-                    $.each(storages, (i) => {
-                        html += `<option value='${storages[i].id}'> ${storages[i].sales_office.sales_office_name} (${storages[i].sales_office_code}) </option>`;
-                    });
-                    $("#sales_office").html(html);
-                    $(".loading").addClass('d-none');
-                }
-            })
-      });
-
-      /** Fetch SAP Requests */
-      fetch_data();
-      function fetch_data(params = []){
+/** Fetch SAP Requests */
+fetch_data();
+function fetch_data(params = []){
         //console.log(params)
           var requestId = params.requestID !== undefined ? params.requestID : '';
           var creationDate = params.creationDate !== undefined ? params.creationDate : '';
@@ -783,7 +443,7 @@
                    deferred.resolve(data, {
                        totalCount: res.totalCount,
                    });
-                   deferred.resolve(window.subData)
+                  // deferred.resolve(window.subData)
                    
                },
                error: function () {
@@ -846,372 +506,46 @@
                 caption: 'Company Names',
                 dataField:"company_name",
                 cellTemplate:(container, options) => {
-                    //console.log(options)
-                    var company_names = JSON.parse(options.data.company_name);
-                    var html = ``;
-                    $.each(company_names, (i) => {
-                        html += `<span>${company_names[i].company_name} (${company_names[i].company_code})</span>`;
-                    });
-                    container.append(html)
+                    container.append(options.data.company_name)
                 }
+           },
+            {
+                caption: 'Department',
+                dataField:"department",
             },
             {
-                caption: 'Plant Names',
-                dataField:"plant_name",
-                cellTemplate:(container, options) => {
-                    //console.log(options)
-                    var plant = JSON.parse(options.data.plant_name);
-                    var html = ``;
-                    $.each(plant, (i) => {
-                        html += `<span>${plant[i].plant_name} (${plant[i].plant_code})</span>`;
-                    });
-                    container.append(html)
-                }
-            },
-            {
-                caption: 'Storage Location',
-                dataField:"storage_location",
-                cellTemplate:(container, options) => {
-                    //console.log(options)
-                    var storage = JSON.parse(options.data.storage_location);
-                    var html = ``;
-                    $.each(storage, (i) => {
-                        html += `<span>${storage[i].storage_description} (${storage[i].storage_code})</span>`;
-                    });
-                    container.append(html)
-                }
-            },
-            {
-                caption: 'Business Area',
-                dataField:"business_area",
-                cellTemplate:(container, options) => {
-                    //console.log(options)
-                    var business = JSON.parse(options.data.business_area);
-                    var html = ``;
-                    $.each(business, (i) => {
-                        html += `<span>${business[i].business_name} (${business[i].business_code})</span>`;
-                    });
-                    container.append(html)
-                }
-            },
-            {
-                caption: 'Created At',
+                caption: 'Request Date',
                 dataField:"created_at",
-                // cellTemplate:(container, options) => {
-                //     //console.log(options)
-                //     var business = JSON.parse(options.data.business_area);
-                //     var html = ``;
-                //     $.each(business, (i) => {
-                //         html += `<span>${business[i].business_name} (${business[i].business_code})</span>`;
-                //     });
-                //     container.append(html)
-                // }
             },
-           
-                           
-            ],
-            masterDetail: {
-                enabled: true,
-                template: function(container, options) {
-                    $("<div>")
-                        .dxDataGrid({
-                            showBorders: true,
-                            allowColumnResizing: true,
-                            paging: false,
-                            scrolling: {
-                                mode: "virtual"
-                            },
-                            columnChooser: {
-                                enabled: true,
-                                mode: "select" // or "select"
-                            },
-                            columns: [
-                                {
-                                caption: 'Module',
-                                dataField:"module",
-                                cellTemplate:(container, options) => {
-                                    //console.log(options.data.module)
-                                    var modules = JSON.parse(options.data.module);
-                                    console.log(modules)
-                                    var html = ``;
-                                    html += `<span class='badge badge-primary'>${modules.name}</span>`;
-                                    container.append(html)
-                                }
-                            },
-                            {
-                                caption: 'TCode',
-                                dataField:"tcode",
-                                cellTemplate:(container, options) => {
-                                    //console.log(options.data.module)
-                                    var tcode = JSON.parse(options.data.tcode);
-                                    console.log(tcode)
-                                    var html = ``;
-                                    $.each(tcode, (i) => {
-                                        html += `<span class='badge badge-primary'>${tcode.description} (${tcode.t_code})</span>`;
-                                    })
-                                   
-                                    container.append(html)
-                                }
-                            },
-                            {
-                                caption: 'Actions',
-                                dataField:"action",
-                                cellTemplate:(container, options) => {
-                                    //console.log(options.data.module)
-                                    var action = JSON.parse(options.data.action);
-                                    console.log(action)
-                                    var html = ``;
-                                    $.each(action, (i) => {
-                                        html += `<span class='badge badge-primary'>${action[i].name}</span> `;
-                                    })
-                                   
-                                    container.append(html)
-                                }
-                            },
-                            {
-                                caption: 'Status',
-                                dataField:"status",
-                                cellTemplate:(container, options) => {
-                                    //console.log(options.data.module)
-                                    var status = JSON.parse(options.data.status);
-                                    var status_logs = options.data.req_log;
-                                    var created_at = options.data.created_at;
-                                    var req_id = options.data.id;
-                                    console.log('req ud' +req_id)
-                                    var html = ``;
-                                    html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs}, ${req_id})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
-                                    container.append(html)
-                                }
-                            },
-                            ],
-                            dataSource: new DevExpress.data.DataSource({
-                                store: new DevExpress.data.ArrayStore({
-                                    key: "request_id",
-                                    data: window.subData
-                                }),
-                                 filter: ["request_id", "=", options.key]
-                            })
-                        }).appendTo(container);
+            {
+                caption:"View Status",
+                dataField:"status",
+                cellTemplate:(container, options) => {
+                    //console.log(options.data.module)
+                    var status = JSON.parse(options.data.status);
+                    var status_logs = options.data.req_log;
+                    var created_at = options.data.created_at;
+                    var req_id = options.data.id;
+                    console.log('req ud' +req_id)
+
+                    var html = ``;
+                    
+                    html = `<a href='javascript:void(0)' onClick='loadStatusModal(${status}, "${created_at}", ${status_logs}, ${req_id}, ${JSON.stringify(options.data)})' class='btn btn-warning p-1' style='font-size:14px'><i class='fas fa-eye'></i> View</a>`;
+                    container.append(html)
                 }
-            }
+            },         
+       ]
   });
     
 }
 
-       
-function stepValidation(step){
-            let flag = true
-            switch(step) {
-                case 1:
-                var company = $("#company_name").val();
-                var plant = $("#plant_id").val();
-                var storage = $("#storage_id").val();
-                var business = $("#business_location").val();
-
-                if(company.length == 0) {
-                    toastr.error('Company Name is mandatory');
-                    flag = false
-                }
-                break;
-                case 2:
-                    var role = $("#role").val();
-                    // if(role.length == 0) {
-                    //     toastr.error('Role must be selected');
-                    //     flag = false
-                    // }
-                break;
-                case 3:
-                var sales = $("#sales_org").val();
-                var purchase = $("#purchase_org").val();
-                if(purchase.length == 0 && sales.length == 0) {
-                    toastr.error('Either purchase / sales input must be filled to continue');
-                    flag = false
-                }
-                if(purchase.length>0) {
-                    var action = $("input[name='action_type']:checked").val();
-                    if(!action) {
-                        toastr.error('Provide the actions for PO to continue');
-                        flag = false
-                    }
-                    console.log(action)
-                    if(action === 'cr1' || action === 'r') {
-                        $("#po_release").parent().removeClass('d-none');
-                    } else {
-                        console.log('donone')
-                        $("#po_release").parent().addClass('d-none');
-                    }
-                }
-                populateStep3(sales,purchase);
-                break;
-                case 4:
-                var sales = $("#sales_org").val();
-                var purchase = $("#purchase_org").val();
-                if(sales.length>0) {
-                    var division = $("#division").val();
-                    var distribution = $("#distibution_channel").val();
-                    var so = $("#sales_office").val();
-                    if(division.length == 0 && distribution.length == 0 && so.length == 0) {
-                        toastr.error('Either one of all inputs must be filled to continue');
-                        flag = false
-                    }
-                }
-                if(purchase.length>0) {
-
-                    var po = $("#po_release").val();
-                    var action = $("input[name='action_type']:checked").val();
-                    if(action) {
-                        if(action == 'cr1' || action == 'r') {
-                            if(po.length == 0) {
-                                toastr.error('Po Release must be filled');
-                                flag = false
-                            }
-                        }
-                    }
-                    
-                }
-                
-                loadTcodes();
-                break;
-                case 5:
-                var data = tree.getSelected();
-                if(data == '') {
-                    toastr.error('You must select atleast one tcode to continue')
-                    return false
-                }
-                loadReviewSection();
-                break;
-                case 6:
-
-                break;
-
-            }
-
-            return flag;
-            
-        }
-
-function loadReviewSection(){
-
-    var data = tree.getSelected();
-    var formData = $("#msform").serializeArray();
-    var finalArray = [];
-    console.log('data')
-    console.log(data)
-   
-    $.each(data, (i) => {
-        finalArray[i] = {
-            moduleset : data[i].addional
-        }
-    });
-    formData.push({name:'module', value: JSON.stringify(finalArray)});
-    console.log(formData)
-    reviewCall(formData)
-}
-
-/** final submit of the form with tcodes */
-$("#finalSubmit1").on('click', (e) => {
-
-e.preventDefault();
-//console.log(tree.getSelected());
-var data = tree.getSelected();
-var formData = $("#msform").serializeArray();
-var finalArray = [];
-
-$.each(data, (i) => {
-    finalArray[i] = {
-        moduleset : data[i].addional
-    }
-});
-formData.push({name:'module', value: JSON.stringify(finalArray)});
-
-Swal.fire({ 
-    title: 'Do you want to submit the request?',
-    showDenyButton: true,
-    showCancelButton: true,
-    confirmButtonText: `Save`,
-    denyButtonText: `Don't save`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire('Saved!', '', 'success')
-            finalCall(formData);
-            return true;
-        } else if (result.isDenied) {
-            Swal.fire('Changes are not saved', '', 'info')
-            return false;
-        }
-});
-        
-
-});
-
-function finalCall(fdata) {
-    
-    customLoader(1);
-
-    $.ajax({
-                url:"{{ route('save.sap.request') }}",
-                type:"POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                data:fdata,
-                error:(r) => {
-                    console.log('error');
-                    toastr.error('Something went wrong');
-                    console.log(r);
-                    customLoader(0);
-                },
-                success: (r) => {
-                    console.log(r)
-                    if(r.message == 'success') {
-                        toastr.success('Your Request has been saved successfully');
-                        customLoader(0);
-                        $("#msform")[0].reset();
-                        $("#requestModal").modal('hide');
-                        fetch_data();
-                    } else {
-                        customLoader(0);
-                        toastr.error('Something went wrong');
-                    }
-                    
-                }
-            })
-}
-
-function reviewCall(fdata) {
-$.ajax({
-                url:"{{ route('review.sap.request') }}",
-                type:"GET",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                data:fdata,
-                error:(r) => {
-                    console.log('error');
-                    toastr.error('Something went wrong');
-                    console.log(r);
-                   
-                },
-                success: (r) => {
-                   console.log('got data');
-                   console.log(r);
-                   $("#review_selections").html(r.data);
-                    
-                }
-            })
-
-    setTimeout(function(){ scrollTable() }, 2000);
-}
-
-
-
 function fetchStages(request_id, logs, created_at) {
 
-var url = "{{ route('fetch.stages') }}";
-// initial stage
-var stages = [0]
+    var url = "{{ route('fetch.stages') }}";
+    // initial stage
+    var stages = [0]
 
-$.ajax({
+    $.ajax({
     url: url,
     type: 'GET',
     headers: {
@@ -1243,170 +577,125 @@ $.ajax({
 
   return true
 }
-function loadStatusModal(status,created_at, logs, request_id) {
 
-fetchStages(request_id, logs, created_at, status);
+function loadStatusModal(status,created_at, logs, request_id, alldata) {
 
+    var requestID = alldata.request_id;
+    
+    $("#fetchRequestID").text(requestID);
+    var html_table = `<table class='table table-bordered'>
+        <thead>
+            <th>Plant Code</th>
+            <th>SO</th>
+            <th>PO</th>
+            <th>Module</th>
+            <th>Tcode</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>${alldata.plant_name}</td>
+            <td>${alldata.sales_org}</td> 
+            <td>${alldata.purchase_org}</td>
+            <td>${alldata.module}</td>
+            <td>${alldata.tcode}</td>
+            <td>${alldata.action}</td>  
+        </tr>            
+    `;
+    html_table += "</tbody></table>";
+    $("#renderDetails").html(html_table);
+    fetchStages(request_id, logs, created_at, status);
 }
 
-
 function renderApprovalStages(stages, logs, created_at, request_id, IS_RM, IS_MH) {
-var pointer = 0;
-var html = '<section> <div class="row justify-content-center orderstatus-container">  <div class="medium-12 columns">';
-//console.log(stages)
-$.each(stages, (i) => {
+    var pointer = 0;
+    var html = '<section> <div class="row justify-content-center orderstatus-container">  <div class="medium-12 columns">';
+    //console.log(stages)
+    $.each(stages, (i) => {
 
-  if(stages[i] == 0) {
+    if(stages[i] == 0) {
 
-    html += `<div class="orderstatus done">
-                <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
-                <div class="orderstatus-text">
-                  <time>${created_at}</time>
-                  <p>Your Request was placed</p>
-                </div>
-              </div>`;
+        html += `<div class="orderstatus done">
+                    <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
+                    <div class="orderstatus-text">
+                    <time>${created_at}</time>
+                    <p>Your Request was placed</p>
+                    </div>
+                </div>`;
 
-  } else {
+    } else {
 
-    let approval_stages = {!!  json_encode($approval_stages) !!}
+        let approval_stages = {!!  json_encode($approval_stages) !!}
 
-    let datetime = "N/A";
+        let datetime = "N/A";
 
-    let addClass = "";
+        let addClass = "";
 
-    let status_text = "Not Approved";
+        let status_text = "Not Approved";
 
-    pointer = i - 1;
+        pointer = i - 1;
 
-    if(logs[i-1] !== undefined) {
+        if(logs[i-1] !== undefined) {
 
-      //console.log('log found')
-      if(stages[i] == logs[pointer].approval_stage) {
+        //console.log('log found')
+        if(stages[i] == logs[pointer].approval_stage) {
 
-        //console.log('log found approval stage')
-          addClass = `done`;
+            //console.log('log found approval stage')
+            addClass = `done`;
 
-          datetime = logs[pointer].created_at;
+            datetime = logs[pointer].created_at;
 
-          $.each(approval_stages, (x) => {
-            if(approval_stages[x] !== undefined) {
-              if(logs[pointer].approval_stage == approval_stages[x].id) {
-                console.log(logs[pointer])
-                if(logs[pointer].status == 1) {
-                  status_text = `Approved By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
-                } else {
-                    addClass = `rejected`;
-                  status_text = `Rejected By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
+            $.each(approval_stages, (x) => {
+                if(approval_stages[x] !== undefined) {
+                if(logs[pointer].approval_stage == approval_stages[x].id) {
+                    console.log(logs[pointer])
+                    if(logs[pointer].status == 1) {
+                    status_text = `Approved By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
+                    } else {
+                        addClass = `rejected`;
+                    status_text = `Rejected By <br> ${logs[pointer].created_by} (${approval_stages[x].approval_type})`;
+                    }
+
+                    status_text += `<br>Remarks: `+logs[pointer].remarks;
+                    
+                }
+                }
+            });
+        } 
+
+        } 
+        else {
+
+                if(stages[i] == approval_stages[stages[i] - 1].id) {
+
+                    status_text = `Pending Approval from <br> (${approval_stages[stages[i] - 1].approval_type})`;          
+                    
                 }
 
-                status_text += `<br>Remarks: `+logs[pointer].remarks;
-                
-              }
-            }
-          });
-      } 
+        }
 
-      } 
-      else {
-
-              if(stages[i] == approval_stages[stages[i] - 1].id) {
-
-                status_text = `Pending Approval from <br> (${approval_stages[stages[i] - 1].approval_type})`;          
-                 
-              }
+        html += `<div class="orderstatus ${addClass}">
+                    <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
+                    <div class="orderstatus-text">
+                        <time>${datetime}</time>
+                        <p>${status_text}</p>
+                    </div>
+                    </div>`;
 
     }
 
-    html += `<div class="orderstatus ${addClass}">
-                  <div class="orderstatus-check"><span class="orderstatus-number">${i+1}</span></div>
-                  <div class="orderstatus-text">
-                    <time>${datetime}</time>
-                    <p>${status_text}</p>
-                  </div>
-                </div>`;
+    });
 
-  }
-
-});
-
-  html += "</div></div></section>";
+    html += "</div></div></section>";
 
 
-  $("#statusModal").modal('show');
-  $("#drop_status").html(html)
+    $("#statusModal").modal('show');
+    $("#drop_status").html(html)
 
 
 }
 
 
+</script>
 
-       
-    
-    </script>
-    <script type="text/javascript">
-
-        $('.search-icon').on('click',function () {
-            $('.search-body').removeClass('d-none');
-        });
-        $('.search-body .close').on('click',function () {
-            $('.search-body').addClass('d-none');
-        });
-
-    </script>
-    <script type="text/javascript">
-        function scrollTable(){
-            const slider = document.querySelector(".scrollable-table");
-            let isDown = false;
-            let startX;
-            let scrollLeft;
-
-            slider.addEventListener("mousedown", e => {
-              isDown = true;
-              slider.classList.add("active");
-              startX = e.pageX - slider.offsetLeft;
-              scrollLeft = slider.scrollLeft;
-            });
-            slider.addEventListener("mouseleave", () => {
-              isDown = false;
-              slider.classList.remove("active");
-            });
-            slider.addEventListener("mouseup", () => {
-              isDown = false;
-              slider.classList.remove("active");
-            });
-            slider.addEventListener("mousemove", e => {
-              if (!isDown) return;
-              e.preventDefault();
-              const x = e.pageX - slider.offsetLeft;
-              const walk = x - startX;
-              slider.scrollLeft = scrollLeft - walk;
-            });
-        }
-            const slider = document.querySelector(".scrollable-table");
-            let isDown = false;
-            let startX;
-            let scrollLeft;
-
-            slider.addEventListener("mousedown", e => {
-              isDown = true;
-              slider.classList.add("active");
-              startX = e.pageX - slider.offsetLeft;
-              scrollLeft = slider.scrollLeft;
-            });
-            slider.addEventListener("mouseleave", () => {
-              isDown = false;
-              slider.classList.remove("active");
-            });
-            slider.addEventListener("mouseup", () => {
-              isDown = false;
-              slider.classList.remove("active");
-            });
-            slider.addEventListener("mousemove", e => {
-              if (!isDown) return;
-              e.preventDefault();
-              const x = e.pageX - slider.offsetLeft;
-              const walk = x - startX;
-              slider.scrollLeft = scrollLeft - walk;
-            });
-    </script>
 @stop

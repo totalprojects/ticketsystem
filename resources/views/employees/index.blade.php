@@ -59,6 +59,10 @@
                         <input type="text" name="contact_no" placeholder="Mobile No" class="form-control">
                     </div>
                     <div class="col-lg-4 pt-2">
+                        <label for="contact_no">Sap Code <span class="text-red">*</span></label>
+                        <input type="text" name="sap_code" placeholder="SAP Code" class="form-control">
+                    </div>
+                    <div class="col-lg-4 pt-2">
                         <label for="state">State <span class="text-red">*</span></label>
                         <select name="state" class="states form-control select2bs4" data-placeholder="Select State" id="states">
                             <option value=""></option>
@@ -187,6 +191,10 @@
                     <div class="col-lg-4 pt-2">
                         <label for="contact_no">Contact No <span class="text-red">*</span></label>
                         <input type="text" name="contact_no1" id="contact_no1" placeholder="Mobile No" class="form-control">
+                    </div>
+                    <div class="col-lg-4 pt-2">
+                        <label for="contact_no">SAP Code <span class="text-red">*</span></label>
+                        <input type="text" name="sap_code1" id="sap_code1" placeholder="Mobile No" class="form-control">
                     </div>
                     <div class="col-lg-4 pt-2">
                         <label for="state">State <span class="text-red">*</span></label>
@@ -344,7 +352,7 @@
             {
                 dataField: "id",
                 caption: 'Id',
-                width:50
+                width:65
             },
             {
                 caption: 'Name',
@@ -364,6 +372,10 @@
             {
                 dataField:"contact_no",
                 caption:"Contact No"
+            },
+            {
+                dataField:"sap_code",
+                caption:"SAP Code"
             },
             {
                 dataField:"state.state_name",
@@ -437,6 +449,7 @@
                         $("#companies1").val(data.company.id).trigger('change');
                         $("#pincode1").val(data.pincode);
                         $("#address1").val(data.address);
+                        $("#sap_code1").val(data.sap_code);
                        
                         setTimeout(() => {
                         

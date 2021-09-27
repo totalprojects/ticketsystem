@@ -612,7 +612,12 @@ div#review_selections{
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
-
+div#review_selections table tbody tr:nth-child(odd) {
+    background: #fffdf2;
+}
+.sap-req-form .select2-container .select2-search--inline {
+    opacity: 0;
+}
 
     /** Approval Status */
     .orderstatus {

@@ -9,9 +9,58 @@
 @section('content')
     <style>
         .menu_bar{
-            list-style-type: none;
+            list-style-type: none !important;
             display: inline-block !important;
 
+        }
+        ul, li {
+            list-style:none;
+            margin: 0;
+            padding: 0;
+        }
+        ul li {
+            list-style:none;
+        }
+        ul ul li {
+            margin-left:15px !important;
+        }
+        .checkboxes-wrapper label {
+            position: relative;
+            bottom: 4px;
+        }
+        .card-header {
+            background-color: #255e61;
+            color: #fff;
+            box-shadow: 0 0 5px rgb(0 0 0 / 33%);
+        }
+
+        #roles-block, #permissions-block, #menus-block{
+            border: 1px solid #5b8284;
+            padding: 5px;
+            margin-bottom: 5px;
+            box-shadow: 0 0 5px rgb(0 0 0 / 33%);
+        }
+        #roles-block h5 {
+            background-color: #255e61;
+            padding: 5px !important;
+            box-shadow: 0 0 5px rgb(0 0 0 / 33%);
+            color: #fff;
+        }
+        #permissions-block h5 {
+            background-color: #255e61;
+            padding: 5px !important;
+            box-shadow: 0 0 5px rgb(0 0 0 / 33%);
+            color: #fff;
+        }
+        #menus-block h5 {
+            padding: 5px !important;
+            background-color: #255e61;
+            box-shadow: 0 0 5px rgb(0 0 0 / 33%);
+            color: #fff;
+        }
+        .wrapper p{
+            margin:0;
+            padding:0;
         }
     </style>
     <div class="tab-content p-1">
@@ -42,10 +91,8 @@
         <div class="modal-body">
           <div id="user-details-block"></div>
           <div id="roles-block"></div>
-
           <div id="permissions-block"></div>
-
-        <div id="menus-block" @if(\Auth::user()->id !== 1 ) class="d-none" @endif></div>
+          <div id="menus-block" @if(\Auth::user()->id !== 1 ) class="d-none" @endif></div>
           
         </div>
         <div class="modal-footer">
@@ -61,7 +108,7 @@
     <div class="modal-dialog modal-md">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Menu Permissions <span id='for'></span></h5>
+          <h5 class="modal-title" id="exampleModalLabel">Access to pages <span id='for'></span></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -167,7 +214,7 @@
             },
             {
                 dataField:"permissions",
-                caption:"Permissions",
+                caption:"Module Permissions",
                 allowFiltering: false,
                 cellTemplate: function (container, options) {
                     var data = options.data;
@@ -175,18 +222,9 @@
                     var permissions = JSON.parse(data.his_permissions);
                     var html = '';
                     var forName = data.name;
-                    //console.log(forName)
-                   // html =  html.str.replace(/,\s*$/, "");
+                   
                     var html = `<a class='badge badge-primary text-white' onclick='loadPermissions(${JSON.stringify(permissions)}, ${JSON.stringify(forName)})'>View</a>`;
      
-                   // container.append(html)
-
-                    // if(permissions.length>0) {
-                    //    $.each(permissions, (i) => {
-                    //         html += `<span class='badge badge-primary'>${permissions[i].name}</span>&nbsp;`;
-                    //    })
-                    //}
-
                     container.append(html)
 
 
@@ -194,7 +232,7 @@
             },
             {
                 dataField:"his_menu",
-                caption:"Menus",
+                caption:"Access",
                 allowFiltering: false,
                 visible:(USERID==1) ? true : false,
                 cellTemplate: function (container, options) {
@@ -245,7 +283,7 @@
                         var his_roles = JSON.parse(data.his_roles);
                         var roles = data.all_roles;
                         // console.log(his_permissions)
-                        var html_form = `<p><strong>User Roles</strong></p><form method='post' id='user-role-frm' method='post'>
+                        var html_form = `<h5><strong>User Roles</strong></h5><form method='post' id='user-role-frm' method='post'>
                         @csrf
                         <select name='roles' class='form-control select2bs4'>
                         `;
@@ -264,31 +302,55 @@
                             html_form += `<option value='${roles[i].id}' ${is_checked}>${roles[i].name}</option>`;
                         })
                         //console.log(html_form);
-                        html_form += `</select><hr><input type='hidden' id='user_id_r' name='user_id_p' value="${data.id}"><button type='submit' id='role-btn' class='btn btn-primary'>Update Roles</button></form><br>`;
+                        
+                        html_form += `</select><hr><input type='hidden' id='user_id_r' name='user_id_p' value="${data.id}">
+                        <p align='right'><button type='submit' id='role-btn' class='btn btn-primary'>Update Roles</button></p></form><br>`;
                         $("#roles-block").html(html_form);
+                        // permissions with parent system module info
 
-                        var html_form = `<p><strong>User Permissions</strong></p><form method='post' id='user-permission-frm' method='post'>
+                        
+                        var html_form = `<h5><strong>User Permissions</strong></h5><form method='post' id='user-permission-frm' method='post'>
+                              <div class='wrapper'> 
                         @csrf
                         `;
                         var is_checked;
                         var flag = false;
-                        $.each(permissions, (i) => {
-                            is_checked = ''
-                            is_checked = ''
-                           flag =  his_permissions.findIndex(function (his_permissions) {
-                                return his_permissions.id === permissions[i].id;
-                            });
-                            if(flag!= -1) {
-                                is_checked = 'checked'
-                            }
-                            flag = false
-                            html_form += `<input type='checkbox' name='permissions' ${is_checked} value='${permissions[i].id}'> ${permissions[i].name} &nbsp;`;
-                        })
+                        $.each(permissions, (j) => {
+
+
+                            html_form += `<div class="card-header p-1 mb-2 mt-2">
+                                             <label>${permissions[j].system_type}</label>
+                                          </div><div class='checkboxes-wrapper row shadow p-1 mt-1 mb-1'>`;
+
+                            let pp = permissions[j].permissions;
+                            // permissions
+                            $.each(pp, (i) => {
+                                is_checked = ''
+                                is_checked = ''
+                                flag =  his_permissions.findIndex(function (his_permissions) {
+                                        return his_permissions.id === pp[i].id;
+                                });
+                                if(flag!= -1) {
+                                    is_checked = 'checked'
+                                }
+                                flag = false
+
+                                html_form += `<div class='col-lg-3'><input type='checkbox' name='permissions' ${is_checked} value='${pp[i].id}'> <label>${pp[i].name}</label>&nbsp; </div>`;
+                            })
+
+                            html_form += `</div>`;
+                        });
+                    
                         //console.log(html_form);
-                        html_form += `<hr><input type='hidden' id='user_id_p' name='user_id_p' value="${data.id}"><button type='submit' id='permission-btn' class='btn btn-primary'>Update Permissions</button></form><br>`;
+                        html_form += `</div><hr><input type='hidden' id='user_id_p' name='user_id_p' value="${data.id}">
+                        <p align='right'><button type='submit' id='permission-btn' class='btn btn-primary'>Update Permissions</button></p></form><br>`;
                         $("#permissions-block").html(html_form);
 
-                        html_form = `<p><strong>User Menus</strong></p><form id='user-menu-mapping-frm' method='post'>
+
+
+
+
+                        html_form = `<h5><strong>User Menus</strong></h5><form id='user-menu-mapping-frm' method='post'>
                         @csrf
                         <ul class='menu_bar'>
                         `;
@@ -312,7 +374,8 @@
                            
                         })
                         //console.log(html_form);
-                        html_form += `<hr><input type='hidden' id='user_id_m' name='user_id_m' value="${data.id}"> <button type='submit' id='menu-btn' class='btn btn-primary'>Update Menu Access</button></ul></form><hr>`;
+                        html_form += `<hr><input type='hidden' id='user_id_m' name='user_id_m' value="${data.id}">
+                        <p align='right'><button type='submit' id='menu-btn' class='btn btn-primary'>Update Menu Access</button></p></ul></form><hr>`;
                         $("#menus-block").html(html_form);
                     })
                     //container.append(html)
@@ -456,19 +519,21 @@
     function loadPermissions(permissions, forName) {
         var html = `No permissions set`;
         if(permissions.length>0) {
-            html = `<div class='row'>`
+            html = `<div class='row'><div class='card-header col-lg-12 mb-2 p-1'>SAP</div>`
             $.each(permissions, (i) => {
-                html += `<div class='col-lg-4 text-center mb-2'><span class='badge badge-primary' style='min-width:150px !important;'> ${permissions[i].name}</span></div>`;
+                html += `<div class='col-lg-4 text-center mb-2'><span class='badge badge-warning' style='min-width:150px !important;'> ${permissions[i].name}</span></div>`;
             })
 
-            html += `</div>`;
+            html += `<div class='card-header col-lg-12 mb-2 p-1'>CRM</div>
+            <div class='card-header col-lg-12 mb-2 p-1'>Email</div>
+            <div class='card-header col-lg-12 mb-2 p-1'>System</div></div>`;
         }
         $("#for").html(' for '+forName);
         $("#render-permissions").html(html)
 
         $("#showpermissions").modal('show');
     }
-    
+
     
      </script>
 @stop

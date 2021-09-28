@@ -42,7 +42,8 @@ class UserController extends Controller {
             $Q->with('menu');
         }])->selectRaw('*, DATE(created_at) as created')->get();
         $totalCount      = count($modeled);
-        $all_permissions = Permission::all();
+        $all_permissions = \SystemModules::with('permissions')->get();
+        //return $all_permissions;
         $all_roles       = Role::all();
         $all_menus       = MenuMaster::orderBy('menu_order', 'asc')->get();
 

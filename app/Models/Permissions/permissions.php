@@ -35,4 +35,7 @@ class permissions extends Model {
         return $this->hasMany(ModuleApprovalStages::class, 'module_id', 'id')->orderBy('approval_matrix_id', 'asc');
     }
 
+    public function parent_module() {
+        return $this->belongsTo(SystemModules::class, 'id', 'type');
+    }
 }

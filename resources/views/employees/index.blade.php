@@ -352,10 +352,12 @@
             {
                 dataField: "id",
                 caption: 'Id',
-                width:65
+                width:65,
+                visible:false,
             },
             {
                 caption: 'Name',
+                fixed:true,
                 dataField:"first_name",
                 cellTemplate:(container, options) => {
                     console.log(options)
@@ -375,7 +377,8 @@
             },
             {
                 dataField:"sap_code",
-                caption:"SAP Code"
+                caption:"SAP Code",
+                width:100,
             },
             {
                 dataField:"state.state_name",
@@ -396,7 +399,7 @@
             {
                 dataField:"report_to.report_employee.first_name",
                 caption:"Report To",
-                width:90,
+                width:100,
                 cellTemplate:(container, options) => {
                     console.log(options)
                     var name = `-`;
@@ -419,16 +422,17 @@
             {
                 dataField: "created_at",
                 caption: 'Created At',
-                width:90,
                 dataType: "date",
+                width:100,
                 format: "d/M/yyyy"
                
             },
             {
                 allowFiltering: false,
                 dataField: "Action",
+                fixed:true,
+                fixedPosition: "right",
                 caption: 'Action',
-                width: 75,
                 visible: EDITABLE,
                 alignment: 'left',
                 cssClass: '__Action',
@@ -452,30 +456,49 @@
                         $("#sap_code1").val(data.sap_code);
                        
                         setTimeout(() => {
-                        
                             $("#districts1").val(data.district_id).trigger('change');
                             $(".departments").val(data.departments.id).trigger('change');
                             setTimeout(() => {
-                                
                                 if(data.report_to.report_employee !== null) {
                                     $("#reporting_tos1").val(data.report_to.report_employee.id).trigger('change');
                                 }
                             
-                        }, 1000);
+                            }, 1000);
                         },1000);
-                       
-                        
-
-
-                        console.log(data)
+                    
                     })
                     //container.append(html)
                     return link;
 
                 }
             },
+            {
+                allowFiltering: false,
+                dataField: "Action",
+                caption: 'Permissions',
+                fixed:true,
+                width:100,
+                fixedPosition: "right",
+                visible: EDITABLE,
+                alignment: 'center',
+                cssClass: '__Action',
+                cellTemplate: function (container, options) {
+                    var data = options.data;
+                   
+                        var link = $(`<a class="permission_info" href="javascript:void(0)" title="edit">`).html("<i class='fas fa-eye'></i> View")
+                        .attr("href", "javascript:void(0)")
+                    
+                    link.on("click", function () {
 
+                        $("#permissions-modal").modal('show');
+                        
+                    
+                    })
+                    //container.append(html)
+                    return link;
 
+                }
+            },
         ]
     })
     }

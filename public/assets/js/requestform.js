@@ -269,11 +269,10 @@ function stepValidation(step){
                 toastr.error('Provide the actions for PO to continue');
                 flag = false
             }
-            console.log(action)
             if(action === 'cr1' || action === 'r') {
                 $("#po_release").parent().removeClass('d-none');
             } else {
-                console.log('donone')
+               
                 $("#po_release").parent().addClass('d-none');
             }
         }
@@ -305,7 +304,6 @@ function stepValidation(step){
             }
             
         }
-        
         loadTcodes();
         break;
         case 5:
@@ -330,10 +328,7 @@ function loadReviewSection(){
 
     var data = tree.getSelected();
     var formData = $("#msform").serializeArray();
-    var finalArray = [];
-    console.log('data')
-    console.log(data)
-   
+    var finalArray = [];   
     $.each(data, (i) => {
         finalArray[i] = {
             moduleset : data[i].addional
@@ -373,7 +368,7 @@ $("#finalSubmit1").on('click', (e) => {
         denyButtonText: `Don't save`,
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire('Saved!', '', 'success')
+                //Swal.fire('Saved!', '', 'success')
                 finalCall(formData);
                 return true;
             } else if (result.isDenied) {

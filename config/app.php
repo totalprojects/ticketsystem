@@ -273,6 +273,9 @@ return [
         'MailVariables'      => App\Models\tbl_mail_variable_masters::class,
         'SystemModules'      => App\Models\tbl_system_modules_masters::class,
         'Excel'              => Maatwebsite\Excel\Facades\Excel::class,
+        'AssetTypes'         => App\Models\Assets\tbl_asset_types::class,
+        'AssetsMasters'      => App\Models\Assets\tbl_assets_masters::class,
+        'EmployeeAssets'     => App\Models\Assets\tbl_employee_assets_masters::class
 
     ]
 

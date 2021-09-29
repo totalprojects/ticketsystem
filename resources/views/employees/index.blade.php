@@ -7,7 +7,16 @@
 @stop
 
 @section('content')
-    
+    <style>
+        .no-assets{
+            height: 30vh;
+            background-color: #cccc;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+        }
+    </style>
     <div class="tab-content p-1">
         <div class="tab-pane active dx-viewport" id="employees">
            
@@ -263,6 +272,26 @@
       </div>
     </div>
   </div>
+
+
+  <!-- Assets Modal -->
+  <div class="modal fade" id="asset-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Employee Assets</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="assets_block"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+        </div>
+      </div>
+    </div>
+  </div>
 @stop
 
 @section('css')
@@ -439,7 +468,7 @@
                 cellTemplate: function (container, options) {
                     var data = options.data;
                    
-                        var link = $(`<a class="edit_info" href="javascript:void(0)" title="edit">`).html("<i class='fas fa-cog'></i> Action")
+                        var link = $(`<a class="edit_info" href="javascript:void(0)" title="edit">`).html("<i class='fas fa-edit'></i> Edit")
                         .attr("href", "javascript:void(0)")
                     
                     link.on("click", function () {
@@ -475,7 +504,7 @@
             {
                 allowFiltering: false,
                 dataField: "Action",
-                caption: 'Permissions',
+                caption: 'Assets',
                 fixed:true,
                 width:100,
                 fixedPosition: "right",
@@ -485,12 +514,43 @@
                 cellTemplate: function (container, options) {
                     var data = options.data;
                    
-                        var link = $(`<a class="permission_info" href="javascript:void(0)" title="edit">`).html("<i class='fas fa-eye'></i> View")
+                        var link = $(`<a class="permission_info" href="javascript:void(0)" title="View Assets">`).html("<i class='fas fa-eye'></i> View")
                         .attr("href", "javascript:void(0)")
                     
                     link.on("click", function () {
+                        var assetsInfo = options.data.assets;
+                        var assetHTML = ``;
 
-                        $("#permissions-modal").modal('show');
+                        if(assetsInfo.length === 0) {
+                            assetHTML += `<h5 class='no-assets text-center'>No assets found</h5>`
+                        } else {
+
+                            assetHTML += `<table class='table table-bordered'><thead>
+                                <th>Serial No</th>
+                                <th>Asset Type</th>
+                                <th>Qty</th>
+                                <th>Asset Company</th>
+                                <th>Issue Date</th>
+                            </thead>
+                            <tbody>`;
+
+                            $.each(assetsInfo, (i) => {
+                                assetHTML += `<tr>
+                                    <td>${assetsInfo[i].asset.serial_number}</td>
+                                    <td>${assetsInfo[i].asset.type.asset_type}</td>
+                                    <td>1</td>
+                                    <td>${assetsInfo[i].asset.company}</td>
+                                    <td>${assetsInfo[i].created_at}</td>
+                                </tr>`;
+                            });
+
+                            assetHTML += `</tbody></table>`;
+
+                        }
+
+                        
+                        $("#assets_block").html(assetHTML);
+                        $("#asset-modal").modal('show');
                         
                     
                     })

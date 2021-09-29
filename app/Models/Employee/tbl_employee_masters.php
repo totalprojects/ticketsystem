@@ -9,6 +9,7 @@ use DistrictMasters;
 use StateMasters;
 use CompanyMasters;
 use DepartmentMasters;
+use EmployeeAssets;
 
 class tbl_employee_masters extends Model {
 
@@ -55,5 +56,10 @@ class tbl_employee_masters extends Model {
     public function departments() {
 
         return $this->belongsTo(DepartmentMasters::class, 'department_id', 'id');
+    }
+
+    /** Assets */
+    public function assets() {
+        return $this->hasMany(EmployeeAssets::class, 'user_id', 'id');
     }
 }

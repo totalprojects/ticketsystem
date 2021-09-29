@@ -49,7 +49,7 @@ class EmployeeController extends Controller {
     // fetch employees
     public function fetchEmployees(Request $request) {
 
-        $employee_model = Employees::with('departments', 'state', 'district', 'company', 'report_to.report_employee')->get();
+        $employee_model = Employees::with('departments', 'state', 'district', 'company', 'report_to.report_employee', 'assets.asset.type')->get();
 
         $dataArray = [];
 

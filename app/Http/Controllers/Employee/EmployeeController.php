@@ -210,13 +210,13 @@ class EmployeeController extends Controller {
                 ]);
                 
 
-                $user->syncRoles($request->role1);
-                $permissions  = RolePermissions::where('role_id', $request->role1)->get();
-                $permissions1 = [];
-                foreach ($permissions as $permission) {
-                    $permissions1[] = $permission->permission_id;
-                }
-                $user->syncPermissions($permissions1);
+                //$user->syncRoles($request->role1);
+                // $permissions  = RolePermissions::where('role_id', $request->role1)->get();
+                // $permissions1 = [];
+                // foreach ($permissions as $permission) {
+                //     $permissions1[] = $permission->permission_id;
+                // }
+                // $user->syncPermissions($permissions1);
 
                 if (!empty($request->reporting_to1)) {
 

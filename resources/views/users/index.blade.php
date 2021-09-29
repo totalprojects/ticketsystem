@@ -15,15 +15,11 @@
         }
         ul, li {
             list-style:none;
-            margin: 0;
-            padding: 0;
         }
         ul li {
             list-style:none;
         }
-        ul ul li {
-            margin-left:15px !important;
-        }
+    
         .checkboxes-wrapper label {
             position: relative;
             bottom: 4px;

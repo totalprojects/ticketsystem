@@ -200,25 +200,15 @@ class EmployeeController extends Controller {
 
                 $employee = Employees::where('id', $request->id1)->update($employeeArray);
 
-                $user = \Users::where('email', $request->email1)->first();
+                $user = \Users::where('email', $request->email1)->get();
                 //return dd($user);
                 $id = $request->id1;
 
-                if (!$user) {
-                    
-                    $user = \Users::create([
-                        'name'        => $request->first_name1 . ' ' . $request->last_name1,
-                        'email'       => $request->email1,
-                        'password'    => \Hash::make('password'),
-                        'employee_id' => $id
-                    ]);
-                } else {
-                    
-                    $update = \Users::where('employee_id', $id)->update([
-                        'name' => $request->first_name1. ' '.$request->last_name1,
-                        'email' => $request->email1
-                    ]);
-                }
+                $update = \Users::where('employee_id', $id)->update([
+                    'name' => $request->first_name1. ' '.$request->last_name1,
+                    'email' => $request->email1
+                ]);
+                
 
                 $user->syncRoles($request->role1);
                 $permissions  = RolePermissions::where('role_id', $request->role1)->get();

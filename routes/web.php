@@ -46,7 +46,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth')->name('home');
+/** Exceptions */
+Route::group(['prefix' => 'app', 'middleware' => ['auth', 'VisitLogs']], function () {
+    /** User Profile */
+    Route::get('/employee/profile/{id}', [EmployeeController::class, 'profile'])->name('employee.profile');
 
+});
 /** All Views */
 Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitLogs']], function () {
 
@@ -98,10 +103,9 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitL
     Route::get('/visits/logs',[LogsController::class, 'visits'])->name('view.page.visits');
     Route::get('/activities/logs',[LogsController::class, 'activities'])->name('view.user.activity.logs');
 
-
     /** Mail Templates */
     Route::get('/mail/templates',[MailTemplateController::class, 'index'])->name('view.mail.templates');
-    
+
 });
 
 /** Ajax Read Calls */

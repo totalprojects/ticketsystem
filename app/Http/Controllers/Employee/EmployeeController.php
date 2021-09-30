@@ -46,6 +46,13 @@ class EmployeeController extends Controller {
         return view('employees.index')->with($data);
     }
 
+    public function profile(Request $request) {
+        
+        $data['page_title'] = "Employee Profile";
+
+        return view('employees.profile.index')->with($data);
+    }
+
     // fetch employees
     public function fetchEmployees(Request $request) {
 

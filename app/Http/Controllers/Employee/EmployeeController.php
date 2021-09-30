@@ -50,7 +50,21 @@ class EmployeeController extends Controller {
         
         $data['page_title'] = "Employee Profile";
 
-        return view('employees.profile.index')->with($data);
+        $id = base64_decode($request->id);
+
+        $empData = Employees::where('id', $id)->with(
+         'departments',
+         'state',
+         'district',
+         'company',
+         'report_to.report_employee',
+         'assets.asset.type',
+         'user.alloted_permissions.permission.allowed_tcodes.tcode',
+         'user.alloted_permissions.permission.allowed_tcodes.access_action_details',
+         'user.alloted_permissions.permission.allowed_tcodes.critical'
+         )->get()->toArray();
+       // return $empData;
+        return view('employees.profile.index')->with($empData);
     }
 
     // fetch employees

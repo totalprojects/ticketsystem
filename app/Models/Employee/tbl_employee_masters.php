@@ -10,6 +10,7 @@ use StateMasters;
 use CompanyMasters;
 use DepartmentMasters;
 use EmployeeAssets;
+use Users;
 
 class tbl_employee_masters extends Model {
 
@@ -61,5 +62,10 @@ class tbl_employee_masters extends Model {
     /** Assets */
     public function assets() {
         return $this->hasMany(EmployeeAssets::class, 'user_id', 'id');
+    }
+
+    /** User */
+    public function user() {
+        return $this->belongsTo(Users::class, 'id', 'employee_id');
     }
 }

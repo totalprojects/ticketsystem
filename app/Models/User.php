@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use MenuMapping;
+use Role;
+use App\Models\Model\model_has_permissions as UserPermissions;
 
 class User extends Authenticatable
 {
@@ -48,5 +50,9 @@ class User extends Authenticatable
     public function assigned_menus() {
 
         return $this->hasMany(MenuMapping::class,'user_id');
+    }
+
+    public function alloted_permissions() {
+        return $this->hasMany(UserPermissions::class, 'model_id', 'id');
     }
 }

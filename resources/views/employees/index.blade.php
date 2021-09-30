@@ -391,7 +391,8 @@
                 cellTemplate:(container, options) => {
                     console.log(options)
                     var name = options.data.first_name+' '+options.data.last_name;
-                    var html = `<a href='${route('employee.profile', options.data.id)}' target='_blank'>${name}</a>`
+                    var id = btoa(options.data.id)
+                    var html = `<a href='${route('employee.profile', id)}' target='_blank'>${name}</a>`
                     container.append(html)
                 }
                

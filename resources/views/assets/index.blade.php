@@ -16,7 +16,7 @@
         <div class="demo-container">
           <div class="top-info">
             <div class="table-heading-custom"><h4 class="right"><i class="fas fa-box"></i> Assets List </h4></div>
-            <button id="add_btn" class='custom-theme-btn d-none'><i class='fa fa-plus'></i> Asset</button>
+            <button id="add_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Asset</button>
           </div>
             
             <div id="assets-list-div" style="height:600px"></div>
@@ -39,9 +39,66 @@
                 <form id="add-frm" method="post">
                     <div class="row">
                         <div class="col-lg-4 pt-2">
-                            <input type="text" name="asset_name" id="asset_name" class="form-control" placeholder="Enter asset name">
-                        </div>                       
+                          
+                                 <label for="permission_name">
+                                    Asset Type
+                                </label> 
+                              <select name="type" id="type" class="form-control select2bs4">
+                                  @foreach($asset_types as $each)
+                                        <option value="{{ $each->id }}">{{ $each->asset_type }}</option>
+                                  @endforeach
+                              </select>
+                        </div>
                         <div class="col-lg-4 pt-2">
+ 
+                             <label for="permission_name">
+                                Asset Description
+                            </label> 
+                           <input type="text" name="description" id="description" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                        
+                                 <label for="permission_name">
+                                    Asset Company
+                                </label> 
+                               <input type="text" name="company" id="company" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                       
+                                 <label for="permission_name">
+                                    Asset Specification
+                                </label> 
+                               <input type="text" name="specs" id="specs" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                          
+                                 <label for="permission_name">
+                                    Serial Number
+                                </label> 
+                               <input type="text" name="sl" id="sl" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                          
+                            <label for="permission_name">
+                              Issue Date
+                           </label> 
+                          <input type="date" name="issue_date" id="issue_date" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                          
+                            <label for="permission_name">
+                              Quantity
+                           </label> 
+                          <input type="number" name="qty" id="qty" class="form-control">
+                        </div>   
+                        <div class="col-lg-4 pt-2">
+                          
+                            <label for="permission_name">
+                              Warrenty Period (In Years)
+                           </label> 
+                          <input type="number" name="warrenty" id="warrenty" class="form-control">
+                        </div>                 
+                        <div class="col-lg-4 pt-2 mt-4">
                             <button class='btn btn-primary' type="submit" id="add-btn" name='add-btn'><i class='fas fa-plus'></i> Add</button>
                         </div>
                     </div>
@@ -71,14 +128,66 @@
                 <form id="update-frm" method="post">
                     <div class="row">
                         <div class="col-lg-4 pt-2">
-                        <input type="hidden" name="easset_id" id="easset_id">
-                             <label for="permission_name">
-                                Asset Name
-                            </label> 
-                           <input type="text" name="easset_name" id="easset_name" class="form-control">
+                            <input type="hidden" name="eid" id="eid">
+                                 <label for="permission_name">
+                                    Asset Type
+                                </label> 
+                              <select name="etype" id="etype" class="form-control select2bs4">
+                                  @foreach($asset_types as $each)
+                                        <option value="{{ $each->id }}">{{ $each->asset_type }}</option>
+                                  @endforeach
+                              </select>
                         </div>
-
-                        <div class="col-lg-4 pt-4">
+                        <div class="col-lg-4 pt-2">
+ 
+                             <label for="permission_name">
+                                Asset Description
+                            </label> 
+                           <input type="text" name="edescription" id="edescription" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                        
+                                 <label for="permission_name">
+                                    Asset Company
+                                </label> 
+                               <input type="text" name="ecompany" id="ecompany" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                       
+                                 <label for="permission_name">
+                                    Asset Specification
+                                </label> 
+                               <input type="text" name="especs" id="especs" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                          
+                                 <label for="permission_name">
+                                    Serial Number
+                                </label> 
+                               <input type="text" name="esl" id="esl" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                          
+                            <label for="permission_name">
+                              Issue Date
+                           </label> 
+                          <input type="date" name="eissue_date" id="eissue_date" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                          
+                            <label for="permission_name">
+                              Quantity
+                           </label> 
+                          <input type="number" name="eqty" id="eqty" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                          
+                            <label for="permission_name">
+                              Warrenty Period (In Years)
+                           </label> 
+                          <input type="number" name="ewarrenty" id="ewarrenty" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-4 mt-3">
                             <button class='btn btn-primary' type="submit" id="update-btn" name='update-btn'>Update</button>
                         </div>
                     </div>
@@ -295,14 +404,29 @@ function fetch_data(){
                 caption:"Specifications"
            },
            {
+                dataField:"issue_date",
+                caption:"Issue Date"
+           },
+           {
+                dataField:"quantity",
+           },
+           {
                dataField: "Action",
                caption: "Action",
-               visible:false,
+               visible:true,
                width:100,
                cellTemplate: function (container, options) {
 
                    var asset_id = options.data.id;
                    var asset_name = options.data.description;
+                   var company = options.data.company;
+                   var type = options.data.type.id;
+                   var specs = options.data.specifications;
+                   var sl = options.data.serial_number;
+                   var issue_date = options.data.issue_date;
+                   var warrenty = options.data.warrenty_period;
+                   var quantity = options.data.quantity;
+
                  
                    var markup = ``;
                    var actions = '';
@@ -315,8 +439,15 @@ function fetch_data(){
                     link.on("click", function () {
                 
                         $("#edit-modal").modal('show');
-                        $("#easset_name").val(asset_name);
-                        $("#easset_id").val(asset_id);
+                        $("#edescription").val(asset_name);
+                        $("#ecompany").val(company);
+                        $("#especs").val(specs);
+                        $("#esl").val(sl);
+                        $("#ewarrenty").val(warrenty);
+                        $("#etype").val(type).trigger('change');
+                        $("#eqty").val(quantity);
+                        $("#eissue_date").val(issue_date);
+                        $("#eid").val(asset_id);
                                         
                     
                     })

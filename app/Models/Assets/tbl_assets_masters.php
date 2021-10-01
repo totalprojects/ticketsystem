@@ -10,6 +10,8 @@ class tbl_assets_masters extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+    
     public function type() {
         return $this->belongsTo(AssetTypes::class, 'type', 'id');
     }

@@ -125,11 +125,13 @@
     padding: 30px 0;
 }
 .details-sec ul {
-    padding: 0;
+    padding: 10px;
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 0;
+    margin-bottom: 10px;
+    background: #f1f1f1;
+        border-radius: 10px;
 }
 
 .details-sec ul li {
@@ -277,6 +279,44 @@
                            <p>30.09.2023</p>
                        </li>
                        <li>
+                           <h6>Head Phone:</h6>
+                           <p>No</p>
+                       </li>
+                   </ul>
+                   <ul>
+                       <li>
+                           <h6>Assests Type: </h6>
+                           <p>Laptop</p>
+                       </li>
+                       <li>
+                           <h6>Serial Number: </h6>
+                           <p>LKZ88954792110</p>
+                       </li>
+                       <li>
+                           <h6>Issue Date:</h6>
+                           <p>12-10-2020</p>
+                       </li>
+                       <li>
+                           <h6>Warrenty Period:</h6>
+                           <p>30.09.2025</p>
+                       </li>
+                       
+                       <li>
+                           <h6>Number:</h6>
+                           <p>90909090</p>
+                       </li>
+                       <li>
+                           <h6>Model Number:</h6>
+                           <p>Lenovo 45HZ12</p>
+                       </li>
+                       <li>
+                           <h6>Web Cam:</h6>
+                           <p>No</p>
+                       </li>
+
+                   </ul>
+                   <ul>
+                       <li>
                            <h6>SIM:</h6>
                            <p>Vodafone</p>
                        </li>
@@ -285,12 +325,8 @@
                            <p>90909090</p>
                        </li>
                        <li>
-                           <h6>IMEI Number:</h6>
+                           <h6>SIM Number:</h6>
                            <p>054545454f5454</p>
-                       </li>
-                       <li>
-                           <h6>Head Phone:</h6>
-                           <p>No</p>
                        </li>
 
                    </ul>

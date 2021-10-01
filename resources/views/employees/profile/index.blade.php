@@ -45,17 +45,18 @@
 }
 
 .info-sec i {
-    font-size: 14px;
+    font-size: 13px;
     display: inline-block;
     vertical-align: inherit;
-    width: 27px;
-    height: 27px;
+    width: 24px;
+    height: 25px;
     text-align: center;
-    border-radius: 50%;
-    border: 1px solid #255e61;
+    border: 1px solid #c9c9c9;
     line-height: 25px;
-    color: #ffffff;
-    background: #255e61;
+    color: #c9c9c9;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
 }
 .info-sec span.badge:hover {
     opacity: 0.8;
@@ -86,6 +87,9 @@
     color: #fff;
     cursor: pointer;
 }
+.info-sec small {
+    font-weight: 600;
+}
 .container.profile-sec {
     background: #f5f5f5;
     padding: 35px;
@@ -93,7 +97,7 @@
 .edit-info-profile {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 20px;
 }
 
 .edit-info-profile span {
@@ -138,6 +142,7 @@
     margin-bottom: 0;
     font-weight: 600;
     font-size: 16px;
+    margin-right: 10px;
 }
 .profile-details .nav-tabs a.active {
     border: 1px solid #ccc;
@@ -148,9 +153,9 @@
     margin-bottom: 10px;
 }
 .profile-details .nav-tabs a {
-    border: 1px solid #939393;
-    background: #e9e9e9;
-    color: #898989 !important;
+    border: 1px solid #e4ff55;
+    background: #e4ff55;
+    color: #255e61 !important;
     border-radius: 20px;
     margin-right: 10px;
     margin-bottom: 10px;
@@ -178,7 +183,10 @@
     line-height: 27px;
     border-radius: 50%;
 }
-
+.info-sec span:hover i {
+    background: #255e61;
+    color: #e4ff55;
+}
 .edit-info-details {
     display: flex;
     align-items: center;
@@ -216,12 +224,12 @@
             <div class="col-md-10">
               <div class="info-sec">
     
-                     <span class="name">Suman Pan <small>(Employee code: 4578987)</small> <span class="badge badge-secondary">copy</span></span>
+                     <span class="name">Suman Pan <small>(Employee code: 4578987)</small> <i class="fa fa-clone"></i></span>
                      <span class="company">IT Department</span>
                     <span class="designation">Business Analyst</span>
-                    <span class="desk-extn">033 2345 12345 <small>(ofiice desk)</small> <span class="badge badge-secondary">copy</span></span>
-                     <span class="mobile">9090909090 <small>(mobile)</small> <span class="badge badge-secondary">copy</span></span>
-                     <span class="email">suman.pan@shyamsteel.com <span class="badge badge-secondary">copy</span></span>
+                    <span class="desk-extn">033 2345 12345 <small>(Ofiice desk)</small> <i class="fa fa-clone"></i></span>
+                     <span class="mobile">9090909090 <small>(Mobile)</small> <i class="fa fa-clone"></i></span>
+                     <span class="email">suman.pan@shyamsteel.com <i class="fa fa-clone"></i></span>
                      
                 
                  

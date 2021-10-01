@@ -54,10 +54,10 @@
             box-shadow: 0 0 5px rgb(0 0 0 / 33%);
             color: #fff;
         }
-        .wrapper p{
+        /* .wrapper p{
             margin:0;
             padding:0;
-        }
+        } */
     </style>
     <div class="tab-content p-1">
         <div class="tab-pane active dx-viewport" id="users">

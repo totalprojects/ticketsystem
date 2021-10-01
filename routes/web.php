@@ -27,6 +27,7 @@ use App\Http\Controllers\LogsController;
 use App\Http\Controllers\TreeController;
 use App\Http\Controllers\Mail\MailTemplateController;
 use App\Http\Controllers\Mail\VariableController;
+use App\Http\Controllers\Assets\AssetsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +99,9 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitL
     /** PO Group */
     Route::get('/po/group',[PoGroupController::class, 'index'])->name('view.po.group');
 
+    /** Assets */
+    Route::get('/assets',[AssetsController::class, 'index'])->name('view.assets');
+
     /** Logs */
     Route::get('/login/logs',[LogsController::class, 'login'])->name('view.login.logs');
     Route::get('/visits/logs',[LogsController::class, 'visits'])->name('view.page.visits');
@@ -151,6 +155,8 @@ Route::group(['prefix' => 'listings'], function () {
     Route::get('/fetch-purchase-org', [POController::class, 'get'])->name('get.purchase.org');
     Route::get('/fetch-po-release', [POReleaseController::class, 'get'])->name('get.po.release');
     Route::get('/fetch-po-group', [PoGroupController::class, 'get'])->name('get.po.group');
+    /** PO Group Add and Update */
+    Route::get('/fetch-assets', [AssetsController::class, 'get'])->name('get.assets');
     Route::get('/fetch/tcodes/for-user', [SapController::class, 'modulesAndTCodes'])->name('tcodes.for.user');
     
     /** Logs */
@@ -236,6 +242,9 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     /** PO Group Add and Update */
     Route::post('/add/po/group', [PoGroupController::class, 'create'])->name('add.po.group');
     Route::post('/update/po/group', [PoGroupController::class, 'update'])->name('update.po.group');
+    /** Assets Add and Update */
+    Route::post('/add/asset', [AssetsController::class, 'create'])->name('add.asset');
+    Route::post('/update/asset', [AssetsController::class, 'update'])->name('update.asset');
 
     /** Create Duplicate Role */
     Route::post('/create/duplicate/role', [RoleController::class,'createDuplicateRole'])->name('create.duplicate.role');

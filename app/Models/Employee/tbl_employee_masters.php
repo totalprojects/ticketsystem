@@ -11,6 +11,8 @@ use CompanyMasters;
 use DepartmentMasters;
 use EmployeeAssets;
 use Users;
+use EmployeeEmailAccess;
+use EmployeeSoftwareAccess;
 
 class tbl_employee_masters extends Model {
 
@@ -68,4 +70,16 @@ class tbl_employee_masters extends Model {
     public function user() {
         return $this->belongsTo(Users::class, 'id', 'employee_id');
     }
+
+    /** Employee Email Access */
+    public function email_access() {
+        return $this->belongsTo(EmployeeEmailAccess::class, 'id', 'employee_id');
+    }
+
+    /** Employee Software Access */
+    public function software_access() {
+        return $this->belongsTo(EmployeeSoftwareAccess::class, 'id', 'employee_id');
+    }
+
+    
 }

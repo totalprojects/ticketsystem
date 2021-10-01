@@ -59,9 +59,11 @@ class EmployeeController extends Controller {
          'company',
          'report_to.report_employee',
          'assets.asset.type',
-         'user.alloted_permissions.permission.allowed_tcodes.tcode',
-         'user.alloted_permissions.permission.allowed_tcodes.access_action_details',
-         'user.alloted_permissions.permission.allowed_tcodes.critical'
+        //  'user.alloted_permissions.permission.allowed_tcodes.tcode',
+        //  'user.alloted_permissions.permission.allowed_tcodes.access_action_details',
+        //  'user.alloted_permissions.permission.allowed_tcodes.critical'
+        'email_access.provider',
+        'software_access.software'
          )->get()->toArray();
        // return $empData;
         return view('employees.profile.index')->with($empData);

@@ -275,7 +275,11 @@ return [
         'Excel'              => Maatwebsite\Excel\Facades\Excel::class,
         'AssetTypes'         => App\Models\Assets\tbl_asset_types::class,
         'AssetsMasters'      => App\Models\Assets\tbl_assets_masters::class,
-        'EmployeeAssets'     => App\Models\Assets\tbl_employee_assets_masters::class
+        'EmployeeAssets'     => App\Models\Assets\tbl_employee_assets_masters::class,
+        'EmailProviders'     => App\Models\tbl_email_providers_masters::class,
+        'EmployeeEmailAccess' => App\Models\tbl_employee_email_access_mappings::class,
+        'SoftwareSolutions'   => App\Models\tbl_software_solutions_masters::class,
+        'EmployeeSoftwareAccess' => App\Models\tbl_employee_software_solution_access_mappings::class
 
     ]
 

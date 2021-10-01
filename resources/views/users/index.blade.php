@@ -13,12 +13,12 @@
             display: inline-block !important;
 
         }
-        ul, li {
+        /* ul, li {
             list-style:none;
         }
         ul li {
             list-style:none;
-        }
+        } */
     
         .checkboxes-wrapper label {
             position: relative;

@@ -106,7 +106,8 @@ class EmployeeController extends Controller {
                     'designation' => $each->designation->designation_name ?? '-',
                     'report_to' => !is_null($each->report_to) ? $each->report_to->report_employee->first_name.' '.$each->report_to->report_employee->last_name : '-'
                 ];
-
+                if(count($permission->permission->allowed_tcodes)>0) 
+                    {
                 foreach($each->user->alloted_permissions as $permission) {
 
                     $module_name = $permission->permission->name;
@@ -136,6 +137,7 @@ class EmployeeController extends Controller {
                 
 
                 }
+            }
             }
 
             return response(['data' => $dataArray, 'subData' => $subData, 'totalCount' => count($dataArray)]);

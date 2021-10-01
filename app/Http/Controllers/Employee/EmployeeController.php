@@ -54,6 +54,7 @@ class EmployeeController extends Controller {
 
         $empData = Employees::where('id', $id)->with(
          'departments',
+         'designation',
          'state',
          'district',
          'company',
@@ -66,7 +67,7 @@ class EmployeeController extends Controller {
         'software_access.software'
          )->get()->toArray();
        // return $empData;
-        return view('employees.profile.index')->with($empData);
+        return view('employees.profile.index')->with(['data' => $empData]);
     }
 
     public function sap_report() {

@@ -226,20 +226,13 @@
             <div class="col-md-10">
               <div class="info-sec">
     
-                     <span class="name">Suman Pan <small>(Employee code: 4578987)</small> <i class="fa fa-clone"></i></span>
-                     <span class="company">IT Department</span>
-                    <span class="designation">Business Analyst</span>
-                    <span class="desk-extn">033 2345 12345 <small>(Ofiice desk)</small> <i class="fa fa-clone"></i></span>
-                     <span class="mobile">9090909090 <small>(Mobile)</small> <i class="fa fa-clone"></i></span>
-                     <span class="email">suman.pan@shyamsteel.com <i class="fa fa-clone"></i></span>
+                     <span class="name">{{ $data[0]['first_name'] . ' '. $data[0]['last_name'] }} <small>(Employee code: 4578987)</small> <i class="fa fa-clone"></i></span>
+                     <span class="company">{{ !empty($data[0]['departments']) ? $data[0]['departments']['department_name'] : '-' }}</span>
+                     <span class="designation">{{ !empty($data[0]['designation']) ? $data[0]['designation']['designation_name'] : 'Team Lead' }}</span>
+                     <span class="desk-extn">{{ rand(2999999999,4999999999) }} <small>(Ofiice desk)</small> <i class="fa fa-clone"></i></span>
+                     <span class="mobile">{{ $data[0]['contact_no'] }} <small>(Mobile)</small> <i class="fa fa-clone"></i></span>
+                     <span class="email">{{ $data[0]['email'] }} <i class="fa fa-clone"></i></span>
                      
-                
-                 
-                 
-                 
-                 
-                 
-                 
               </div> 
               <div class="edit-info-profile">
                  <span>Edit </span><i class="fa fa-pen"></i>
@@ -261,75 +254,40 @@
                <div class="edit-info-details">
                  <span>Edit </span><i class="fa fa-pen"></i>
               </div>
+              @if(!is_null($data[0]['assets']) && !empty($data[0]['assets']))
+
+                @foreach($data[0]['assets'] as $each)
                    <ul>
                        <li>
                            <h6>Assests Type: </h6>
-                           <p>Mobile</p>
+                           <p>{{ $each['asset']['type']['asset_type'] ?? '-' }}</p>
                        </li>
                        <li>
-                           <h6>Serial Number: </h6>
-                           <p>LKZ88954792110</p>
-                       </li>
-                       <li>
-                           <h6>Issue Date:</h6>
-                           <p>12-10-2020</p>
-                       </li>
-                       <li>
-                           <h6>Warrenty Period:</h6>
-                           <p>30.09.2023</p>
-                       </li>
-                       <li>
-                           <h6>Head Phone:</h6>
-                           <p>No</p>
-                       </li>
+                        <h6>Serial Number: </h6>
+                        <p>{{ $each['asset']['serial_number'] ?? '-' }}</p>
+                    </li>
+                    <li>
+                        <h6>Issue Date:</h6>
+                        <p>{{ date('d-m-Y', strtotime($each['asset']['issue_date'])) ?? '-' }}</p>
+                    </li>
+                    <li>
+                        <h6>Warrenty Period:</h6>
+                        <p>{{ $each['asset']['warrenty_period'] ?? '-' }} year(s)</p>
+                    </li>
+                    
+                    <li>
+                        <h6>Specifications:</h6>
+                        <p>{{ $each['asset']['specifications'] ?? '-' }}</p>
+                    </li>
+                    <li>
+                        <h6>Model:</h6>
+                        <p>{{ $each['asset']['company'] ?? '-' }}</p>
+                    </li>
                    </ul>
-                   <ul>
-                       <li>
-                           <h6>Assests Type: </h6>
-                           <p>Laptop</p>
-                       </li>
-                       <li>
-                           <h6>Serial Number: </h6>
-                           <p>LKZ88954792110</p>
-                       </li>
-                       <li>
-                           <h6>Issue Date:</h6>
-                           <p>12-10-2020</p>
-                       </li>
-                       <li>
-                           <h6>Warrenty Period:</h6>
-                           <p>30.09.2025</p>
-                       </li>
-                       
-                       <li>
-                           <h6>Number:</h6>
-                           <p>90909090</p>
-                       </li>
-                       <li>
-                           <h6>Model Number:</h6>
-                           <p>Lenovo 45HZ12</p>
-                       </li>
-                       <li>
-                           <h6>Web Cam:</h6>
-                           <p>No</p>
-                       </li>
-
-                   </ul>
-                   <ul>
-                       <li>
-                           <h6>SIM:</h6>
-                           <p>Vodafone</p>
-                       </li>
-                       <li>
-                           <h6>Number:</h6>
-                           <p>90909090</p>
-                       </li>
-                       <li>
-                           <h6>SIM Number:</h6>
-                           <p>054545454f5454</p>
-                       </li>
-
-                   </ul>
+                @endforeach
+                @else
+                   <h5>No assets alloted</h5>
+                @endif
               </div>
            </div>
            <div class="tab-pane fade" id="nav-Email" role="tabpanel" aria-labelledby="nav-Email-tab">
@@ -340,19 +298,19 @@
                    <ul>
                        <li>
                            <h6>Email Type: </h6>
-                           <p>O365</p>
+                           <p>{{ !is_null($data[0]['email_access']) ? $data[0]['email_access']['provider']['provider_name'] : 'N/A' }}</p>
                        </li>
                        <li>
                            <h6>Standard/Business: </h6>
-                           <p>Standard</p>
+                           <p>{{ !is_null($data[0]['email_access']) ? $data[0]['email_access']['provider']['type'] : 'N/A' }}</p>
                        </li>
                        <li>
                            <h6>Exclusion Type:</h6>
-                           <p>Default/E1/E2/E3</p>
+                           <p>{{ !is_null($data[0]['email_access']) ? $data[0]['email_access']['exclusion_type'] : 'N/A' }}</p>
                        </li>
                        <li>
                            <h6>Mail On Mobile:</h6>
-                           <p>Yes</p>
+                           <p>{{ !is_null($data[0]['email_access']) ? 'Yes' : 'No' }}</p>
                        </li>
                    </ul>
               </div>
@@ -373,27 +331,27 @@
                        </li>
                        <li>
                            <h6>NAS Drive Access:</h6>
-                           <p>--</p>
+                           <p>{{ !is_null($data[0]['software_access']) ? $data[0]['software_access']['software']['software_name'] : 'N/A' }}</p>
                        </li>
                        <li>
                            <h6>Access Folder List:</h6>
-                           <p>Yes</p>
+                           <p>{{ !is_null($data[0]['software_access']) ? 'Yes' : 'N/A' }}</p>
                        </li>
                        <li>
                            <h6>Folder Access Rights:</h6>
-                           <p>Read/Write/Delete</p>
+                           <p>{{ !is_null($data[0]['software_access']) ? 'Yes' : 'N/A' }}</p>
                        </li>
                        <li>
                            <h6>VPN Access:</h6>
-                           <p>Yes</p>
+                           <p>{{ !is_null($data[0]['software_access']) ? 'Yes' : 'N/A' }}</p>
                        </li>
                        <li>
                            <h6>SSL VPN/IPSEC VPN:</h6>
-                           <p>Yes</p>
+                           <p>{{ !is_null($data[0]['software_access']) ? 'Yes' : 'N/A' }}</p>
                        </li>
                        <li>
                            <h6>Active/Inactive VPN:</h6>
-                           <p>Active</p>
+                           <p>{{ !is_null($data[0]['software_access']) ? 'Active' : 'N/A' }}</p>
                        </li>
                    </ul>
               </div>

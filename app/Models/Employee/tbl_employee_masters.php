@@ -13,6 +13,7 @@ use EmployeeAssets;
 use Users;
 use EmployeeEmailAccess;
 use EmployeeSoftwareAccess;
+use Designations;
 
 class tbl_employee_masters extends Model {
 
@@ -59,6 +60,12 @@ class tbl_employee_masters extends Model {
     public function departments() {
 
         return $this->belongsTo(DepartmentMasters::class, 'department_id', 'id');
+    }
+
+    /** Designation */
+    public function designation() {
+
+        return $this->belongsTo(Designations::class, 'designation_id', 'id');
     }
 
     /** Assets */

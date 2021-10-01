@@ -83,7 +83,7 @@
                 <div class="small-box bg-danger">
                   <div class="inner">
                     @if(!empty($login_logs))
-                    <h5><strong>{{ date('d-m-y h:i a', strtotime($login_logs[0]->created_at)) }}</strong></h5>
+                    <h5><strong>{{ date('d-m-y h:i a', strtotime($login_logs[1]->created_at ?? '0000-00-00')) }}</strong></h5>
                     @endif
                     <p>Last Login</p>
                   </div>
@@ -99,7 +99,7 @@
             <div class="small-box bg-danger">
               <div class="inner">
                 @if(!empty($login_logs))
-                <h5><strong>{{ $login_logs[0]->ip ?? '-' }}</strong></h5>
+                <h5><strong>{{ $login_logs[1]->ip ?? '-' }}</strong></h5>
                 @endif
                 <p>IP Address</p>
               </div>
@@ -115,7 +115,7 @@
             <div class="small-box bg-danger">
               <div class="inner">
                 @if(!empty($login_logs))
-                @php($agent = explode(" ", $login_logs[0]->agent))
+                @php($agent = explode(" ", $login_logs[1]->agent))
                 <h5><strong>{{ $agent[0] ?? '-' }}</strong></h5>
                 @endif
                 <p>Browser Agent</p>
@@ -299,7 +299,6 @@ function loadLast5Logs() {
     }
   });
 }
-
 
 // loadChart2();
 function loadLogCounterChart() {

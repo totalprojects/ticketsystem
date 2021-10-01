@@ -102,6 +102,9 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitL
     /** Assets */
     Route::get('/assets',[AssetsController::class, 'index'])->name('view.assets');
 
+    /** Employee SAP Access Report */
+    Route::get('/sap/report',[EmployeeController::class, 'sap_report'])->name('view.sap.report');
+
     /** Logs */
     Route::get('/login/logs',[LogsController::class, 'login'])->name('view.login.logs');
     Route::get('/visits/logs',[LogsController::class, 'visits'])->name('view.page.visits');
@@ -125,6 +128,7 @@ Route::group(['prefix' => 'listings'], function () {
     Route::get('/fetch/districts/list', [AreaController::class, 'fetchDistricts'])->name('fetch.districts');
     Route::get('/fetch/companies/list', [EmployeeController::class, 'fetchCompanies'])->name('fetch.companies');
     Route::get('/fetch/departments/list', [EmployeeController::class, 'fetchDepartments'])->name('fetch.departments');
+    Route::get('/fetch/employee/sap/report', [EmployeeController::class, 'fetchEmployeeSAPReport'])->name('show.sap.report');
     Route::get('/fetch/roles/list', [EmployeeController::class, 'fetchRoles'])->name('fetch.roles');
     Route::get('/fetch/report-to/list', [EmployeeController::class, 'fetchReportTos'])->name('fetch.report_tos');
     Route::get('/fetch/plant/list', [PlantController::class, 'getPlants'])->name('get.plants');

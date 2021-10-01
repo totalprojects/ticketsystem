@@ -69,6 +69,78 @@ class EmployeeController extends Controller {
         return view('employees.profile.index')->with($empData);
     }
 
+    public function sap_report() {
+
+        $data['page_title'] = "SAP Report";
+
+        return view('user_sap_access_report.index')->with($data);
+    }
+    public function fetchEmployeeSAPReport(Request $request) {
+
+        $empData = Employees::with(
+            'departments',
+            'designation',
+            'company',
+            'report_to.report_employee',
+            'assets.asset.type',
+            'user.alloted_permissions.permission.allowed_tcodes.tcode',
+            'user.alloted_permissions.permission.allowed_tcodes.access_action_details',
+            'user.alloted_permissions.permission.allowed_tcodes.critical',
+            'user.alloted_permissions.permission.module_head.user_details',
+            'email_access.provider',
+            'software_access.software'
+            )->where('id', '!=', 1)->get();
+
+            $dataArray = [];
+            $subData = [];
+          //  return $empData;
+            foreach($empData as $each) {
+
+                $dataArray[] = [
+                    'id' => $each->id,
+                    'first_name' => $each->first_name,
+                    'last_name' => $each->last_name,
+                    'sap_code' => $each->sap_code,
+                    'department' => $each->departments->department_name,
+                    'company' => $each->company->company_name,
+                    'designation' => $each->designation->designation_name ?? '-',
+                    'report_to' => !is_null($each->report_to) ? $each->report_to->report_employee->first_name.' '.$each->report_to->report_employee->last_name : '-'
+                ];
+
+                foreach($each->user->alloted_permissions as $permission) {
+
+                    $module_name = $permission->permission->name;
+                    $module_head = $permission->permission->module_head;
+                    $tcodes1 = '';
+                    if(count($permission->permission->allowed_tcodes)>0) 
+                    {
+                        foreach($permission->permission->allowed_tcodes as $tcodes) {
+                            $actions1 = '';
+                            $tcodes1 .= $tcodes->tcode->t_code.', ';
+                            if(isset($tcodes->access_action_details)) {
+                                foreach($tcodes->access_action_details as $actions) {
+                                    $actions1 .= $actions->name.', ';
+                                }
+                            }
+                           
+                        }
+                        
+                        $subData[] = [
+                            'id' => $each->id,
+                            'module' => $module_name,
+                            'module_head' => $module_head,
+                            'tcodes' => substr($tcodes1, 0, -2),
+                            'actions' => substr($actions1, 0, -2)
+                        ];
+                    }
+                
+
+                }
+            }
+
+            return response(['data' => $dataArray, 'subData' => $subData, 'totalCount' => count($dataArray)]);
+    }
+
     // fetch employees
     public function fetchEmployees(Request $request) {
 

@@ -25,11 +25,7 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        //$user->syncRoles([]);
-        //$user->givePermissionTo('edit articles');
-        //return $user->getPermissionNames();
         $loginLogs = \LoginLog::where('user_id', $user->id)->latest()->get();
-        //return $loginLogs;
         $data['login_logs'] = $loginLogs;
         return view('home')->with($data);
     }

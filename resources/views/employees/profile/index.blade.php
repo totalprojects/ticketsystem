@@ -229,7 +229,7 @@
                      <span class="name">{{ $data[0]['first_name'] . ' '. $data[0]['last_name'] }} <small>(Employee code: 4578987)</small> <i class="fa fa-clone"></i></span>
                      <span class="company">{{ !empty($data[0]['departments']) ? $data[0]['departments']['department_name'] : '-' }}</span>
                      <span class="designation">{{ !empty($data[0]['designation']) ? $data[0]['designation']['designation_name'] : 'Team Lead' }}</span>
-                     <span class="desk-extn">{{ rand(2999999999,4999999999) }} <small>(Ofiice desk)</small> <i class="fa fa-clone"></i></span>
+                     <span class="desk-extn">{{ rand(2999999999,4999999999) }} <small>(Office desk)</small> <i class="fa fa-clone"></i></span>
                      <span class="mobile">{{ $data[0]['contact_no'] }} <small>(Mobile)</small> <i class="fa fa-clone"></i></span>
                      <span class="email">{{ $data[0]['email'] }} <i class="fa fa-clone"></i></span>
                      

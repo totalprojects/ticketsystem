@@ -55,7 +55,7 @@
     </div>
 
     <!-- Tcode List -->
-    <div class="modal fade" id="tcode-list-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="tcode-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -65,26 +65,7 @@
             </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="tcode_searchFrm">
-                <div class="row p-2">
-                    <div class="col-lg-4">
-                        <input type="hidden" id="s_permission_id">
-                        <input type="text" name="s_tcode" id="s_tcode" class="form-control" placeholder="Search by Tcode">
-                    </div>
-                    <div class="col-lg-4">
-                        <input type="text" name="s_desc" id="s_desc" class="form-control" placeholder="Search by Description">
-                    </div>
-                    <div class="col-lg-4">
-                        <button type="submit" id="tcode_searchFilterBtn" class="btn btn-primary">Search</button>
-                    </div>
-                </div>
-                </form>
-                <div class="tab-pane active dx-viewport" id="modules">
-                    <div class="demo-container p-3" style="max-height: 400px; overflow:auto">
-                       
-                        <div id="tcodes-list-div" style="height:auto"></div>
-                    </div>
-                </div>
+                <div id="vtcode"></div>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -93,8 +74,6 @@
         </div>
         </div>
 </div>
-
-    
 @stop
 
 @section('css')
@@ -104,40 +83,7 @@
 @section('js')
 
     <script>
-        $("#update-tcode-btn").on('click', (e) => {
-            e.preventDefault();
-            var tcode = $("#tt_tcode").val();
-            var desc = $("#t_description").val();
-            var tactions = $("input[name='t_actions[]']").find(":checked").val();
-            var permission_id = $("#t_module_id").val();
-            var formData = $("#tcode-update-frm").serialize();
-            //formData)
-            $.ajax({
-                url:"{{ route('tcode.update') }}",
-                data:formData,
-                type:"POST",
-                headers: {
-               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                error:(r) => {
-                    toasrt.error('Server Error');
-                    //r)
-                },
-                success: (r) => {
-                    //r);
-                    if(r.status == 200) {
-                        toastr.success('Tcode updated successfully');
-                        $("#edit-tcode-modal").modal('hide');
-                        
-                        showTcodes(permission_id);
-                        
-                    } else {
-                        toastr.error('Something went wrong');
-                    }
-                }
-            })
 
-        })
         $("#tcode_searchFilterBtn").on('click', (e) => {
             e.preventDefault();
             var tcode = $("#s_tcode").val();
@@ -157,185 +103,12 @@
             // },3000);
           
         })
-    function trashTcode(id,pid) {
-       
-        const url = "{{ route('trash.tcode') }}"
-    
-        if(id > 0) {
-            $.ajax({
-            url:url,
-            data:{id},
-            type:"GET",
-            headers: {
-               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-           
-            error:(r) => {
-              
-                toastr.error('Something went wrong');
-                //r)
-            },
-            success:(r) => {
-               
-                toastr.success('Tcode Removed successfully');
-                setTimeout(() => {
-                $("#link_"+pid).trigger('click');
-            },1800);
-                fetch_data();
-            }
 
-        })
-        } else {
-            toastr.error('Id not found')
-        }
-    }
 
-    $(document).on('show','.accordion', function (e) {
-    //$('.accordion-heading i').toggleClass(' ');
-    $(e.target).prev('.accordion-heading').addClass('accordion-opened');
-    });
-
-    $(document).on('hide','.accordion', function (e) {
-    $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
-    //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
-    });
-
-$(document).on('click','#add_permission', ()=> {
-   // //'inn')
-    $("#add-permission-modal").modal('show');
-});
-
-$(document).on('click','#add_tcodes', ()=> {
-  
-    $("#add-tcode-modal").modal('show');
-});
-$(document).on('click','#update-permission-btn', ()=> {
-
-$("#permission-update-frm").validate({
-    rules:{
-        epermission_name:{
-            required:true
-        },
-        epermission_type:{
-            required:true
-        },
-        epermission_code:{
-            required:true
-        }
-    },
-    submitHandler:(r) => {
-        //'next')
-        var url = "{{  route('update.permission') }}"
-        $.ajax({
-            url:url,
-            data:$("#permission-update-frm").serialize(),
-            type:"POST",
-            headers: {
-               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            beforeSend:(r) => {
-                $("#update-persmission-btn").prop('disabled',true);
-            },
-            error:(r) => {
-                $("#update-persmission-btn").prop('disabled',false);
-                toastr.error('Something went wrong');
-            },
-            success:(r) => {
-                $("#update-persmission-btn").prop('disabled',false);
-                toastr.success('Module Updated successfully');
-                $("#settings-modal").modal('hide');
-                fetch_data();
-            }
-
-        })
-    }
-});
-})
-$(document).on('click','#add-permission-btn', ()=> {
-$("#add-permission-frm").validate({
-    rules:{
-        permission_name:{
-            required:true
-        },
-        permission_type:{
-            required:true
-        },
-        permission_code:{
-            required:true
-        }
-    },
-    submitHandler:(r) => {
-        var url = "{{  route('add.permission') }}"
-        $.ajax({
-            url:url,
-            data:$("#add-permission-frm").serialize(),
-            type:"POST",
-            headers: {
-               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            beforeSend:(r) => {
-                $("#add-permission-btn").prop('disabled',true);
-            },
-            error:(r) => {
-                //r.responseJSON)
-                $("#add-permission-btn").prop('disabled',false);
-                toastr.error(r.responseJSON.message);
-            },
-            success:(r) => {
-                $("#add-permission-btn").prop('disabled',false);
-                toastr.success('Module Added successfully');
-                $("#add-permission-modal").modal('hide');
-                fetch_data();
-            }
-
-        })
-    }
-});
-})
 
 window.subData = '';
-/* Add TCOde */
-$(document).on('click','#add-tcode-btn', ()=> {
-$("#add-tcode-frm").validate({
-    rules:{
-        tcode:{
-            required:true
-        },
-        module:{
-            required:true
-        },
-        tcode_desc:{
-            required:true
-        }
-    },
-    submitHandler:(r) => {
-        var url = "{{  route('add.tcode') }}"
-        $.ajax({
-            url:url,
-            data:$("#add-tcode-frm").serialize(),
-            type:"POST",
-            headers: {
-               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            beforeSend:(r) => {
-                $("#add-tcode-btn").prop('disabled',true);
-            },
-            error:(r) => {
-                $("#add-tcode-btn").prop('disabled',false);
-                toastr.error('Something went wrong');
-            },
-            success:(r) => {
-                $("#add-tcode-btn").prop('disabled',false);
-                toastr.success('Tcode Added successfully');
-                $("#add-tcode-modal").modal('hide');
-                fetch_data();
-            }
 
-        })
-    }
-});
-})
-    fetch_data();
+fetch_data();
 function fetch_data(){
     function isNotEmpty(value) {
         return value !== undefined && value !== null && value !== "";
@@ -499,6 +272,12 @@ function fetch_data(){
                         {
                                 dataField:"tcodes",
                                 caption:"Tcode",
+                                cellTemplate: (container, options) => {
+                                    var tcodes = options.data.tcodes;   
+                                    console.log(tcodes);                                    
+                                    var html = `<a href='javascript:void(0)' onClick="viewTcodes(${JSON.stringify(tcodes)}')" class='badge badge-primary text-white'><i class='fas fa-eye'></i> View</a>`;
+                                    container.append(html);
+                                }
                         },
                         {
                                 dataField:"actions",
@@ -697,6 +476,42 @@ function showTcodes(permission_id, tcode = '', desc = '') {
                 $("#t_actions").html(action_markup);
             }
 
+
+function viewTcodes(tcodes) {
+    
+    var html = ``
+
+    var acc = `<div class="accordion" id="accordionPanelsStayOpenExample">
+        
+</div>`
+    $.each(tcodes, (i) => {
+
+        let actions = '';
+        $.each(tcodes[i].actions, (j) => {
+            actions = `<span class='badge badge-primary'>${tcodes[i].actions[j]}</span>`
+        });
+
+
+        html += `<div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-heading{$i}">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse{$i}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+        ${tcodes[i].tcode}
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapse${i}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-heading{$i}">
+      <div class="accordion-body">
+            ${actions}
+      </div>
+    </div>
+  </div>`;
+
+
+
+    });
+
+    $("#vtcode").html(html);
+    $("#tcode-modal").modal('show');
+}
     
     </script>
 @stop

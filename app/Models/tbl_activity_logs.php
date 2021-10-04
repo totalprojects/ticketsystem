@@ -14,7 +14,7 @@ class tbl_activity_logs extends Model {
     protected $casts = [
         'created_at' => 'datetime:d-m-Y h:i a'
     ];
-    
+
     public $table = 'tbl_app_activity_logs';
 
     protected $guarded = [];

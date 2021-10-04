@@ -107,32 +107,34 @@ class EmployeeController extends Controller {
                     'designation' => $each->designation->designation_name ?? '-',
                     'report_to' => !is_null($each->report_to) ? $each->report_to->report_employee->first_name.' '.$each->report_to->report_employee->last_name : '-'
                 ];
+                $index = 0;
                 if(isset($each->user->alloted_permissions)>0) 
                     {
                 foreach($each->user->alloted_permissions as $permission) {
 
                     $module_name = $permission->permission->name;
                     $module_head = $permission->permission->module_head;
-                    $tcodes1 = '';
+                    $tcodes1 = [];
                     if(count($permission->permission->allowed_tcodes)>0) 
                     {
                         foreach($permission->permission->allowed_tcodes as $tcodes) {
-                            $actions1 = '';
-                            $tcodes1 .= $tcodes->tcode->t_code.', ';
+                            $actions1 = [];
+                            $tcodes1[$index] = ['tcode' => $tcodes->tcode->t_code, 'actions' => []];
                             if(isset($tcodes->access_action_details)) {
                                 foreach($tcodes->access_action_details as $actions) {
-                                    $actions1 .= $actions->name.', ';
+                                    $actions1[] = $actions->name;
                                 }
+                                $tcodes1[$index]['actions'] = $actions1; 
                             }
-                           
+                            
+                            $index++;
                         }
                         
                         $subData[] = [
-                            'id' => $each->id,
-                            'module' => $module_name,
+                            'id'        => $each->id,
+                            'module'    => $module_name,
                             'module_head' => $module_head,
-                            'tcodes' => substr($tcodes1, 0, -2),
-                            'actions' => substr($actions1, 0, -2)
+                            'tcodes'    => $tcodes1,
                         ];
                     }
                 

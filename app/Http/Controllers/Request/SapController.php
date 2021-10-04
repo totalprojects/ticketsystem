@@ -894,8 +894,6 @@ class SapController extends Controller {
             }
         }
         /* Moderators check ends */
-
-
         $team = EmployeeMappings::where('report_to', $user_id)->select('employee_id')->get();
 
         $user_ids = [];

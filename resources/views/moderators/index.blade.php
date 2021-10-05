@@ -161,7 +161,8 @@
         showBorders: true,
         showRowLines:true,
         rowAlternationEnabled: true,
-        allowColumnResizing: true,
+        allowColumnResizing: false,
+        columnAutoWidth: true,
         loadPanel: {
            // indicatorSrc: `${ASSET_URL}/assets/images/loader4.gif`,
             text: 'Loading...',

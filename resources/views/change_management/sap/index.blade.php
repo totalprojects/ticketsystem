@@ -10,7 +10,203 @@
 @stop
 
 @section('content')
+<style>
+    /*-----------------MAIN SECTION---------------------*/
 
+.kanban-board-wrap main .main__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 25px;
+}
+.kanban-board-wrap main .main__header > div {
+  color: grey;
+}
+.kanban-board-wrap main .main__header > div > * {
+  margin-left: 20px;
+  cursor: pointer;
+}
+.kanban-board-wrap main .main__header > div .fa-bell {
+  position: relative;
+}
+
+.kanban-board-wrap main .main__kanban__info {
+  background: #ccc;
+  padding: 0px 25px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.kanban-board-wrap main .main__kanban__info > img {
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.kanban-board-wrap main .main__kanban__info > button {
+  color: #2e2e2e;
+  border: 0px;
+  outline: 0px;
+  cursor: pointer;
+  background: #f1f1f1;
+  padding: 6px 15px;
+  border-radius: 18px;
+  border: 1px solid #f6f6f6;
+  transition: all 0.3s ease-in-out;
+}
+.kanban-board-wrap main .main__kanban__info > button:first-of-type {
+  margin-right: auto;
+  margin-left: 10px;
+}
+.kanban-board-wrap main .main__kanban__info > button:hover {
+  background: #fff;
+  border-color: #2e2e2e;
+}
+.kanban-board-wrap main .main__kanban {
+  padding: 0px 25px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.kanban-board-wrap main .main__kanban::after {
+  content: "";
+  padding-right: 25px;
+  height: 100%;
+}
+.kanban-board-wrap main .main__kanban .board {
+    flex: 0 0 20%;
+    margin-right: 0;
+    height: 100%;
+    padding: 10px;
+    
+}
+.kanban-board-wrap main .main__kanban .board__conatiner {
+  min-height: calc(100% - 120px);
+  max-height: calc(100% - 120px);
+  scrollbar-width: none;
+  box-shadow: 0 0 7px #ccc;
+  border-radius: 18px;
+  
+}
+.kanban-board-wrap main .main__kanban .board__conatiner::-webkit-scrollbar {
+  width: 0px;
+  /* Remove scrollbar space */
+  background: transparent;
+  /* Optional: just make scrollbar invisible */
+}
+.kanban-board-wrap main .main__kanban .board__header {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-bottom: 30px;
+  padding: 0px 15px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #255e61;
+}
+.kanban-board-wrap main .main__kanban .board__header > span {
+  margin-right: auto;
+  margin-left: 10px;
+  color: #ffffff;
+  font-weight: 600;
+}
+.kanban-board-wrap main .main__kanban .board__header > i {
+  font-size: 13px;
+  color: #e4ff55;
+}
+.kanban-board-wrap main .main__kanban .board__header .fa-ellipsis-h {
+  cursor: pointer;
+}
+.kanban-board-wrap main .main__kanban .board__boxes {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  margin-bottom: 15px;
+  cursor: move;
+  padding: 20px;
+}
+.kanban-board-wrap main .main__kanban .board__boxes > .image-wrapper {
+  margin: -20px -20px 10px -20px;
+}
+.kanban-board-wrap main .main__kanban .board__boxes p {
+  font-size: 16px;
+  color: #2e2e2e;
+  margin-bottom: 30px;
+  line-height: 28px;
+}
+.kanban-board-wrap main .main__kanban .board__boxes__sections {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.kanban-board-wrap main .main__kanban .board__boxes__sections > * {
+  height: 4px;
+  width: 20px;
+  border-radius: 10px;
+  margin-right: 4px;
+}
+.kanban-board-wrap main .main__kanban .board__boxes__info {
+  display: flex;
+  cursor: pointer;
+
+  flex-direction: row;
+  align-items: center;
+}
+.kanban-board-wrap main .main__kanban .board__boxes__info i{
+    border:1px solid #ccc;
+    padding:5px;
+}
+.kanban-board-wrap main .main__kanban .board__boxes__info i,
+.kanban-board-wrap main .main__kanban .board__boxes__info span {
+  color: #2e2e2e;
+  
+  font-size: 12px;
+}
+.kanban-board-wrap main .main__kanban .board__boxes__info span {
+  margin-left: 10px;
+  margin-right: auto;
+  
+}
+.kanban-board-wrap main .main__kanban .board__boxes__info img {
+  border-radius: 50%;
+  margin-left: 5px;
+}
+.kanban-board-wrap main .main__kanban .board .add__card {
+    background: #80c4ff;
+    cursor: pointer;
+    border: 0;
+    outline: 0;
+    color: #2e2e2e;
+    margin-top: 10px;
+    padding: 10px 15px 9px;
+    border-radius: 6px;
+    line-height: 1;
+    margin-bottom: 15px;
+}
+.board__style {
+    background: #fffcf3;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 0 7px #ccc;
+}
+
+
+.dragging {
+  border: 2px solid #454545;
+}
+	</style>
+</style>
 <div class="tab-content p-1">
     <div class="tab-pane active dx-viewport" id="users">
         <div class="demo-container">
@@ -18,8 +214,52 @@
             <div class="table-heading-custom"><h4 class="right"><i class="fas fa-building"></i> List </h4></div>
             <button id="add_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Add Request</button>
           </div>
-            
-            <!-- <div id="cm-list-div" style="height:600px"></div> -->
+
+          <div class="kanban-board-wrap">
+
+<!--  MAIN SECTION  -->
+<main>
+
+  <!--   KANBAN BOARD STARTS   -->
+  <div class="main__kanban">
+    <!--     1st board   -->
+    @foreach($stages as $each)
+    <div class="board">
+      <div class="board__header board__style">
+        <i class="fas fa-dot-circle"></i>
+        <span>{{ $each->name }}</span>
+        <i class="fas fa-ellipsis-h"></i>
+      </div>
+      <div class="board__conatiner" style="min-height:400px; padding:5px;">
+          @if(!empty($each->requests))
+          <input type="hidden" id="stage_id2" value="{{ $each->id }}">
+                @foreach($each->requests as $eachRequest)
+                <div class="board__boxes board__style" draggable="true" style="font-size:11px !important;">
+                    <input type="hidden" id="req_id" value="{{ $eachRequest->id }}">
+                    <input type="hidden" id="stage_id" value="{{ $each->id }}">
+                    <p>Description: <strong>{{ $eachRequest->description }}</strong></p>
+                    <p>Module: <strong>{{ $eachRequest->permission->name }}</strong></p>
+                    <p>TCode: <strong>{{ $eachRequest->tcode->t_code }}</strong></p>
+                    <div class="board__boxes__info">
+                        <i class="fas fa-paperclip"></i>
+                        <span>0</span>
+                        &nbsp;
+                        <i class="fas fa-plus"></i>
+                        
+                    </div>
+                </div>
+                @endforeach
+            @endif
+      </div>
+      <button class="add__card d-none"> <i class="fas fa-plus"></i> Add Card</button>
+    </div>
+    @endforeach
+    
+  </div>
+
+</main>
+
+</div>
         </div>
     </div>
 </div>
@@ -29,7 +269,7 @@
             <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Company</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Add Development Request</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -39,11 +279,17 @@
                 <form id="add-frm" method="post">
                     <div class="row">
                         <div class="col-lg-4 pt-2">
-                            <input type="text" name="company_name" id="company_name" class="form-control" placeholder="Enter name">
+                            <select name="module_id" id="module_id" class="form-control select2bs4" placeholder='Select Module'>
+                                @foreach($modules as $each)
+                                    <option value="{{ $each['id'] }}">{{ $each['name'] }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-lg-4 pt-2">
                           
-                            <input type="number" name="company_code" id="company_code" class="form-control">
+                            <select name="tcode_id" id="tcode_id" class="form-control select2bs4" placeholder='Select TCode'>
+                                <option value=""></option>
+                            </select>
                         </div>                       
                         <div class="col-lg-4 pt-2">
                             <button class='btn btn-primary' type="submit" id="add-btn" name='add-btn'><i class='fas fa-plus'></i> Add</button>
@@ -58,8 +304,6 @@
             </div>
             </div>
     </div>
-
-
 
 @stop
 
@@ -279,11 +523,61 @@ function fetch_data(){
        ],
    }).dxDataGrid("instance");
     
-}
-
-
-    
-
-    
+}   
     </script>
+    <script type="text/javascript">
+	const draggableElements = document.querySelectorAll(".board__boxes");
+const droppableElements = document.querySelectorAll(".board__conatiner");
+
+draggableElements.forEach(draggable => {
+  draggable.addEventListener("dragstart", () => {
+    draggable.classList.add("dragging");
+  });
+
+  draggable.addEventListener("dragend", (e) => {
+      console.log('dragged')
+      console.log(e)
+      var req_id = e.srcElement.childNodes[1].value;
+      var stage_id = e.srcElement.childNodes[3].value;
+
+      console.log('req_id '+req_id+ ' stage id '+stage_id);
+    draggable.classList.remove("dragging");
+  });
+});
+
+droppableElements.forEach(droppable => {
+  droppable.addEventListener("dragover", e => {
+    e.preventDefault();
+    const nearestElement = getNearestElement(droppable, e.clientY);
+    const draggable = document.querySelector(".dragging");
+     // var stage_id = e.srcElement.childNodes[3].value;
+        console.log('after drop')
+      console.log(e);
+    if (nearestElement == null) {
+      droppable.appendChild(draggable);
+    } else {
+      droppable.insertBefore(draggable, nearestElement);
+    }
+  });
+});
+
+function getNearestElement(container, y) {
+  const draggableElements = [
+  ...container.querySelectorAll(".board__boxes:not(.dragging)")];
+
+
+  return draggableElements.reduce(
+  (closest, draggable) => {
+    const box = draggable.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: draggable };
+    } else {
+      return closest;
+    }
+  },
+  { offset: Number.NEGATIVE_INFINITY }).
+  element;
+}
+</script>
 @stop

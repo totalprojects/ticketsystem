@@ -279,7 +279,9 @@ return [
         'EmailProviders'     => App\Models\tbl_email_providers_masters::class,
         'EmployeeEmailAccess' => App\Models\tbl_employee_email_access_mappings::class,
         'SoftwareSolutions'   => App\Models\tbl_software_solutions_masters::class,
-        'EmployeeSoftwareAccess' => App\Models\tbl_employee_software_solution_access_mappings::class
+        'EmployeeSoftwareAccess' => App\Models\tbl_employee_software_solution_access_mappings::class,
+        'DevStages'                => App\Models\tbl_dev_stages::class,
+        'DevRequests'              => App\Models\tbl_dev_requests::class
 
     ]
 

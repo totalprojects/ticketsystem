@@ -19,7 +19,7 @@
             <button id="add_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Add Request</button>
           </div>
             
-            <div id="cm-list-div" style="height:600px"></div>
+            <!-- <div id="cm-list-div" style="height:600px"></div> -->
         </div>
     </div>
 </div>
@@ -59,46 +59,6 @@
             </div>
     </div>
 
-
-    <!-- Edit Modal -->
-        <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-        
-                <form id="update-frm" method="post">
-                    <div class="row">
-                        <div class="col-lg-4 pt-2">
-                        <input type="hidden" name="ecompany_id" id="ecompany_id">
-                            
-                           <input type="text" name="ecompany_name" id="ecompany_name" class="form-control">
-                        </div>
-                        <div class="col-lg-4 pt-2">
-                         
-                            <input type="number" name="ecompany_code" id="ecompany_code" class="form-control">
-                        </div>  
-                        <div class="col-lg-4 pt-2">
-                            <button class='btn btn-primary' type="submit" id="update-btn" name='update-btn'>Update</button>
-                        </div>
-                    </div>
-                
-                </form>
-        
-                
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                </div>
-            </div>
-            </div>
-        </div>
 
 
 @stop

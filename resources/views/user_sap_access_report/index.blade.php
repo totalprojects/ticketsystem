@@ -11,31 +11,85 @@
 
 @section('content')
 <style>
-    .accordion-toggle:after {
-    font-family: 'FontAwesome';
-    content: "\f078";    
-    float: right;
+.accordion-forms {
+  padding-right: 0 !important;
+}
+@media (max-width: 800px) {
+  .accordion-forms {
+    padding: 0 10px !important;
+    margin: 25px 0;
+  }
 }
 
-.accordion {
-    background-color: antiquewhite !important;
-    padding:5px;
-    box-shadow: 0 0 2px 3px rgba(0,0,0,0.19);
+.accordion-block {
+  background-color: #f4f4f4;
+  margin-bottom: 20px;
 }
-.accordion-heading {
-    background-color: cadetblue !important;
-    padding: 5px;
+.accordion-block:last-of-type {
+  margin-bottom: 0;
 }
-.accordion-heading a {
-    font-weight: 500 !important;
-    color:cornsilk !important;
+
+.accordion-block__header {
+  color: inherit;
+  margin-bottom: 0;
+  font-size: 16px;
+  line-height: 1.25;
 }
-.accordion-body {
-    background-color: cornsilk !important;
-    padding: 5px;
+
+.accordion-block__btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 8px 10px;
+  border-color: #000a28 !important;
+  background: #000a28 !important;
+  color: #ffffff !important;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+  transition: background-color 0.25s ease-in-out;
+  text-transform: none;
 }
-.accordion-opened .accordion-toggle:after {    
-    content: "\f054";    
+.accordion-block__btn:hover, .accordion-block__btn:active, .accordion-block__btn:focus {
+  color: #ffffff !important;
+  background-color: rgba(0, 10, 40, 0.75) !important;
+}
+.accordion-block__btn span {
+  color: inherit;
+  margin-bottom: 0;
+  text-align: left;
+}
+.accordion-block__btn svg {
+  margin: auto 0;
+  flex-shrink: 0;
+}
+.accordion-block__btn svg path {
+  fill: #ffffff;
+}
+.accordion-block__btn svg[aria-hidden=true] {
+  display: block;
+}
+.accordion-block__btn svg[aria-hidden=false] {
+  display: none;
+}
+
+.accordion-block__content {
+  display: none;
+}
+
+.accordion-block__btn[aria-expanded=false] .js-accordion__icon-plus {
+  display: inline-block;
+}
+.accordion-block__btn[aria-expanded=false] .js-accordion__icon-minus {
+  display: none;
+}
+
+.accordion-block__btn[aria-expanded=true] .js-accordion__icon-plus {
+  display: none;
+}
+.accordion-block__btn[aria-expanded=true] .js-accordion__icon-minus {
+  display: inline-block;
 }
 </style>
     <div class="tab-content p-1">
@@ -81,7 +135,7 @@
 @stop
 
 @section('js')
-
+               
     <script>
 
         $("#tcode_searchFilterBtn").on('click', (e) => {
@@ -273,16 +327,13 @@ function fetch_data(){
                                 dataField:"tcodes",
                                 caption:"Tcode",
                                 cellTemplate: (container, options) => {
-                                    var tcodes = options.data.tcodes;   
-                                    console.log(tcodes);                                    
-                                    var html = `<a href='javascript:void(0)' onClick="viewTcodes(${JSON.stringify(tcodes)}')" class='badge badge-primary text-white'><i class='fas fa-eye'></i> View</a>`;
+                                    var tcodes = JSON.stringify(options.data.tcodes);   
+                                    console.log(tcodes);                                   
+                                    var html = `<a href='javascript:void(0)' onClick='viewTcodes(${tcodes})' class='badge badge-primary text-white'><i class='fas fa-eye'></i> View</a>`;
                                     container.append(html);
                                 }
                         },
-                        {
-                                dataField:"actions",
-                                caption:"Actions",
-                        },
+                       
                        ],
                         dataSource: new DevExpress.data.DataSource({
                             store: new DevExpress.data.ArrayStore({
@@ -480,38 +531,73 @@ function showTcodes(permission_id, tcode = '', desc = '') {
 function viewTcodes(tcodes) {
     
     var html = ``
+    console.log('innn')
+   
 
-    var acc = `<div class="accordion" id="accordionPanelsStayOpenExample">
-        
-</div>`
+    var acc = `<div class="events-right accordion-forms">
+  <div class="contact-text accordion-forms__container">`;
+
     $.each(tcodes, (i) => {
 
         let actions = '';
         $.each(tcodes[i].actions, (j) => {
-            actions = `<span class='badge badge-primary'>${tcodes[i].actions[j]}</span>`
+            actions += `<span class='badge badge-primary mr-2 mt-2'>${tcodes[i].actions[j]}</span>`
         });
 
-
-        html += `<div class="accordion-item">
-    <h2 class="accordion-header" id="panelsStayOpen-heading{$i}">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse{$i}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-        ${tcodes[i].tcode}
-      </button>
-    </h2>
-    <div id="panelsStayOpen-collapse${i}" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-heading{$i}">
-      <div class="accordion-body">
-            ${actions}
+        html += `<div class="accordion-block js-accordion">
+      <h3 class="accordion-block__header">
+        <button class="accordion-block__btn js-accordion__trigger" aria-expanded="false">
+          <span> ${tcodes[i].tcode}</span>
+          <svg class="js-accordion__icon-plus" aria-hidden="true" width="24" height="24" fill-rule="evenodd" clip-rule="evenodd">
+            <path d="M11.5 0c6.347 0 11.5 5.153 11.5 11.5s-5.153 11.5-11.5 11.5-11.5-5.153-11.5-11.5 5.153-11.5 11.5-11.5zm0 1c5.795 0 10.5 4.705 10.5 10.5s-4.705 10.5-10.5 10.5-10.5-4.705-10.5-10.5 4.705-10.5 10.5-10.5zm.5 10h6v1h-6v6h-1v-6h-6v-1h6v-6h1v6z" />
+          </svg>
+          <svg class="js-accordion__icon-minus" aria-hidden="false" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
+            <path d="M11.5 0c6.347 0 11.5 5.153 11.5 11.5s-5.153 11.5-11.5 11.5-11.5-5.153-11.5-11.5 5.153-11.5 11.5-11.5zm0 1c5.795 0 10.5 4.705 10.5 10.5s-4.705 10.5-10.5 10.5-10.5-4.705-10.5-10.5 4.705-10.5 10.5-10.5zm-6.5 10h13v1h-13v-1z" />
+          </svg>
+        </button>
+      </h3>
+      <div class="accordion-block__content js-accordion__content" aria-hidden="true">
+        ${actions}
       </div>
-    </div>
-  </div>`;
-
-
-
+    </div>`;
     });
-
+    html += ' </div></div>';
     $("#vtcode").html(html);
     $("#tcode-modal").modal('show');
 }
+
+/* accordion */
+
+  $(document).on("click", ".js-accordion__trigger", (e) => {
+      console.log('triggered');
+    let target = $(e.currentTarget);
+    let expanded = target.attr("aria-expanded") === "true" || false;
+    let targetContent = target
+      .closest(".js-accordion")
+      .find(".js-accordion__content");
+
+    /* collapse all accordion contents */
+    $(".js-accordion__trigger").attr("aria-expanded", "false");
+    $(".js-accordion__content").attr("aria-hidden", "true").slideUp(700);
+
+    /* toggle the target accordion block */
+    target.attr("aria-expanded", !expanded);
+    targetContent.attr("aria-hidden", expanded);
+
+    let targetContentShown =
+      targetContent.attr("aria-hidden") === "true" || false;
+
+    targetContentShown
+      ? targetContent.slideUp(700)
+      : targetContent.slideDown(700);
+  });
+
+
+/* init accordion logic if it exists on the page */
+//$(".js-accordion") ? triggerAccordion() : false;
+
+
     
     </script>
+    
 @stop

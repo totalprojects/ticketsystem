@@ -28,6 +28,9 @@ use App\Http\Controllers\TreeController;
 use App\Http\Controllers\Mail\MailTemplateController;
 use App\Http\Controllers\Mail\VariableController;
 use App\Http\Controllers\Assets\AssetsController;
+use App\Http\Controllers\ChangeManagement\SapChangeManagementController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -113,6 +116,8 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitL
     /** Mail Templates */
     Route::get('/mail/templates',[MailTemplateController::class, 'index'])->name('view.mail.templates');
 
+    /** SAP Change Management */
+    Route::get('/sap/change/management',[SapChangeManagementController::class, 'index'])->name('view.sap.change.management');
 });
 
 /** Ajax Read Calls */

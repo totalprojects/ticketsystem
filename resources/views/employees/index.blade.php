@@ -33,7 +33,7 @@
                         @endif
                     @endif
                </div>
-                <div id="employee-list-div" style="height:auto"></div>
+                <div id="employee-list-div" style="height:600px"></div>
             </div>
         </div>
     </div>

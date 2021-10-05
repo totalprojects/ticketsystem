@@ -275,6 +275,10 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     /** Import Files */
     Route::post('/import/users', [UserController::class, 'importUsers'])->name('import.users');
 
+    /** Dev Stage Change */
+    Route::post('/dev/stage/change', [SapChangeManagementController::class, 'stageChange'])->name('dev.stage.change');
+    Route::post('/allowed/tcodes', [SapChangeManagementController::class, 'allowedTcodes'])->name('get.allowed.tcodes');
+    Route::post('/add/development/sap/request', [SapChangeManagementController::class, 'addRequest'])->name('add.dev.sap.request');
 });
 
 /** Migration Routes */

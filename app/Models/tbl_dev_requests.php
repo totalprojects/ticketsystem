@@ -10,7 +10,8 @@ use StandardTCodes;
 class tbl_dev_requests extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
+    
     public function permission() {
         return $this->belongsTo(Permission::class, 'module_id', 'id');
     }

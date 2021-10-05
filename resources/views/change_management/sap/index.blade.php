@@ -211,7 +211,7 @@
     <div class="tab-pane active dx-viewport" id="users">
         <div class="demo-container">
           <div class="top-info">
-            <div class="table-heading-custom"><h4 class="right"><i class="fas fa-building"></i> List </h4></div>
+            <div class="table-heading-custom"><h4 class="right"><i class="fas fa-book"></i> Development Change Logs </h4></div>
             <button id="add_btn" class='custom-theme-btn'><i class='fa fa-plus'></i> Add Request</button>
           </div>
 
@@ -219,37 +219,43 @@
 
 <!--  MAIN SECTION  -->
 <main>
-
+<div class="temp-heading ml-2 p-2">
+        <p>Developer:  @if($moderators['isDeveloper']==true) <span class='badge badge-success'> Yes </span> @else <span class='badge badge-danger'> No </span>  @endif &nbsp; 
+        Approver/Module Head:  @if($moderators['isModuleHead']==true) <span class='badge badge-success'> Yes </span> @else <span class='badge badge-danger'> No </span>  @endif &nbsp;
+        BASIS:  @if($moderators['isBasis']==true) <span class='badge badge-success'> Yes </span> @else <span class='badge badge-danger'> No </span>  @endif </p> &nbsp;
+</div>
   <!--   KANBAN BOARD STARTS   -->
   <div class="main__kanban">
+      
     <!--     1st board   -->
     @foreach($stages as $each)
     <div class="board">
       <div class="board__header board__style">
         <i class="fas fa-dot-circle"></i>
-        <span>{{ $each->name }}</span>
+        <span>{{ $each['name'] }}</span>
         <i class="fas fa-ellipsis-h"></i>
       </div>
       <div class="board__conatiner" style="min-height:400px; padding:5px;">
-          @if(!empty($each->requests))
-          <input type="hidden" id="stage_id2" value="{{ $each->id }}">
-                @foreach($each->requests as $eachRequest)
-                <div class="board__boxes board__style" draggable="true" style="font-size:11px !important;">
-                    <input type="hidden" id="req_id" value="{{ $eachRequest->id }}">
-                    <input type="hidden" id="stage_id" value="{{ $each->id }}">
-                    <p>Description: <strong>{{ $eachRequest->description }}</strong></p>
-                    <p>Module: <strong>{{ $eachRequest->permission->name }}</strong></p>
-                    <p>TCode: <strong>{{ $eachRequest->tcode->t_code }}</strong></p>
-                    <div class="board__boxes__info">
-                        <i class="fas fa-paperclip"></i>
-                        <span>0</span>
-                        &nbsp;
-                        <i class="fas fa-plus"></i>
-                        
+          @if(!empty($each['requests']))
+                <input type="hidden" id="o__{{ $each['name'] }}" value="{{ $each['id'] }}">
+                @foreach(json_decode($each['requests']) as $eachRequest)
+                    <div class="board__boxes board__style" draggable="{{ ($each['isDraggable'] == true) ? 'true' : 'false' }}">
+                        <input type="hidden" id="state__{{ $eachRequest->id }}" value="{{ ($each['isDropable'] == true) ? 'true' : 'false' }}">
+                        <input type="hidden" id="req_id" value="{{ $eachRequest->id }}">
+                        <input type="hidden" id="stage_id" value="{{ $each['id'] }}">
+                        <p>Description: <strong>{{ $eachRequest->description }}</strong></p>
+                        <p>Module: <strong>{{ $eachRequest->permission->name }}</strong></p>
+                        <p>TCode: <strong>{{ $eachRequest->tcode->t_code }}</strong></p>
+                        <div class="board__boxes__info">
+                            <i class="fas fa-paperclip"></i>
+                            <span>0</span>
+                            &nbsp;
+                            <i class="fas fa-plus"></i>
+                            
+                        </div>
                     </div>
-                </div>
                 @endforeach
-            @endif
+        @endif
       </div>
       <button class="add__card d-none"> <i class="fas fa-plus"></i> Add Card</button>
     </div>
@@ -275,21 +281,23 @@
                 </button>
                 </div>
                 <div class="modal-body">
-        
                 <form id="add-frm" method="post">
                     <div class="row">
                         <div class="col-lg-4 pt-2">
-                            <select name="module_id" id="module_id" class="form-control select2bs4" placeholder='Select Module'>
-                                @foreach($modules as $each)
+                            <select name="module_id" id="module_id" class="form-control select2bs4" data-placeholder='Select Module'>
+                                <option value=""></option>   
+                            @foreach($modules as $each)
                                     <option value="{{ $each['id'] }}">{{ $each['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-lg-4 pt-2">
-                          
                             <select name="tcode_id" id="tcode_id" class="form-control select2bs4" placeholder='Select TCode'>
-                                <option value=""></option>
+                                <option value="">--SELECT MODULE FIRST--</option>
                             </select>
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                            <textarea name="description" id="description" class="form-control" placeholder="Description about the requirement"></textarea>
                         </div>                       
                         <div class="col-lg-4 pt-2">
                             <button class='btn btn-primary' type="submit" id="add-btn" name='add-btn'><i class='fas fa-plus'></i> Add</button>
@@ -315,7 +323,41 @@
 
     <script>
         
-      
+$("#module_id").on('change', (e) => {
+    var module_id = $("#module_id").val();
+    var url = route('get.allowed.tcodes');
+    $.ajax({
+            url:url,
+            data:{module_id},  
+            type:"POST",
+            headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            beforeSend:(r) => {
+              
+            },
+            error:(r) => {
+               console.log(r)
+                toastr.error('Something went wrong');
+            },
+            success:(r) => {
+                var html = ``;
+                if(r.data !== undefined) {
+
+                    $.each(r.data, (i) => {
+                        html += `<option value='${r.data[i].id}'>${r.data[i].name}</option>`;
+                    })
+                    $("#tcode_id").html(html);
+                } else {
+                    toastr.error('No Tcode assigned for this module yet');
+                }
+                
+               
+            }
+
+        })
+    
+})
 
 $(document).on('click','#add_btn', ()=> {
    // //'inn')
@@ -323,57 +365,18 @@ $(document).on('click','#add_btn', ()=> {
 });
 
 
-$(document).on('click','#update-btn', ()=> {
+$(document).on('click','#add-btn', ()=> {
 
-$("#update-frm").validate({
+$("#add-frm").validate({
     rules:{
-        ecompany_name:{
-            required:true
-        },
-        ecompany_code:{
-            required:true
-        }
+       
     },
     submitHandler:(r) => {
         //'next')
-        var url = "{{  route('update.company') }}"
+        var url = "{{  route('add.dev.sap.request') }}"
         $.ajax({
             url:url,
-            data:$("#update-frm").serialize(),  
-            type:"POST",
-            headers: {
-               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            beforeSend:(r) => {
-                $("#update-btn").prop('disabled',true);
-            },
-            error:(r) => {
-                $("#update-btn").prop('disabled',false);
-                toastr.error('Something went wrong');
-            },
-            success:(r) => {
-                $("#update-btn").prop('disabled',false);
-                toastr.success(r.message);
-                $("#edit-modal").modal('hide');
-                fetch_data();
-            }
-
-        })
-    }
-});
-})
-$(document).on('click','#add-btn', ()=> {
-$("#add-frm").validate({
-    rules:{
-        Company_name:{
-            required:true
-        },
-    },
-    submitHandler:(r) => {
-        var url = "{{  route('add.company') }}"
-        $.ajax({
-            url:url,
-            data:$("#add-frm").serialize(),
+            data:$("#add-frm").serialize(),  
             type:"POST",
             headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -382,14 +385,17 @@ $("#add-frm").validate({
                 $("#add-btn").prop('disabled',true);
             },
             error:(r) => {
-                //r.responseJSON)
                 $("#add-btn").prop('disabled',false);
-                toastr.error(r.responseJSON.message);
+                toastr.error('Something went wrong');
             },
             success:(r) => {
                 $("#add-btn").prop('disabled',false);
                 toastr.success(r.message);
                 $("#add-modal").modal('hide');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                
                 fetch_data();
             }
 
@@ -527,33 +533,62 @@ function fetch_data(){
     </script>
     <script type="text/javascript">
 	const draggableElements = document.querySelectorAll(".board__boxes");
-const droppableElements = document.querySelectorAll(".board__conatiner");
+    const droppableElements = document.querySelectorAll(".board__conatiner");
 
-draggableElements.forEach(draggable => {
-  draggable.addEventListener("dragstart", () => {
-    draggable.classList.add("dragging");
-  });
+    draggableElements.forEach(draggable => {
+        draggable.addEventListener("dragstart", (e) => {
+            console.log(e)
+            var dropable = e.target.childNodes[1].value;
+            console.log('is dropable? '+ dropable)
+            if(dropable==false) {
+                draggable.classList.add("dragstart");
+            } else {
+                draggable.classList.add("dragging");
+            }
+            
+        });
 
-  draggable.addEventListener("dragend", (e) => {
-      console.log('dragged')
-      console.log(e)
-      var req_id = e.srcElement.childNodes[1].value;
-      var stage_id = e.srcElement.childNodes[3].value;
-
-      console.log('req_id '+req_id+ ' stage id '+stage_id);
-    draggable.classList.remove("dragging");
-  });
-});
+        draggable.addEventListener("dragend", (e) => {
+            console.log('dragged')
+            console.log(e)
+            var to_stage = $(e.target).parent().find("input").val();
+            console.log(to_stage);
+            console.log('source')
+            console.log(e.srcElement)
+          
+           
+            if(confirm('Are you sure about the change?')) {
+                var req_id = e.srcElement.childNodes[3].value;
+                var stage_id = e.srcElement.childNodes[5].value;
+                    console.log('req_id '+req_id+ ' from stage id '+stage_id+' to stage '+to_stage);
+                var dragIt = $("state__"+req_id).val();
+                changeStage(req_id, stage_id, to_stage);
+                
+            } else {
+                window.location.reload();
+            }
+           
+                
+            
+        });
+    });
 
 droppableElements.forEach(droppable => {
+  console.log('dropping');
+ 
+  droppable.addEventListener("dropend", (e) => {
+    console.log('drop ended!!!')
+    console.log(e) 
+            
+  });
   droppable.addEventListener("dragover", e => {
-    e.preventDefault();
+   // e.preventDefault();
     const nearestElement = getNearestElement(droppable, e.clientY);
     const draggable = document.querySelector(".dragging");
-     // var stage_id = e.srcElement.childNodes[3].value;
-        console.log('after drop')
-      console.log(e);
+   
+
     if (nearestElement == null) {
+        
       droppable.appendChild(draggable);
     } else {
       droppable.insertBefore(draggable, nearestElement);
@@ -578,6 +613,48 @@ function getNearestElement(container, y) {
   },
   { offset: Number.NEGATIVE_INFINITY }).
   element;
+}
+
+function changeStage(req_id, stage_id, to_stage) {
+
+    var url = "{{ route('dev.stage.change') }}";
+    $.ajax({
+               url: url,
+               type: 'POST',
+               headers: {
+                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+               },
+               dataType: "json",
+               data: {req_id, stage_id, to_stage},
+               complete: function (result) {
+
+                if(result.responseJSON) {
+                    var status = result.responseJSON.status;
+
+                    if(status == 200) {
+
+                        toastr.success('Stage of the REQ ID '+req_id+ ' shifted to stage: '+to_stage+ 'successfully! Please wait...');
+                        setTimeout(()=> {
+                            window.location.reload(); 
+                        },2000);
+
+                    } else if(status == 400) {
+                        toastr.error('Error in shifting to unautorized stage');
+                        setTimeout(()=> {
+                            window.location.reload(); 
+                        },2000);
+                    } else {
+                        toastr.error('Error 404, try again');
+                    }
+                } 
+                  
+                   
+               },
+               error: function (e) {
+                   toastr.error(e.getMessage);
+               },
+               //timeout: 2000000
+           });
 }
 </script>
 @stop

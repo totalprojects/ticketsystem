@@ -534,6 +534,18 @@
         position: relative;
         
     }
+    .sap-development-icon {
+        content:"";
+        background-image:url("{{ asset('assets/images/svg/development-dashboard.svg') }}") !important;
+        width: 25px;
+        height: 25px; 
+        display: inline-block;
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size:contain;
+        position: relative;
+        
+    }
     .load-custom{
           width: 50px;
           height: 50px;

@@ -575,6 +575,10 @@
       100%{transform: rotate(360deg);}
     }
 
+    #ui-datepicker-div{
+        z-index: 99999 !important;
+    }
+
 /**
  * Tooltip Styles
  */

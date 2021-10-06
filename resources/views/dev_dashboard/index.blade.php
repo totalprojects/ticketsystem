@@ -1617,10 +1617,11 @@ function loadRequests() {
                     </div>
                        
                         <div class="mc-description">
-                        <div class='wrapper' style='overflow:auto'>
+                       
                             <h2><i class='fa fa-history'></i> Activity Logs </h2>
+                            <div class='wrapper' style='overflow:auto'>
                                 ${logs}
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <a class="mc-btn-action" onClick="trig(this)">

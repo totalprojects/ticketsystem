@@ -1560,7 +1560,7 @@ function loadRequests() {
             var html = ``;
 
             $.each(r.data, (i) => {
-
+                logs = '';
                 $.each(r.data[i].logs, (j) => {
                     logs += `<p class='shadow-sm' style='padding-top:15px; font-size:13px !important;'><i class='fas fa-angle-double-right'></i> <strong>${r.data[i].logs[j].creator.first_name}</strong> has moved this task from <strong>${r.data[i].logs[j].from_stage.name}</strong> to <strong>${r.data[i].logs[j].to_stage.name}</strong> as on <strong>${r.data[i].logs[j].created_at}</strong></p>`;
                 });

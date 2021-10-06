@@ -310,7 +310,7 @@ class SapChangeManagementController extends Controller
     }
 
     public function fetchModules() {
-        $moduleWiseRequests = Permission::with('requests', 'stageWise')->get();
+        $moduleWiseRequests = Permission::with('requests', 'stageWise')->where('type',2)->get();
         $moduleStageWiseRequest = DevStages::all();
         $dataArray = [];
         $drilled = [];

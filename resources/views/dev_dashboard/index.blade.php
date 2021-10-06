@@ -153,6 +153,9 @@ function renderPieChart(dataset, drilleddata) {
                 chart: {
                     type: 'pie'
                 },
+                exporting: {
+                    enabled: false
+                },
                 title: {
                     text: 'Module wise Requests'
                 },
@@ -203,6 +206,9 @@ function renderStagesBarChart(dataset) {
     Highcharts.chart('bar-1', {
   chart: {
     type: 'column'
+  },
+  exporting: {
+    enabled: false
   },
   title: {
     text: 'Overall Stage wise Request'

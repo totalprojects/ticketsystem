@@ -1619,7 +1619,7 @@ function loadRequests() {
                         <div class="mc-description">
                        
                             <h2><i class='fa fa-history'></i> Activity Logs </h2>
-                            <div class='wrapper' style='overflow:auto'>
+                            <div class='wrapper' style='max-height: 200px; overflow:auto'>
                                 ${logs}
                             </div>
                         </div>

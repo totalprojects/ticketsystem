@@ -10,12 +10,14 @@ use App\Models\Model\model_has_permissions as UserPermissions;
 use DevStages;
 use DevRequests;
 use ModuleHead;
+use DevRequestLogs;
+
 
 class SapChangeManagementController extends Controller
 {
     //
     public function index() {
-
+       // return dd(checkifAnyModerator());
         $data['pag_title'] = "SAP Change Management";
         $user_id = Auth::user()->id;
         $emp_id = Auth::user()->employee_id;
@@ -58,12 +60,12 @@ class SapChangeManagementController extends Controller
                 }
                 
             });
-                $Q->with('permission', 'tcode');
+                $Q->with('permission', 'tcode', 'logs.to_stage','logs.from_stage', 'logs.creator');
          }])->get();
 
 
          $stageswithRequestArray = [];
-        // return $stageswithRequest[0]->name;
+       //  return $stageswithRequest;
          foreach($stageswithRequest as $each) {
 
             $isDraggable = $this->checkIfDraggable($each->id, $is_mh, $is_developer, $is_basis);
@@ -136,9 +138,22 @@ class SapChangeManagementController extends Controller
     }
 
     public function stageChange(Request $request) {
+
         $from_stage = $request->stage_id;
         $to_stage = $request->to_stage;
         $reqId = $request->req_id;
+        $empId = Auth::user()->employee_id;
+        if(!checkIfAnyModerator()) {
+            return response(['status' => 401, 'message' => 'Operation not permitted'], 200);
+        }
+
+        DevRequestLogs::create([
+            'dev_req_id' => $reqId,
+            'from_stage' => $from_stage,
+            'to_stage' => $to_stage,
+            'remarks' => 'N/A',
+            'created_by' => $empId
+        ]);
 
         $checkBeforeChange = DevRequests::where(['id' => $reqId])->select('id', 'current_stage')->get();
 
@@ -227,5 +242,31 @@ class SapChangeManagementController extends Controller
         } catch(\Exception $e) {
             return response(['message' => $e->getMessage()], 500);
         }
+    }
+
+    public function getRspEmployees(Request $request) {
+        $req_id = $request->req_id;
+
+        $getTask = DevRequests::where('id', $req_id)->get();
+
+        if($getTask->Count() == 0) {
+            return response(['data' => []], 500);
+        }
+
+        $module_id = $getTask[0]->module_id;
+
+        $getUsers = UserPermissions::where('permission_id', $module_id)->has('users')->get();
+        $respUsersArray = [];
+        foreach($getUsers as $each) {
+            if($each->users->employee_id>0) {
+                $respUsersArray[] = [
+                    'id' => $each->users->employee_id,
+                    'name' => $each->users->name
+                ];
+            }
+           
+        }
+
+        return response(['data' => $respUsersArray, 'status' => 200], 200);
     }
 }

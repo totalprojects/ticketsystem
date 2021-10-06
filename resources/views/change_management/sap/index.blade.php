@@ -250,7 +250,10 @@
                             <i class="fas fa-paperclip"></i>
                             <span>0</span>
                             &nbsp;
-                            <i class="fas fa-plus"></i>
+                            @php($logs = json_encode($eachRequest->logs))
+                            <i class="fas fa-book" onClick="viewLogs({{ $logs }})"></i>
+                            &nbsp;
+                            <i class="fas fa-plus" onClick="addTask({{$eachRequest->id}})"></i>
                             
                         </div>
                     </div>
@@ -313,6 +316,67 @@
             </div>
     </div>
 
+    <!-- View Logs -->
+    <div class="modal fade" id="view-logs-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Task Logs</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                  <div id="logs"></div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+            </div>
+    </div>
+
+    <!-- Add Task -->
+    <div class="modal fade" id="add-task-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <form id="add-task-frm" method="post">
+                    <div class="row">
+                        <div class="col-lg-4 pt-2">
+                          <input type="hidden" id="treq_id" name="treq_id">
+                           <textarea name="task_remarks" class="form-control" placeholder="Add Task Description"></textarea>
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                            <input type="text" id="task_due_date" class="form-control" placeholder="Task Due Date">
+                        </div>
+                        <div class="col-lg-4 pt-2">
+                        <select name='assigned_to' id='assgined' class='form-control select2bs4' data-placeholder='Assign To'>
+                         
+                        </select>
+                        </div>
+                                      
+                        <div class="col-lg-4 pt-2">
+                            <button class='btn btn-primary' type="submit" id="add-btn" name='add-task-btn'><i class='fas fa-plus'></i> Add</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+            </div>
+    </div>
+
 @stop
 
 @section('css')
@@ -322,7 +386,7 @@
 @section('js')
 
     <script>
-        
+$("#task_due_date").datepicker({minDate:0, maxDate: '+1m', changeMonth:true, dateFormat: 'yy-mm-dd'});
 $("#module_id").on('change', (e) => {
     var module_id = $("#module_id").val();
     var url = route('get.allowed.tcodes');
@@ -549,13 +613,7 @@ function fetch_data(){
         });
 
         draggable.addEventListener("dragend", (e) => {
-            console.log('dragged')
-            console.log(e)
             var to_stage = $(e.target).parent().find("input").val();
-            console.log(to_stage);
-            console.log('source')
-            console.log(e.srcElement)
-          
            
             if(confirm('Are you sure about the change?')) {
                 var req_id = e.srcElement.childNodes[3].value;
@@ -630,21 +688,25 @@ function changeStage(req_id, stage_id, to_stage) {
 
                 if(result.responseJSON) {
                     var status = result.responseJSON.status;
-
                     if(status == 200) {
 
-                        toastr.success('Stage of the REQ ID '+req_id+ ' shifted to stage: '+to_stage+ 'successfully! Please wait...');
+                        toastr.success('Stage of the REQ ID '+req_id+ ' shifted to stage: '+to_stage+' successfully! Please wait...');
+
+                    } else if(status == 400) {
+                        toastr.error('Error in dropping: Reason: Unauthorized Stage');
                         setTimeout(()=> {
                             window.location.reload(); 
                         },2000);
-
-                    } else if(status == 400) {
-                        toastr.error('Error in shifting to unautorized stage');
+                    } else if(status == 401) {
+                        toastr.error('Operation not permitted!');
                         setTimeout(()=> {
                             window.location.reload(); 
                         },2000);
                     } else {
                         toastr.error('Error 404, try again');
+                        setTimeout(()=> {
+                            window.location.reload(); 
+                        },2000);
                     }
                 } 
                   
@@ -654,7 +716,59 @@ function changeStage(req_id, stage_id, to_stage) {
                    toastr.error(e.getMessage);
                },
                //timeout: 2000000
-           });
+    });
+}
+
+
+function viewLogs(logs) {
+
+  var html = ``;
+
+  $.each(logs, (i) => {
+    html += `<span><strong>${logs[i].creator.first_name}</strong> moved this task from <strong>${logs[i].from_stage.name}</strong> to <strong>${logs[i].to_stage.name}</strong> on <strong>${logs[i].created_at}</strong></span> <hr>`
+  });
+
+  $("#view-logs-modal").modal('show');
+  $("#logs").html(html)
+
+}
+
+function addTask(req_id) {
+
+
+  var url = "{{ route('get.module.resp.employees') }}";
+    $.ajax({
+               url: url,
+               type: 'GET',
+               headers: {
+                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+               },
+               dataType: "json",
+               data: {req_id},
+               complete: function (result) {
+
+                if(result.responseJSON) {
+                    var data = result.responseJSON.data;
+                    var html = ` <option value=''></option>`;
+                      $.each(data, (i) => {
+                          html += `<option value='${data[i].id}'>${data[i].name}</option>`;
+                      })
+                    html += `</select>`;
+                    $("#assgined").html(html)
+                    $("#treq_id").val(req_id);
+                    $("#add-task-modal").modal('show');
+                      
+                } else {
+                  toasr.error('Something went wrong');
+                }
+                  
+                   
+               },
+               error: function (e) {
+                   toastr.error(e.getMessage);
+               },
+               //timeout: 2000000
+    });
 }
 </script>
 @stop

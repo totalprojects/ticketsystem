@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Permission;
 use StandardTCodes;
+use DevRequestLogs;
 
 class tbl_dev_requests extends Model
 {
@@ -18,5 +19,9 @@ class tbl_dev_requests extends Model
 
     public function tcode() {
         return $this->belongsTo(StandardTCodes::class, 'tcode_id', 'id');
+    }
+
+    public function logs() {
+        return $this->hasMany(DevRequestLogs::class, 'dev_req_id', 'id');
     }
 }

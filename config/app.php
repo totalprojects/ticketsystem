@@ -281,7 +281,9 @@ return [
         'SoftwareSolutions'   => App\Models\tbl_software_solutions_masters::class,
         'EmployeeSoftwareAccess' => App\Models\tbl_employee_software_solution_access_mappings::class,
         'DevStages'                => App\Models\tbl_dev_stages::class,
-        'DevRequests'              => App\Models\tbl_dev_requests::class
+        'DevRequests'              => App\Models\tbl_dev_requests::class,
+        'DevRequestLogs'              => App\Models\tbl_dev_requests_change_logs::class,
+        'DevRequestTasks'              => App\Models\tbl_dev_req_tasks::class
 
     ]
 

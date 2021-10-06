@@ -43,6 +43,25 @@ function isModerator($type) {
     return $flag;
 }
 
+function checkIfAnyModerator() {
+
+    $emp_id = \Auth::user()->employee_id;
+    $user_id  = \Auth::user()->id;
+    $moderator = Moderators::where(['employee_id' => $emp_id, 'type_id' => 4])->get();
+    // any moderator
+    $flag = ($moderator->Count() > 0) ? true : false;
+
+    // module head
+    $is_module_head =   ModuleHead::where('user_id', $user_id)->get();
+    $flag2 = ($is_module_head->Count() > 0) ? true : false;
+
+    // developer
+    $flag3 = false;
+
+
+    return ($flag === true || $flag2 === true || $flag3 === true) ? true : false;
+}
+
 function webBaseURL() {
     return "http://125.22.105.181:33066/audit_compliance/public/";
 }

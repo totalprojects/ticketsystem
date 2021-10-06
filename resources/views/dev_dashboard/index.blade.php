@@ -24,26 +24,7 @@
 .approval-time-wrap.row > div {
     margin-bottom: 25px;
 }
-.count-wrap .count {
-    font-size: 40px;
-    font-weight: 800;
-    color: #e4ff55;
-    height: 85px;
-    width: 85px;
-    background: #255e61;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin-bottom: 15px;
-}
 
-.count-wrap p {
-    text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    color: #255e61;
-}
 .legends {
     width: 100% !important;
     font-weight: 700;
@@ -51,47 +32,47 @@
     font-size: 18px;
     margin-bottom: 10px;
 }
-.lastlogsblock.row {
-    max-height: 300px !important;
-    overflow: auto;
-}
-
-.lastlogsblock .col-sm-3 {
-    border: 0.5px solid #ccc;
-    padding: 5px;
-    text-align: center;
-    font-weight: 600;
-    background-color: #255e61;
-    color: #e4ff55;
-    font-size: 12.5px;
-}
-.lastlogsblock .col-sm-3 p{
-   margin-bottom: 0;
-}
-
-.lastlogsblock .col-sm-9 {
-    border-bottom: 0.5px solid #ccc;
-    border-top: 0.5px solid #ccc;
-    padding: 5px;
-    font-weight: 600;
-    font-size: 12.5px;
-}
 </style>
 
     @if(\Auth::user()->id == 1)
-    <div class="approval-time-wrap row">
-        <div class="col-lg-12">
-            <h2>SAP Development Dashboard</h2>
-        </div>
-      <div class="col-md-6">
-        <div id="pie-1">
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div id="bar-1">
-        </div>
-      </div>   
-    </div> 
+        <div class="approval-time-wrap row">
+            <div class="col-lg-12">
+                <h2>SAP Change Request Dashboard</h2>
+            </div>
+            <div class="col-md-6">
+                <div id="pie-1">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="bar-1">
+                </div>
+            </div>
+            
+            <!-- Search at a glance -->
+            <div class="col-lg-12">
+                <legend>
+                    Search
+                </legend>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" name="tcode" class="form-control" placeholder="TCode">
+            </div>
+            <div class="col-lg-4">
+                <input type="text" name="request_id" class="form-control" placeholder="Request ID">
+            </div>
+            <div class="col-lg-4">
+                <input type="text" name="module_id" class="form-control" placeholder="Module Name">
+            </div>
+            <div class="col-lg-4">
+                <input type="text" name="user_id" class="form-control" placeholder="User">
+            </div>
+            <div class="col-lg-4">
+                <input type="text" name="from" id="from" class="form-control" placeholder="From Date">
+            </div>
+            <div class="col-lg-4">
+                <input type="text" name="to" id="to" class="form-control" placeholder="To Date">
+            </div>
+        </div> 
     @endif
 
 @stop
@@ -125,7 +106,6 @@ $.ajax({
     }
 })
 }
-
 
 /* Load Pie 1 */
 function loadPieChart1() {
@@ -201,7 +181,6 @@ function renderPieChart(dataset, drilleddata) {
 }
 
 /** Load Stages Chart */
-//renderStagesBarChart([]);
 function renderStagesBarChart(dataset) {
     Highcharts.chart('bar-1', {
   chart: {

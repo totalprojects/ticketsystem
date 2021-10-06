@@ -68,10 +68,7 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-
 .kanban-board-wrap main .main__kanban::after {
   content: "";
   padding-right: 25px;
@@ -89,7 +86,7 @@
   max-height: calc(100% - 120px);
   scrollbar-width: none;
   box-shadow: 0 0 7px #ccc;
-  border-radius: 18px;
+  border-radius: 15px;
   
 }
 .kanban-board-wrap main .main__kanban .board__conatiner::-webkit-scrollbar {
@@ -139,7 +136,7 @@
 .kanban-board-wrap main .main__kanban .board__boxes p {
   font-size: 16px;
   color: #2e2e2e;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   line-height: 28px;
 }
 .kanban-board-wrap main .main__kanban .board__boxes__sections {
@@ -162,9 +159,11 @@
   flex-direction: row;
   align-items: center;
 }
-.kanban-board-wrap main .main__kanban .board__boxes__info i{
-    border:1px solid #ccc;
-    padding:5px;
+.kanban-board-wrap main .main__kanban .board__boxes__info i {
+    border: 1px solid #ccc;
+    padding: 5px;
+    color: #e4ff55 !important;
+    background: #255e61;
 }
 .kanban-board-wrap main .main__kanban .board__boxes__info i,
 .kanban-board-wrap main .main__kanban .board__boxes__info span {
@@ -197,7 +196,7 @@
     background: #fffcf3;
     width: 100%;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 15px;
     box-shadow: 0 0 7px #ccc;
 }
 

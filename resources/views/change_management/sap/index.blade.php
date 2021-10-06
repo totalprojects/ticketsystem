@@ -359,12 +359,15 @@
                         </div>
                         <div class="col-lg-4 pt-2">
                         <select name='assigned_to' id='assgined' class='form-control select2bs4' data-placeholder='Assign To'>
-                         
                         </select>
                         </div>
                                       
                         <div class="col-lg-4 pt-2">
                             <button class='btn btn-primary' type="submit" id="add-task-btn" name='add-task-btn'><i class='fas fa-plus'></i> Add</button>
+                        </div>
+
+                        <div class="col-lg-12 pt-2" id="renderTasks">
+                            
                         </div>
                     </div>
                 </form>
@@ -788,6 +791,35 @@ function addTask(req_id) {
 
                 if(result.responseJSON) {
                     var data = result.responseJSON.data;
+                    var tasks = result.responseJSON.existingTasks;
+                   
+                    var html_table = `<table class='table table-bordered mt-2'><thead><th>Sl No</th>
+                    <th>Assigned To</th>
+                    <th>Description</th>
+                    <th>Due Date</th>
+                    <th>Current Status</th>
+                    <th>Created On</th>
+                    </thead>`;
+                    
+                    if(tasks != null) {
+                      html_table += `<tbody>`;
+                      $.each(tasks, (i) => {
+                          html_table += `<tr>
+                            <td>${i+1}</td>
+                            <td>${tasks[i].assigned.first_name+ ' ' +tasks[i].assigned.last_name}</td>
+                            <td>${tasks[i].description}</td>
+                            <td>${tasks[i].due_date}</td>
+                            <td>${(tasks[i].status == 1) ? '<span class="badge badge-success">Completed</span>' : '<span class="badge badge-warning">Pending</span>'}</td>
+                            <td>${tasks[i].created_at}</td>
+                          </tr>`
+                      })
+
+                      html_table += `</tbody></table>`;
+                    } else {
+                      html_table = ``;
+                    }
+                    
+                    console.log(html_table)
                     var html = ` <option value=''></option>`;
                       $.each(data, (i) => {
                           html += `<option value='${data[i].id}'>${data[i].name}</option>`;
@@ -795,6 +827,7 @@ function addTask(req_id) {
                     html += `</select>`;
                     $("#assgined").html(html)
                     $("#treq_id").val(req_id);
+                    $("#renderTasks").html(html_table);
                     $("#add-task-modal").modal('show');
                       
                 } else {

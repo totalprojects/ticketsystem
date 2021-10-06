@@ -292,9 +292,11 @@ class SapChangeManagementController extends Controller
                     'name' => $each->users->name
                 ];
             }
-           
         }
 
-        return response(['data' => $respUsersArray, 'status' => 200], 200);
+        $existingTasks = \DevRequestTasks::where('request_id', $req_id)->with('request','assigned')->get();
+
+
+        return response(['data' => $respUsersArray, 'existingTasks' => $existingTasks, 'status' => 200], 200);
     }
 }

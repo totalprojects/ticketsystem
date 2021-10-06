@@ -104,21 +104,23 @@
 <script type="text/javascript">
 
 loadPieChart1();
+loadBarChart2();
 
 /* Load Stages Bar chart */
 function loadBarChart2() {
 
 $.ajax({
-    url:route('fetch.dev.sap.modules'),
+    url:route('fetch.stage.bar'),
     data:null,
     type:"GET",
     error:(r) => {
         toastr.error("Error");
     },
     success: (r) => {
-        console.log(r.drilleddata);
+
         if(r.data) {
-            renderBarChart(r.data, r.drilleddata);
+            console.log(r.data)
+            renderStagesBarChart(r.data);
         }
     }
 })
@@ -196,7 +198,7 @@ function renderPieChart(dataset, drilleddata) {
 }
 
 /** Load Stages Chart */
-renderStagesBarChart([]);
+//renderStagesBarChart([]);
 function renderStagesBarChart(dataset) {
     Highcharts.chart('bar-1', {
   chart: {
@@ -234,13 +236,13 @@ function renderStagesBarChart(dataset) {
   },
   plotOptions: {
     column: {
-      pointPadding: 0.2,
-      borderWidth: 0
+      pointPadding: 0,
+      borderWidth: 1
     }
   },
   series: [{
     name: 'Requests',
-    data: [1, 4, 5, 2, 9]
+    data: dataset
 
   }]
 });

@@ -579,6 +579,10 @@
         z-index: 99999 !important;
     }
 
+    .highcharts-credits{
+        opacity: 0 !important;
+    }
+
 /**
  * Tooltip Styles
  */

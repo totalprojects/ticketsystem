@@ -534,7 +534,7 @@
         position: relative;
         
     }
-    .sap-development-icon {
+    .development-dashboard-icon {
         content:"";
         background-image:url("{{ asset('assets/images/svg/development-dashboard.svg') }}") !important;
         width: 25px;

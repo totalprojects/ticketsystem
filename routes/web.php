@@ -287,7 +287,8 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     Route::post('/add/development/sap/request', [SapChangeManagementController::class, 'addRequest'])->name('add.dev.sap.request');
     Route::post('/add/development/sap/request/task', [SapChangeManagementController::class, 'addTask'])->name('add.dev.sap.request.task');
     Route::get('/get/module/responsible/employees', [SapChangeManagementController::class, 'getRspEmployees'])->name('get.module.resp.employees');
-
+    Route::get('/get/dev/request/report', [SapChangeManagementController::class, 'fetchDevRequests'])->name('fetch.dev.dashboard.requests');
+    
 });
 
 /** Migration Routes */

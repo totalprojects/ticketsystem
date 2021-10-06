@@ -382,4 +382,12 @@ class SapChangeManagementController extends Controller
             return response(['data' => $reqArr], 200);
             
     }
+
+    public function fetchDevRequests(Request $request) {
+
+
+        $requests = DevRequests::with('permission')->with('creator')->with('logs.from_stage')->with('logs.to_stage')->with('logs.creator')->with('tcode')->get();
+
+        return response(['data' => $requests], 200);
+    }
 }

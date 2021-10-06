@@ -8,12 +8,15 @@ use Permission;
 use StandardTCodes;
 use DevRequestLogs;
 use DevStages;
+use Employees;
 
 class tbl_dev_requests extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    
+    protected $casts = [
+        'created_at' => 'datetime:F m, Y h:i a'
+    ];
     public function permission() {
         return $this->belongsTo(Permission::class, 'module_id', 'id');
     }
@@ -28,6 +31,10 @@ class tbl_dev_requests extends Model
 
     public function stage() {
         return $this->belongsTo(DevStages::class, 'current_stage', 'id');
+    }
+
+    public function creator() {
+        return $this->belongsTo(Employees::class, 'employee_id', 'id');
     }
 
 }

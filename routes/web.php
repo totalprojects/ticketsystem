@@ -118,6 +118,9 @@ Route::group(['prefix' => 'app', 'middleware' => ['auth', 'permissions', 'VisitL
 
     /** SAP Change Management */
     Route::get('/sap/change/management',[SapChangeManagementController::class, 'index'])->name('view.sap.change.management');
+
+    /** SAP DEV DASHBOARD */
+    Route::get('/sap/dev/dashboard',[SapChangeManagementController::class, 'dashboard'])->name('view.dev.sap.dashboard');
 });
 
 /** Ajax Read Calls */
@@ -176,6 +179,9 @@ Route::group(['prefix' => 'listings'], function () {
     /** Mail Templates */
     Route::get('/fetch-mail-templates', [MailTemplateController::class, 'fetchMailTemplates'])->name('get.mail.templates');
 
+    /** SAP DEV Dashboard Fetches */
+    Route::get('/sap/dev/module/wise/view',[SapChangeManagementController::class, 'fetchModules'])->name('fetch.dev.sap.modules');
+    Route::get('/sap/dev/stage/wise/view',[SapChangeManagementController::class, 'fetchStagesBar'])->name('fetch.stage.bar');
 });
 
 /** Ajax Create/Update/Delete calls with logs */

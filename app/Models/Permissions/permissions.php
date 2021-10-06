@@ -11,6 +11,7 @@ use ModuleApprovalStages;
 use CriticalTCodes;
 use RoleTcodeAccess;
 use StandardTCodes;
+use DevRequests;
 
 class permissions extends Model {
     use HasFactory;
@@ -38,4 +39,14 @@ class permissions extends Model {
     public function parent_module() {
         return $this->belongsTo(SystemModules::class, 'id', 'type');
     }
+
+    public function requests() {
+        return $this->hasMany(DevRequests::class, 'module_id', 'id')->selectRaw("module_id, count(id) as total_request")->groupBy(\DB::raw('module_id'));
+    }
+
+    public function stageWise() {
+        return $this->hasMany(DevRequests::class, 'module_id', 'id')->selectRaw("module_id, current_stage, count(id) as total_request")->groupBy(\DB::raw('module_id, current_stage'));
+    }
 }
+
+

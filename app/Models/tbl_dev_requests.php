@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Permission;
 use StandardTCodes;
 use DevRequestLogs;
+use DevStages;
 
 class tbl_dev_requests extends Model
 {
@@ -24,4 +25,9 @@ class tbl_dev_requests extends Model
     public function logs() {
         return $this->hasMany(DevRequestLogs::class, 'dev_req_id', 'id');
     }
+
+    public function stage() {
+        return $this->belongsTo(DevStages::class, 'current_stage', 'id');
+    }
+
 }

@@ -11,6 +11,7 @@ use DevStages;
 use DevRequests;
 use ModuleHead;
 use DevRequestLogs;
+use Permission;
 
 
 class SapChangeManagementController extends Controller
@@ -298,5 +299,81 @@ class SapChangeManagementController extends Controller
 
 
         return response(['data' => $respUsersArray, 'existingTasks' => $existingTasks, 'status' => 200], 200);
+    }
+
+    public function dashboard() {
+        $data = [];
+        $moduleWiseRequests = Permission::with('requests', 'stageWise')->get();
+       // return $moduleWiseRequests;
+      
+        return view('dev_dashboard.index')->with($data);
+    }
+
+    public function fetchModules() {
+        $moduleWiseRequests = Permission::with('requests', 'stageWise')->get();
+        $moduleStageWiseRequest = DevStages::all();
+        $dataArray = [];
+        $drilled = [];
+       // return $moduleWiseRequests;
+        foreach($moduleWiseRequests as $each) {
+            $dataArray[] = [
+                'name' => $each->name,
+                'y' => (count($each->requests) > 0) ? (int) $each->requests[0]->total_request : 0,
+                'drilldown' => $each->name
+            ];
+
+            foreach($moduleStageWiseRequest as $ee) {
+                $eev = 0;
+                foreach($each->stageWise as $e) {
+                    if($ee->id == $e->current_stage) {
+                        $eev = $e->total_request;
+                    }
+                }
+                if(isset($drilled) && !empty($drilled)) {
+                    $flag = 1;
+                    foreach($drilled as $key => $x) {
+
+                        if($x['name'] == $each->name) {
+                            $flag = 0;
+                            array_push($drilled[$key]['data'], [$ee->name, (int) $eev]);
+                        }
+                    }
+
+
+                    if($flag) {
+                        $drilled[] = [
+                            'name' => $each->name,
+                            'id' => $each->name,
+                            'data' => [
+                               [$ee->name, (int) $eev]
+                             ]
+                        ];
+                    }
+                } else {
+                    $drilled[] = [
+                        'name' => $each->name,
+                        'id' => $each->name,
+                        'data' => [
+                           [$ee->name, (int) $eev]
+                         ]
+                    ];
+                }
+
+
+                
+            }   
+        }
+
+        return response(['data' => $dataArray, 'drilleddata' => $drilled], 200);
+    }
+
+
+    public function fetchStagesBar(Request $request) {
+
+            $req = DevStages::with('grouped_requests')->get();
+
+            
+            return response(['data' => $req], 200);
+            
     }
 }

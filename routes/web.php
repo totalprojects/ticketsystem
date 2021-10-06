@@ -279,6 +279,7 @@ Route::group(['prefix' => 'activity', 'middleware' => ['auth', 'Logs']], functio
     Route::post('/dev/stage/change', [SapChangeManagementController::class, 'stageChange'])->name('dev.stage.change');
     Route::post('/allowed/tcodes', [SapChangeManagementController::class, 'allowedTcodes'])->name('get.allowed.tcodes');
     Route::post('/add/development/sap/request', [SapChangeManagementController::class, 'addRequest'])->name('add.dev.sap.request');
+    Route::post('/add/development/sap/request/task', [SapChangeManagementController::class, 'addTask'])->name('add.dev.sap.request.task');
     Route::get('/get/module/responsible/employees', [SapChangeManagementController::class, 'getRspEmployees'])->name('get.module.resp.employees');
 
 });

@@ -244,6 +244,34 @@ class SapChangeManagementController extends Controller
         }
     }
 
+    public function addTask(Request $request) {
+        $assiged_to = $request->assigned_to;
+        $description = $request->task_description;
+        $due_date = $request->task_due_date;
+        $req_id = $request->treq_id;
+        $createdAt = NOW();
+
+        try {
+            //$isDuplicate = DevRequests::where(['module_id' => ])
+
+            $save = \DevRequestTasks::create([
+                'assigned_to' => $assiged_to,
+                'request_id' => $req_id,
+                'description' => $description,
+                'due_date' => $due_date,
+                'status' => 0,
+                'created_at' => $createdAt,
+                'updated_at' => NULL
+            ]);
+
+
+            return response(['message' => 'Success', 'last_id' => $save->id ?? -1], 200);
+
+        } catch(\Exception $e) {
+            return response(['message' => $e->getMessage()], 500);
+        }
+    }
+
     public function getRspEmployees(Request $request) {
         $req_id = $request->req_id;
 

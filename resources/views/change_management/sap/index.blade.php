@@ -352,10 +352,10 @@
                     <div class="row">
                         <div class="col-lg-4 pt-2">
                           <input type="hidden" id="treq_id" name="treq_id">
-                           <textarea name="task_remarks" class="form-control" placeholder="Add Task Description"></textarea>
+                           <textarea name="task_description" class="form-control" placeholder="Add Task Description"></textarea>
                         </div>
                         <div class="col-lg-4 pt-2">
-                            <input type="text" id="task_due_date" class="form-control" placeholder="Task Due Date">
+                            <input type="text" id="task_due_date" name="task_due_date" class="form-control" placeholder="Task Due Date">
                         </div>
                         <div class="col-lg-4 pt-2">
                         <select name='assigned_to' id='assgined' class='form-control select2bs4' data-placeholder='Assign To'>
@@ -364,7 +364,7 @@
                         </div>
                                       
                         <div class="col-lg-4 pt-2">
-                            <button class='btn btn-primary' type="submit" id="add-btn" name='add-task-btn'><i class='fas fa-plus'></i> Add</button>
+                            <button class='btn btn-primary' type="submit" id="add-task-btn" name='add-task-btn'><i class='fas fa-plus'></i> Add</button>
                         </div>
                     </div>
                 </form>
@@ -456,6 +456,45 @@ $("#add-frm").validate({
                 $("#add-btn").prop('disabled',false);
                 toastr.success(r.message);
                 $("#add-modal").modal('hide');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                
+                fetch_data();
+            }
+
+        })
+    }
+});
+})
+
+$(document).on('click','#add-task-btn', (e)=> {
+
+$("#add-task-frm").validate({
+    rules:{
+       
+    },
+    submitHandler:(r) => {
+        //'next')
+        var url = "{{  route('add.dev.sap.request.task') }}"
+        $.ajax({
+            url:url,
+            data:$("#add-task-frm").serialize(),  
+            type:"POST",
+            headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            beforeSend:(r) => {
+                $("#add-task-btn").prop('disabled',true);
+            },
+            error:(r) => {
+                $("#add-task-btn").prop('disabled',false);
+                toastr.error('Something went wrong');
+            },
+            success:(r) => {
+                $("#add-task-btn").prop('disabled',false);
+                toastr.success(r.message);
+                $("#add-task-modal").modal('hide');
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000);

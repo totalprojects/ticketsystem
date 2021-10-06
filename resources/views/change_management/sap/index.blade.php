@@ -234,7 +234,7 @@
         <span>{{ $each['name'] }}</span>
         <i class="fas fa-ellipsis-h"></i>
       </div>
-      <div class="board__conatiner" style="min-height:400px; padding:5px;">
+      <div class="board__conatiner" style="min-height:400px; padding:5px;" ondrop="return false">
           @if(!empty($each['requests']))
                 <input type="hidden" id="o__{{ $each['name'] }}" value="{{ $each['id'] }}">
                 @foreach(json_decode($each['requests']) as $eachRequest)

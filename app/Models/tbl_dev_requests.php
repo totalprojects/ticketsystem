@@ -15,7 +15,7 @@ class tbl_dev_requests extends Model
     use HasFactory;
     protected $guarded = [];
     protected $casts = [
-        'created_at' => 'datetime:F m, Y h:i a'
+        'created_at' => 'datetime:d/m/y h:i a'
     ];
     public function permission() {
         return $this->belongsTo(Permission::class, 'module_id', 'id');

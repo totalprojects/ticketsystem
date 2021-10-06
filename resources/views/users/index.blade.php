@@ -277,7 +277,7 @@
                         // console.log(his_permissions)
                         var html_form = `<h5><strong>User Roles</strong></h5><form method='post' id='user-role-frm' method='post'>
                         @csrf
-                        <select name='roles' class='form-control select2bs4'>
+                        <select name='roles' id='roles_1' class='form-control select2bs4'>
                         `;
                         var is_checked;
                         var flag = false;
@@ -422,11 +422,13 @@
     $(document).on('click','#role-btn', (e)=> {
         e.preventDefault();
         var roles = []
-        var ds = $("input[name='roles']:checked").each(function(i){
-            roles[i] = this.value;
-        });
+        // var ds = $("input[name='roles']:selected").each(function(i){
+        //     roles[i] = this.value;
+        // });
+        var ds = $("#roles_1").val();
+        roles[0] = ds;
         var user_id = $("#user_id_r").val();
-
+        console.log(roles)
         $.ajax({
             url: "{{  route('update.user.roles') }}",
             headers:{

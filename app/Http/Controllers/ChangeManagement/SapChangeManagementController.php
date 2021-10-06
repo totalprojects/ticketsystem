@@ -31,8 +31,8 @@ class SapChangeManagementController extends Controller
                 $permissions[] = $each->permission_id;
             }
         }
-      
-        $is_developer = false;
+
+        $is_developer = (Auth::user()->roles[0]->name === 'ZM_DEVELOPER') ? true : false;
         $is_basis = \Moderators::where(['employee_id' => $emp_id, 'type_id' => 4])->get();
         $is_basis = ($is_basis->Count()>0) ? true : false;
 

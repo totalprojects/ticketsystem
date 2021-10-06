@@ -251,9 +251,9 @@
                             <span>0</span>
                             &nbsp;
                             @php($logs = json_encode($eachRequest->logs))
-                            <i class="fas fa-book" onClick="viewLogs({{ $logs }})"></i>
+                            <i class="fas fa-book" onClick="viewLogs({{ $logs }})" title="View Change Logs"></i>
                             &nbsp;
-                            <i class="fas fa-plus" onClick="addTask({{$eachRequest->id}})"></i>
+                            <i class="fas fa-plus" onClick="addTask({{$eachRequest->id}})" title="Add New Task"></i>
                             
                         </div>
                     </div>

@@ -801,7 +801,7 @@ function addTask(req_id) {
                     <th>Created On</th>
                     </thead>`;
                     
-                    if(tasks != null) {
+                    if(tasks.length>0) {
                       html_table += `<tbody>`;
                       $.each(tasks, (i) => {
                           html_table += `<tr>

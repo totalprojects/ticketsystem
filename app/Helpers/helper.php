@@ -56,8 +56,8 @@ function checkIfAnyModerator() {
     $flag2 = ($is_module_head->Count() > 0) ? true : false;
 
     // developer
-    $flag3 = false;
-
+    $role = Auth::user()->roles[0]->name ?? '';
+    $flag3 = ($role === 'ZM_DEVELOPER') ? true : false;
 
     return ($flag === true || $flag2 === true || $flag3 === true) ? true : false;
 }

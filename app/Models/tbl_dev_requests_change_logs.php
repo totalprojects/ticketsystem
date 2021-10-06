@@ -14,7 +14,7 @@ class tbl_dev_requests_change_logs extends Model
 
     protected $guarded = [];
     protected $casts = [
-        'created_at' => 'datetime:d-m-Y h:i a'
+        'created_at' => 'datetime:F m, y h:i a'
     ];
 
     public function to_stage() {

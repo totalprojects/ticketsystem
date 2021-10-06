@@ -260,13 +260,17 @@
 @media screen and (max-width: 767px) {
   .material-card.mc-active .mc-content {
     position: relative;
+    min-height: none !important;
+    overflow:auto !important;
     margin-right: 16px;
   }
 }
 .material-card.mc-active .mc-description {
-  top: 100px;
-  padding-top: 5.6em;
-  opacity: 1;
+    top: 100px;
+    width: 90%;
+    padding-right: 2em;
+    padding-top: 6.6em;
+    opacity: 1;
   filter: alpha(opacity=100);
 }
 @media screen and (max-width: 767px) {
@@ -1286,6 +1290,11 @@ h3 {
     font-size: 18px;
     margin-bottom: 10px;
 }
+.inheading{
+    background-color:#8BC34A;
+    color:#fff;
+    padding:8px;
+}
 </style>
 
     @if(\Auth::user()->id == 1)
@@ -1309,13 +1318,13 @@ h3 {
                 </legend>
             </div>
     </div> 
-        <form method='post'>
+        <form method='post' id='srchFrm'>
             <div class="row">
                 <div class="col-lg-4 mt-2">
-                    <input type="text" name="tcode" class="form-control" placeholder="TCode">
+                    <input type="text" name="tcode" id="tcode" class="form-control" placeholder="TCode">
                 </div>
                 <div class="col-lg-4 mt-2">
-                    <input type="text" name="request_id" class="form-control" placeholder="Request ID">
+                    <input type="text" name="req_id" id="req_id" class="form-control" placeholder="Request ID">
                 </div>
                 <div class="col-lg-4 mt-2">
                     <input type="text" name="module_id" class="form-control" placeholder="Module Name">
@@ -1324,13 +1333,13 @@ h3 {
                     <input type="text" name="user_id" class="form-control" placeholder="User">
                 </div>
                 <div class="col-lg-4 mt-2">
-                    <input type="text" name="from" id="from" class="form-control" placeholder="From Date">
+                    <input type="text" name="fromDate" id="from" class="form-control" placeholder="From Date">
                 </div>
                 <div class="col-lg-4 mt-2">
-                    <input type="text" name="to" id="to" class="form-control" placeholder="To Date">
+                    <input type="text" name="toDate" id="to" class="form-control" placeholder="To Date">
                 </div>
                 <div class="col-lg-4 mt-2">
-                    <button name="search_btn" id="seaerchBtn" class="btn btn-primary">Search</button>
+                    <button name="search_btn" id="searchBtn" class="btn btn-primary">Search</button>
                 </div>
             </div>
         </form>
@@ -1344,7 +1353,23 @@ h3 {
         </div>
        
     @endif
-
+    <!-- Description modal -->
+    <div class="modal fade" id="desc-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detailed Description</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                  <div id="desc"></div>
+                </div>
+               
+            </div>
+            </div>
+    </div>
 @stop
 
 @section('css')
@@ -1353,6 +1378,20 @@ h3 {
 
 @section('js')
 <script type="text/javascript">
+/** Search Form */
+$("#searchBtn").on('click', (e) => {
+    e.preventDefault();
+    // var req_id = $("#req_id").val();
+    // var tcode = $("#tcode").val();
+
+    // if(req_id.length == 0 && tcode.length == 0) {
+    //     toastr.error('You must search with atleast one search field');
+    //     return false;
+    // }
+        loadRequests();
+    
+});
+
 $("#from").datepicker({ maxDate: 0, changeMonth:true, changeYear:true, dateFormat: 'yy-mm-dd'});
 $("#to").datepicker({ maxDate: 0, changeMonth:true, changeYear:true, dateFormat: 'yy-mm-dd'});
 loadPieChart1();
@@ -1505,10 +1544,10 @@ function renderStagesBarChart(dataset) {
 }
 
 
-function loadRequests(params = []) {
+function loadRequests() {
     $.ajax({
     url:route('fetch.dev.dashboard.requests'),
-    data:null,
+    data:$("#srchFrm").serialize(),
     type:"GET",
     error:(r) => {
         toastr.error("Error");
@@ -1523,7 +1562,7 @@ function loadRequests(params = []) {
             $.each(r.data, (i) => {
 
                 $.each(r.data[i].logs, (j) => {
-                    logs += `<p> ${r.data[i].logs[j].creator.first_name} has moved this task from ${r.data[i].logs[j].from_stage.name} to ${r.data[i].logs[j].to_stage.name} as on ${r.data[i].logs[j].created_at}</p>`;
+                    logs += `<p class='shadow-sm' style='padding-top:15px; font-size:13px !important;'><i class='fas fa-angle-double-right'></i> <strong>${r.data[i].logs[j].creator.first_name}</strong> has moved this task from <strong>${r.data[i].logs[j].from_stage.name}</strong> to <strong>${r.data[i].logs[j].to_stage.name}</strong> as on <strong>${r.data[i].logs[j].created_at}</strong></p>`;
                 });
 
 
@@ -1542,25 +1581,43 @@ function loadRequests(params = []) {
     border-bottom: 1px solid #ccc;
     background-color: #fff;'><h1>DEV/TEST/${r.data[i].id}</h1>&nbsp;&nbsp;<small>${r.data[i].created_at}</small></div>
    
-                    <div class='row' style='position:relative; top:5%; font-size: 12px;
-    padding: 0;
+                    <div class='row' style='position:relative; top:5%; font-size: 13px;
+    padding: 5px;
     margin: 0;'>
+    <div class='col-lg-12'><h6 class='inheading text-bold'>Employee Details</h6></div>
                         <div class='col-lg-4'>
-                            <label> Request ID </label> <hr>
-                            <span> DEV/TEST/${r.data[i].id} </span>
+                            <label> SAP Code </label> <br>
+                            <span class='badge badge-primary'>${r.data[i].creator.sap_code} </span>
                         </div>
                         <div class='col-lg-4'>
-                            <label> Module </label> <hr>
+                            <label> Designation </label> <br>
+                            <span> - </span>
+                        </div>
+                        <div class='col-lg-4'>
+                            <label> Department </label> <br>
+                            <span> ${(r.data[i].creator.departments !== undefined) ? r.data[i].creator.departments.department_name : '-'} </span>
+                        </div>
+                        <div class='col-lg-12 mt-4'><h6 class='inheading text-bold'>Requirements</h6></div>
+                       
+                        <div class='col-lg-4'>
+                            <label> Module </label> <br>
                             <span> ${r.data[i].permission.name} </span>
                         </div>
                         <div class='col-lg-4'>
-                            <label> Tcode </label> <hr>
+                            <label> Tcode </label> <br>
                             <span> ${r.data[i].tcode.t_code} </span>
+                        </div>
+                        <div class='col-lg-4'>
+                            <label> Request Stage </label> <br>
+                            <span class='badge badge-primary'>${r.data[i].stage.name} </span>
+                        </div>
+                        <div class='col-lg-12 mt-2'>
+                            <a href='javascript:void(0)' class='badge badge-primary text-white p-1 m-0' style='padding:4px !important' onclick='viewDescription("${r.data[i].description}")'> Read More </a>
                         </div>
                     </div>
                        
                         <div class="mc-description" style='overflow:auto'>
-                        <h2> Activity Logs </h2>
+                        <h2><i class='fa fa-history'></i> Activity Logs </h2>
                             ${logs}
                         </div>
                     </div>
@@ -1582,10 +1639,16 @@ function loadRequests(params = []) {
     }
 })
 }
+
+function viewDescription(desc) {
+
+    $("#desc").html(`<h5>${desc}</h5>`)
+    $("#desc-modal").modal('show');
+}
 </script>
 
 <script>
- 
+    
 // $(function() {
 
 

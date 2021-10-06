@@ -385,8 +385,45 @@ class SapChangeManagementController extends Controller
 
     public function fetchDevRequests(Request $request) {
 
+        # search filters
+        $req_id = $request->req_id;
+        $tcode = $request->tcode;
+        $module = $request->module_id;
+        $user_id = $request->user_id;
+        $fromDate = !empty($request->fromDate) ? date('Y-m-d', strtotime($request->fromDate)) : '';
+        $toDate = !empty($request->toDate) ? date('Y-m-d', strtotime($request->toDate)) : date('Y-m-d');
 
-        $requests = DevRequests::with('permission')->with('creator')->with('logs.from_stage')->with('logs.to_stage')->with('logs.creator')->with('tcode')->get();
+        $requests = DevRequests::when(!empty($fromDate), function($Q) use($fromDate, $toDate) {
+            $Q->whereBetween('created_at', [$fromDate, $toDate]);
+        })->when(!empty($req_id), function($Q) use($req_id) {
+            if(stristr($req_id, '/')) {
+                $id = explode("/", $req_id);
+                $id = $id[2] ?? NULL;
+                if($id !== null) {
+                    $Q->where('id', $id);
+                }   
+            }
+        })->when(!empty($module), function($Q) use($module) {
+            $Q->whereHas('permission', function($Q) use($module) {
+                $Q->where('name', 'like', '%' .$module . '%');
+            });
+        })->when(!empty($user_id), function($Q) use($user_id) {
+            $Q->whereHas('creator', function($Q) use($user_id) {
+            $Q->with('departments');
+                $Q->where('first_name', 'like', '%' .$user_id . '%');
+                $Q->orWhere('last_name', 'like', '%' .$user_id . '%');
+            });
+        })->whereHas('stage')
+        ->with(['logs' => function($Q) {
+            $Q->with('from_stage');
+            $Q->with('to_stage');
+            $Q->with('creator');
+        }])->with('creator.departments', 'tcode', 'permission', 'stage')
+        ->when(!empty($tcode), function($Q) use($tcode) {
+            $Q->whereHas('tcode', function($Q) use($tcode) {
+                    $Q->where('t_code', $tcode);
+            });
+        })->get();
 
         return response(['data' => $requests], 200);
     }

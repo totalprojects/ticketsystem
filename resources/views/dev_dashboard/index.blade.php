@@ -1320,14 +1320,22 @@ h3 {
     </div> 
         <form method='post' id='srchFrm'>
             <div class="row">
-                <div class="col-lg-4 mt-2">
-                    <input type="text" name="tcode" id="tcode" class="form-control" placeholder="TCode">
-                </div>
+
                 <div class="col-lg-4 mt-2">
                     <input type="text" name="req_id" id="req_id" class="form-control" placeholder="Request ID">
                 </div>
-                <div class="col-lg-4 mt-2">
-                    <input type="text" name="module_id" class="form-control" placeholder="Module Name">
+                <div class="col-lg-4 pt-2">
+                    <select name="module_id" id="module_id" class="form-control select2bs4" data-placeholder='Select Module'>
+                        <option value=""></option>   
+                    @foreach($modules as $each)
+                            <option value="{{ $each['id'] }}">{{ $each['name'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-lg-4 pt-2">
+                    <select name="tcode_id" id="tcode_id" class="form-control select2bs4" placeholder='Select TCode'>
+                        <option value="">--SELECT MODULE FIRST--</option>
+                    </select>
                 </div>
                 <div class="col-lg-4 mt-2">
                     <input type="text" name="user_id" class="form-control" placeholder="User">
@@ -1340,6 +1348,7 @@ h3 {
                 </div>
                 <div class="col-lg-4 mt-2">
                     <button name="search_btn" id="searchBtn" class="btn btn-primary">Search</button>
+                    &nbsp;<button name="reset-btn" id="reset-btn" type="button" class="btn btn-primary">Reset</button>
                 </div>
             </div>
         </form>
@@ -1378,18 +1387,21 @@ h3 {
 
 @section('js')
 <script type="text/javascript">
+/** Reset Form */
+$(document).on('click','#reset-btn', (e) => {
+  e.preventDefault();
+  $("#srchFrm")[0].reset();
+  $("#module_id").val('').trigger('change');
+  $("#tcode_id").val('').trigger('change');
+  customLoader(0)
+  
+})
+
 /** Search Form */
 $("#searchBtn").on('click', (e) => {
     e.preventDefault();
-    // var req_id = $("#req_id").val();
-    // var tcode = $("#tcode").val();
 
-    // if(req_id.length == 0 && tcode.length == 0) {
-    //     toastr.error('You must search with atleast one search field');
-    //     return false;
-    // }
         loadRequests();
-    
 });
 
 $("#from").datepicker({ maxDate: 0, changeMonth:true, changeYear:true, dateFormat: 'yy-mm-dd'});
@@ -1652,18 +1664,15 @@ function viewDescription(desc) {
 
 <script>
     
-// $(function() {
-
 
     function trig(obj) {
-        //e.preventDefault();
-            console.log('ri');
+   
             var card = $(obj).parent('.material-card');
             var icon = $(obj).children('i');
             icon.addClass('fa-spin-fast');
 
             if (card.hasClass('mc-active')) {
-                console.log('act');
+              
                 card.removeClass('mc-active');
 
                 window.setTimeout(function() {
@@ -1674,7 +1683,7 @@ function viewDescription(desc) {
 
                 }, 800);
             } else {
-                console.log('inac');
+                
                 card.addClass('mc-active');
 
                 window.setTimeout(function() {
@@ -1686,7 +1695,6 @@ function viewDescription(desc) {
                 }, 800);
             }
         };
- //   });
 
 </script>
 @stop

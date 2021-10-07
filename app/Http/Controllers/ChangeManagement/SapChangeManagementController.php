@@ -303,8 +303,20 @@ class SapChangeManagementController extends Controller
 
     public function dashboard() {
         $data = [];
-        $moduleWiseRequests = Permission::with('requests', 'stageWise')->get();
-       // return $moduleWiseRequests;
+        $user_id = Auth::user()->id;
+        $modules = UserPermissions::where('model_id', $user_id)->whereHas('permission', function($Q) {
+            $Q->where('type', 2);
+        })->with('permission')->get();
+    
+        $modulesArray = [];
+        foreach($modules as $each) {
+            $modulesArray[] = [
+                'id' => $each->permission_id,
+                'name' => !is_null($each->permission->name) ? $each->permission->name : '-'
+            ];
+        }
+        
+        $data['modules'] = $modulesArray;
       
         return view('dev_dashboard.index')->with($data);
     }
@@ -314,7 +326,6 @@ class SapChangeManagementController extends Controller
         $moduleStageWiseRequest = DevStages::all();
         $dataArray = [];
         $drilled = [];
-       // return $moduleWiseRequests;   
         foreach($moduleWiseRequests as $each) {
             $dataArray[] = [
                 'name' => $each->name,
@@ -387,7 +398,7 @@ class SapChangeManagementController extends Controller
 
         # search filters
         $req_id = $request->req_id;
-        $tcode = $request->tcode;
+        $tcode = $request->tcode_id;
         $module = $request->module_id;
         $user_id = $request->user_id;
         $fromDate = !empty($request->fromDate) ? date('Y-m-d', strtotime($request->fromDate)) : '';
@@ -403,10 +414,9 @@ class SapChangeManagementController extends Controller
                     $Q->where('id', $id);
                 }   
             }
-        })->when(!empty($module), function($Q) use($module) {
-            $Q->whereHas('permission', function($Q) use($module) {
-                $Q->where('name', 'like', '%' .$module . '%');
-            });
+        })->when(!empty($module), function($Q) use($module, $tcode) {
+                $Q->where('module_id', $module);
+                $Q->where('tcode_id', $tcode);
         })->when(!empty($user_id), function($Q) use($user_id) {
             $Q->whereHas('creator', function($Q) use($user_id) {
             $Q->with('departments');
@@ -419,12 +429,12 @@ class SapChangeManagementController extends Controller
             $Q->with('to_stage');
             $Q->with('creator');
         }])->with('creator.departments', 'tcode', 'permission', 'stage')
-        ->when(!empty($tcode), function($Q) use($tcode) {
-            $Q->whereHas('tcode', function($Q) use($tcode) {
-                    $Q->where('t_code', $tcode);
-            });
-        })->get();
+        ->get();
 
         return response(['data' => $requests], 200);
+    }
+
+    public function users() {
+        
     }
 }

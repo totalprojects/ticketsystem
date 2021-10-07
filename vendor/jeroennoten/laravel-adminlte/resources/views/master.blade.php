@@ -903,6 +903,42 @@ function customLoader(loadState = 'off') {
             })
         }
 
+$("#module_id").on('change', (e) => {
+    var module_id = $("#module_id").val();
+    var url = route('get.allowed.tcodes');
+    $.ajax({
+            url:url,
+            data:{module_id},
+            type:"POST",
+            headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            beforeSend:(r) => {
+                customLoader(1)
+            },
+            error:(r) => {
+               console.log(r)
+                toastr.error('Something went wrong');
+            },
+            success:(r) => {
+                var html = `<option value=''>--SELECT TCODE--</option>`;
+                if(r.data !== undefined) {
+
+                    $.each(r.data, (i) => {
+                        html += `<option value='${r.data[i].id}'>${r.data[i].name}</option>`;
+                    })
+                    $("#tcode_id").html(html);
+                } else {
+                    toastr.error('No Tcode assigned for this module yet');
+                }
+
+                customLoader(0)
+            }
+
+        })
+    
+})
+
     </script>
 </body>
 

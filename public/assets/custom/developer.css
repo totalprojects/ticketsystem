@@ -24,9 +24,9 @@
             font-family: 'Open Sans', sans-serif;
         }
         .dx-datagrid-rowsview td {
-            font-weight: 600 !important;
-             font-size: 13px !important;
-             color: #000;
+            font-weight: 400 !important;
+            font-size: 14px !important;
+            color: #000;
         }
         .brand-link .brand-image {
             margin-left:0 !important;
@@ -580,7 +580,10 @@ form#srch-frm {
 .search-icon i {
     color: #e4ff55;
 }
-
+a.empl-name {
+    color: #000ca2 !important;
+    text-decoration: underline;
+}
 
 
 

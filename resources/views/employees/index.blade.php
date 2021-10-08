@@ -392,7 +392,7 @@
                     console.log(options)
                     var name = options.data.first_name+' '+options.data.last_name;
                     var id = btoa(options.data.id)
-                    var html = `<a href='${route('employee.profile', id)}' target='_blank'>${name}</a>`
+                    var html = `<a href='${route('employee.profile', id)}' class="empl-name" target='_blank'>${name}</a>`
                     container.append(html)
                 }
                

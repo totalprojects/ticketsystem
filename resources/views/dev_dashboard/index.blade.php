@@ -1319,8 +1319,11 @@ h3 {
             </div>
     </div> 
         <form method='post' id='srchFrm'>
+          <input type="hidden" name="take" id="take">
+          <input type="hidden" name="skip" id="skip">
+          <input type="hidden" id="position" value="1">
+          <input type="hidden" id="noOfPages" value="0">
             <div class="row">
-
                 <div class="col-lg-4 mt-2">
                     <input type="text" name="req_id" id="req_id" class="form-control" placeholder="Request ID">
                 </div>
@@ -1346,6 +1349,7 @@ h3 {
                 <div class="col-lg-4 mt-2">
                     <input type="text" name="toDate" id="to" class="form-control" placeholder="To Date">
                 </div>
+                
                 <div class="col-lg-4 mt-2">
                     <button name="search_btn" id="searchBtn" class="btn btn-primary">Search</button>
                     &nbsp;<button name="reset-btn" id="reset-btn" type="button" class="btn btn-primary">Reset</button>
@@ -1358,6 +1362,7 @@ h3 {
                 <div class="row active-with-click" id="view-result">
                   
                 </div>
+               
            </div>
         </div>
        
@@ -1391,16 +1396,19 @@ h3 {
 $(document).on('click','#reset-btn', (e) => {
   e.preventDefault();
   $("#srchFrm")[0].reset();
-  $("#module_id").val('').trigger('change');
   $("#tcode_id").val('').trigger('change');
+  $("#module_id").val('').trigger('change');
   customLoader(0)
   
 })
 
+/** On Load Set Take Skip Initial values */
+$("#skip").val(0);
+$("#take").val(3);
+
 /** Search Form */
 $("#searchBtn").on('click', (e) => {
     e.preventDefault();
-
         loadRequests();
 });
 
@@ -1557,6 +1565,7 @@ function renderStagesBarChart(dataset) {
 
 
 function loadRequests() {
+
     $.ajax({
     url:route('fetch.dev.dashboard.requests'),
     data:$("#srchFrm").serialize(),
@@ -1565,100 +1574,142 @@ function loadRequests() {
         toastr.error("Error");
     },
     success: (r) => {
-
         if(r.data) {
-            let logs = '';
-            console.log(r.data)
+            console.log(r)
             var html = ``;
-
-            $.each(r.data, (i) => {
-                logs = '';
-                $.each(r.data[i].logs, (j) => {
-                    logs += `<p class='shadow-sm' style='padding-top:15px; font-size:13px !important;'><i class='fas fa-angle-double-right'></i> <strong>${r.data[i].logs[j].creator.first_name}</strong> has moved this task from <strong>${r.data[i].logs[j].from_stage.name}</strong> to <strong>${r.data[i].logs[j].to_stage.name}</strong> as on <strong>${r.data[i].logs[j].created_at}</strong></p>`;
-                });
-
-
-    html += `<div class="col-md-4 col-sm-6 col-xs-12 mt-4">
-                <article class="material-card Light-Green">
-                    <h2>
-                        <span>${r.data[i].creator.first_name}</span>
-                        <strong>
-                            <i class="fas fa-user-tag"></i>
-                            Operations
-                        </strong>
-                    </h2>
-                    <div class="mc-content shadow" style="min-height:436px">
-                    <div style='padding: 7px;
-    height: 100px;
-    border-bottom: 1px solid #ccc;
-    background-color: #fff;'><h1>DEV/TEST/${r.data[i].id}</h1>&nbsp;&nbsp;<small>${r.data[i].created_at}</small></div>
-   
-                    <div class='row' style='position:relative; top:5%; font-size: 13px;
-    padding: 5px;
-    margin: 0;'>
-    <div class='col-lg-12'><h6 class='inheading text-bold'>Employee Details</h6></div>
-                        <div class='col-lg-4'>
-                            <label> SAP Code </label> <br>
-                            <span class='badge badge-primary'>${r.data[i].creator.sap_code} </span>
-                        </div>
-                        <div class='col-lg-4'>
-                            <label> Designation </label> <br>
-                            <span> - </span>
-                        </div>
-                        <div class='col-lg-4'>
-                            <label> Department </label> <br>
-                            <span> ${(r.data[i].creator.departments !== undefined) ? r.data[i].creator.departments.department_name : '-'} </span>
-                        </div>
-                        <div class='col-lg-12 mt-4'><h6 class='inheading text-bold'>Requirements</h6></div>
-                       
-                        <div class='col-lg-4'>
-                            <label> Module </label> <br>
-                            <span> ${r.data[i].permission.name} </span>
-                        </div>
-                        <div class='col-lg-4'>
-                            <label> Tcode </label> <br>
-                            <span> ${r.data[i].tcode.t_code} </span>
-                        </div>
-                        <div class='col-lg-4'>
-                            <label> Request Stage </label> <br>
-                            <span class='badge badge-primary'>${r.data[i].stage.name} </span>
-                        </div>
-                        <div class='col-lg-12 mt-2'>
-                            <a href='javascript:void(0)' class='badge badge-primary text-white p-1 m-0' style='padding:4px !important' onclick='viewDescription("${r.data[i].description}")'> Read More </a>
-                        </div>
-                    </div>
-                       
-                        <div class="mc-description">
-                       
-                            <h2><i class='fa fa-history'></i> Activity Logs </h2>
-                            <div class='wrapper' style='max-height: 200px; overflow:auto'>
-                                ${logs}
-                            </div>
-                        </div>
-                    </div>
-                    <a class="mc-btn-action" onClick="trig(this)">
-                        <i class="fa fa-bars"></i>
-                    </a>
-                    <div class="mc-footer d-none">
-                        
-                    </div>
-                </article>
-            </div>`;
-
-            });
-          
-         
+            const take = $("#take").val();
+            html = renderHTML(r.data, r.totalCount, take)
             $("#view-result").html(html)
-            
+        } else {
+          toastr.error('Something went wrong');
         }
     }
 })
+}
+
+function renderHTML(data, totalCount, take) {
+let html = ``;
+let logs = '';
+
+      
+        $.each(data, (i) => {
+            $.each(data[i].logs, (j) => {
+              logs += `<p class='shadow-sm' style='padding-top:15px; font-size:13px !important;'><i class='fas fa-angle-double-right'></i> <strong>${data[i].logs[j].creator.first_name}</strong> has moved this task from <strong>${data[i].logs[j].from_stage.name}</strong> to <strong>${data[i].logs[j].to_stage.name}</strong> as on <strong>${data[i].logs[j].created_at}</strong></p>`;
+            });
+
+            html += `<div class="col-md-4 col-sm-6 col-xs-12 mt-4">
+                        <article class="material-card Light-Green">
+                            <h2>
+                                <span>${data[i].creator.first_name}</span>
+                                <strong>
+                                    <i class="fas fa-user-tag"></i>
+                                    Operations
+                                </strong>
+                            </h2>
+                            <div class="mc-content shadow" style="min-height:auto">
+                              <div style='padding: 7px;
+                        height: 100px;
+                        border-bottom: 1px solid #ccc;
+                        background-color: #fff;'><h1>DEV/TEST/${data[i].id}</h1>&nbsp;&nbsp;<small>${data[i].created_at}</small></div>
+                      
+                                        <div class='row' style='position:relative; top:5%; font-size: 13px;
+                        padding: 5px;
+                        margin: 0;'>
+                        <div class='col-lg-12'>
+                          <h6 class='inheading text-bold'>Employee Details</h6></div>
+                                <div class='col-lg-4'>
+                                    <label> SAP Code </label> <br>
+                                    <span class='badge badge-primary'>${data[i].creator.sap_code} </span>
+                                </div>
+                                <div class='col-lg-4'>
+                                    <label> Designation </label> <br>
+                                    <span> - </span>
+                                </div>
+                                <div class='col-lg-4'>
+                                    <label> Department </label> <br>
+                                    <span> ${(data[i].creator.departments !== undefined) ? data[i].creator.departments.department_name : '-'} </span>
+                                </div>
+                                <div class='col-lg-12 mt-4'><h6 class='inheading text-bold'>Requirements</h6></div>
+                              
+                                <div class='col-lg-4'>
+                                    <label> Module </label> <br>
+                                    <span> ${data[i].permission.name} </span>
+                                </div>
+                                <div class='col-lg-4'>
+                                    <label> Tcode </label> <br>
+                                    <span> ${data[i].tcode.t_code} </span>
+                                </div>
+                                <div class='col-lg-4'>
+                                    <label> Request Stage </label> <br>
+                                    <span class='badge badge-primary'>${data[i].stage.name} </span>
+                                </div>
+                                <div class='col-lg-12 mt-2'>
+                                    <a href='javascript:void(0)' class='badge badge-primary text-white p-1 m-0' style='padding:4px !important' onclick='viewDescription("${data[i].description}")'> Read More </a>
+                                </div>
+                            </div>
+                              
+                                <div class="mc-description">
+                              
+                                    <h2><i class='fa fa-history'></i> Activity Logs </h2>
+                                    <div class='wrapper' style='max-height: 200px; overflow:auto'>
+                                        ${logs}
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="mc-btn-action" onClick="trig(this)">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                            <div class="mc-footer d-none">
+                                
+                            </div>
+                        </article>
+                    </div>`;
+
+                  });
+                      pages = 
+                      html += `<div class='col-lg-12'><nav aria-label="Page navigation">
+                          <ul class="pagination">
+                            <li class="page-item">
+                              <a class="page-link" href='javascript:void(0)' onclick="moveLeft()" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                              </a>
+                            </li>
+                            
+                            ${ generatePagination(totalCount, take) }
+                            <li class="page-item">
+                              <a class="page-link" href='javascript:void(0)' onclick="moveRight()" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                              </a>
+                            </li>
+                          </ul>
+                      </nav></div>`;
+
+                return html;
 }
 
 function viewDescription(desc) {
 
     $("#desc").html(`<h5>${desc}</h5>`)
     $("#desc-modal").modal('show');
+}
+
+function generatePagination(count, take) {
+  let pages = count / take;
+  if(count % take == 0) {
+    pages = count / take;
+  } else {
+    // 5 or 7 or 8 or 10
+    pages = Math.round(pages);
+  }
+
+  let html = ``;
+  for(let i=0; i<pages; i++) {
+    html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onClick="navigate('${i+1}')">${i+1}</a></li>`
+  };
+  $("#noOfPages").val(pages)
+  return html;
 }
 </script>
 
@@ -1695,6 +1746,40 @@ function viewDescription(desc) {
                 }, 800);
             }
         };
+
+
+        function navigate(position) {
+            let take = parseInt($("#take").val());
+            let newSkip = parseInt($("#skip").val());
+            if(position == 1 || position < 0) {
+              newSkip = 0
+            } else if(position > 1) {
+              newSkip = (position-1) * take;
+            }
+              $("#skip").val(newSkip);
+              $("#position").val(position)
+              loadRequests();
+        }
+
+        function moveRight() {
+            var currentPos = parseInt($("#position").val());
+            var noOfPages = parseInt($("#noOfPages").val());
+            if(currentPos < noOfPages) {
+              navigate(++currentPos)
+            }
+        }
+
+        function moveLeft() {
+          var currentPos = parseInt($("#position").val());
+          console.log(currentPos)
+          if(currentPos>1){
+            navigate(--currentPos)
+          }
+          
+        }
+
+
+
 
 </script>
 @stop

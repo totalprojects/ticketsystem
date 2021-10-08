@@ -905,6 +905,9 @@ function customLoader(loadState = 'off') {
 
 $("#module_id").on('change', (e) => {
     var module_id = $("#module_id").val();
+    if(module_id == 0 || module_id == '') {
+        return false;
+    } 
     var url = route('get.allowed.tcodes');
     $.ajax({
             url:url,

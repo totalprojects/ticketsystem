@@ -404,6 +404,16 @@ h3 {
                 </div>
             </div>
             <div class="col-md-6">
+              <div class="bar-filter-section">
+                  <form id="bar-chart-filter">
+                      <div class="row">
+                      <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                          <i class="fa fa-calendar"></i>&nbsp;
+                          <span></span> <i class="fa fa-caret-down"></i>
+                      </div>
+                      </div>  
+                  </form>
+              </div>
                 <div id="bar-1">
                 </div>
             </div>  
@@ -497,6 +507,41 @@ $(document).on('click','#reset-btn', (e) => {
   
 })
 
+// $('#monthly').datepicker( {
+//   changeMonth: true,
+//   showButtonPanel: true,
+//   dateFormat: 'MM',
+//   onClose: function(dateText, inst) { 
+//     console.log('closed date')
+//     console.log(dateText)
+//      // $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+//   }
+// });
+var start = moment().subtract(29, 'days');
+var end = moment();
+
+function cb(start, end) {
+    $('#reportrange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      var range = $("#reportrange").html();
+      loadBarChart2(range)
+}
+$("#reportrange").daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+}, cb);
+cb(start, end)
+
+
+
+
 /** On Load Set Take Skip Initial values */
 $("#skip").val(0);
 $("#take").val(3);
@@ -517,11 +562,11 @@ loadRequests();
 
 
 /* Load Stages Bar chart */
-function loadBarChart2() {
+function loadBarChart2(range) {
 
   $.ajax({
       url:route('fetch.stage.bar'),
-      data:null,
+      data:{range},
       type:"GET",
       error:(r) => {
           toastr.error("Error");

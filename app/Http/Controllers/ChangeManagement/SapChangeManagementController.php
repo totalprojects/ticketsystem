@@ -381,6 +381,8 @@ class SapChangeManagementController extends Controller
 
     public function fetchStagesBar(Request $request) {
 
+
+            
             $req = DevStages::with('grouped_requests')->orderBy('id','asc')->get();
             $reqArr = [];
             foreach($req as $each) {

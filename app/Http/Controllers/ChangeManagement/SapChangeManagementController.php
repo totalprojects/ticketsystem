@@ -66,7 +66,7 @@ class SapChangeManagementController extends Controller
 
 
          $stageswithRequestArray = [];
-       //  return $stageswithRequest;
+
          foreach($stageswithRequest as $each) {
 
             $isDraggable = $this->checkIfDraggable($each->id, $is_mh, $is_developer, $is_basis);
@@ -303,8 +303,20 @@ class SapChangeManagementController extends Controller
 
     public function dashboard() {
         $data = [];
-        $moduleWiseRequests = Permission::with('requests', 'stageWise')->get();
-       // return $moduleWiseRequests;
+        $user_id = Auth::user()->id;
+        $modules = UserPermissions::where('model_id', $user_id)->whereHas('permission', function($Q) {
+            $Q->where('type', 2);
+        })->with('permission')->get();
+    
+        $modulesArray = [];
+        foreach($modules as $each) {
+            $modulesArray[] = [
+                'id' => $each->permission_id,
+                'name' => !is_null($each->permission->name) ? $each->permission->name : '-'
+            ];
+        }
+        
+        $data['modules'] = $modulesArray;
       
         return view('dev_dashboard.index')->with($data);
     }
@@ -314,7 +326,6 @@ class SapChangeManagementController extends Controller
         $moduleStageWiseRequest = DevStages::all();
         $dataArray = [];
         $drilled = [];
-       // return $moduleWiseRequests;   
         foreach($moduleWiseRequests as $each) {
             $dataArray[] = [
                 'name' => $each->name,
@@ -387,9 +398,12 @@ class SapChangeManagementController extends Controller
 
         # search filters
         $req_id = $request->req_id;
-        $tcode = $request->tcode;
+        $tcode = $request->tcode_id;
         $module = $request->module_id;
         $user_id = $request->user_id;
+        $take = $request->take;
+        $skip = $request->skip;
+
         $fromDate = !empty($request->fromDate) ? date('Y-m-d', strtotime($request->fromDate)) : '';
         $toDate = !empty($request->toDate) ? date('Y-m-d', strtotime($request->toDate)) : date('Y-m-d');
 
@@ -403,10 +417,11 @@ class SapChangeManagementController extends Controller
                     $Q->where('id', $id);
                 }   
             }
-        })->when(!empty($module), function($Q) use($module) {
-            $Q->whereHas('permission', function($Q) use($module) {
-                $Q->where('name', 'like', '%' .$module . '%');
-            });
+        })->when(!empty($module), function($Q) use($module, $tcode) {
+                $Q->where('module_id', $module);
+                $Q->when(!empty($tcode), function($Q) use($tcode) {
+                    $Q->where('tcode_id', $tcode);
+                });
         })->when(!empty($user_id), function($Q) use($user_id) {
             $Q->whereHas('creator', function($Q) use($user_id) {
             $Q->with('departments');
@@ -418,13 +433,15 @@ class SapChangeManagementController extends Controller
             $Q->with('from_stage');
             $Q->with('to_stage');
             $Q->with('creator');
-        }])->with('creator.departments', 'tcode', 'permission', 'stage')
-        ->when(!empty($tcode), function($Q) use($tcode) {
-            $Q->whereHas('tcode', function($Q) use($tcode) {
-                    $Q->where('t_code', $tcode);
-            });
-        })->get();
+        }])->with('creator.departments', 'tcode', 'permission', 'stage');
 
-        return response(['data' => $requests], 200);
+        $totalCount = $requests->get()->Count();
+        $result = $requests->take($take)->skip($skip)->get();
+
+        return response(['data' => $result, 'totalCount' => $totalCount], 200);
+    }
+
+    public function users() {
+        
     }
 }

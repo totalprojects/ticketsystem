@@ -299,534 +299,7 @@
 .material-card.mc-active .mc-footer h4 {
   top: -32px;
 }
-.material-card.Red h2 {
-  background-color: #F44336;
-}
-.material-card.Red h2:after {
-  border-top-color: #F44336;
-  border-right-color: #F44336;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Red h2:before {
-  border-top-color: transparent;
-  border-right-color: #B71C1C;
-  border-bottom-color: #B71C1C;
-  border-left-color: transparent;
-}
-.material-card.Red.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #F44336;
-  border-bottom-color: #F44336;
-  border-left-color: transparent;
-}
-.material-card.Red.mc-active h2:after {
-  border-top-color: #B71C1C;
-  border-right-color: #B71C1C;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Red .mc-btn-action {
-  background-color: #F44336;
-}
-.material-card.Red .mc-btn-action:hover {
-  background-color: #B71C1C;
-}
-.material-card.Red .mc-footer h4 {
-  color: #B71C1C;
-}
-.material-card.Red .mc-footer a {
-  background-color: #B71C1C;
-}
-.material-card.Red.mc-active .mc-content {
-  background-color: #FFEBEE;
-}
-.material-card.Red.mc-active .mc-footer {
-  background-color: #FFCDD2;
-}
-.material-card.Red.mc-active .mc-btn-action {
-  border-color: #FFEBEE;
-}
-.material-card.Blue-Grey h2 {
-  background-color: #607D8B;
-}
-.material-card.Blue-Grey h2:after {
-  border-top-color: #607D8B;
-  border-right-color: #607D8B;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Blue-Grey h2:before {
-  border-top-color: transparent;
-  border-right-color: #263238;
-  border-bottom-color: #263238;
-  border-left-color: transparent;
-}
-.material-card.Blue-Grey.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #607D8B;
-  border-bottom-color: #607D8B;
-  border-left-color: transparent;
-}
-.material-card.Blue-Grey.mc-active h2:after {
-  border-top-color: #263238;
-  border-right-color: #263238;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Blue-Grey .mc-btn-action {
-  background-color: #607D8B;
-}
-.material-card.Blue-Grey .mc-btn-action:hover {
-  background-color: #263238;
-}
-.material-card.Blue-Grey .mc-footer h4 {
-  color: #263238;
-}
-.material-card.Blue-Grey .mc-footer a {
-  background-color: #263238;
-}
-.material-card.Blue-Grey.mc-active .mc-content {
-  background-color: #ECEFF1;
-}
-.material-card.Blue-Grey.mc-active .mc-footer {
-  background-color: #CFD8DC;
-}
-.material-card.Blue-Grey.mc-active .mc-btn-action {
-  border-color: #ECEFF1;
-}
-.material-card.Pink h2 {
-  background-color: #E91E63;
-}
-.material-card.Pink h2:after {
-  border-top-color: #E91E63;
-  border-right-color: #E91E63;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Pink h2:before {
-  border-top-color: transparent;
-  border-right-color: #880E4F;
-  border-bottom-color: #880E4F;
-  border-left-color: transparent;
-}
-.material-card.Pink.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #E91E63;
-  border-bottom-color: #E91E63;
-  border-left-color: transparent;
-}
-.material-card.Pink.mc-active h2:after {
-  border-top-color: #880E4F;
-  border-right-color: #880E4F;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Pink .mc-btn-action {
-  background-color: #E91E63;
-}
-.material-card.Pink .mc-btn-action:hover {
-  background-color: #880E4F;
-}
-.material-card.Pink .mc-footer h4 {
-  color: #880E4F;
-}
-.material-card.Pink .mc-footer a {
-  background-color: #880E4F;
-}
-.material-card.Pink.mc-active .mc-content {
-  background-color: #FCE4EC;
-}
-.material-card.Pink.mc-active .mc-footer {
-  background-color: #F8BBD0;
-}
-.material-card.Pink.mc-active .mc-btn-action {
-  border-color: #FCE4EC;
-}
-.material-card.Purple h2 {
-  background-color: #9C27B0;
-}
-.material-card.Purple h2:after {
-  border-top-color: #9C27B0;
-  border-right-color: #9C27B0;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Purple h2:before {
-  border-top-color: transparent;
-  border-right-color: #4A148C;
-  border-bottom-color: #4A148C;
-  border-left-color: transparent;
-}
-.material-card.Purple.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #9C27B0;
-  border-bottom-color: #9C27B0;
-  border-left-color: transparent;
-}
-.material-card.Purple.mc-active h2:after {
-  border-top-color: #4A148C;
-  border-right-color: #4A148C;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Purple .mc-btn-action {
-  background-color: #9C27B0;
-}
-.material-card.Purple .mc-btn-action:hover {
-  background-color: #4A148C;
-}
-.material-card.Purple .mc-footer h4 {
-  color: #4A148C;
-}
-.material-card.Purple .mc-footer a {
-  background-color: #4A148C;
-}
-.material-card.Purple.mc-active .mc-content {
-  background-color: #F3E5F5;
-}
-.material-card.Purple.mc-active .mc-footer {
-  background-color: #E1BEE7;
-}
-.material-card.Purple.mc-active .mc-btn-action {
-  border-color: #F3E5F5;
-}
-.material-card.Deep-Purple h2 {
-  background-color: #673AB7;
-}
-.material-card.Deep-Purple h2:after {
-  border-top-color: #673AB7;
-  border-right-color: #673AB7;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Deep-Purple h2:before {
-  border-top-color: transparent;
-  border-right-color: #311B92;
-  border-bottom-color: #311B92;
-  border-left-color: transparent;
-}
-.material-card.Deep-Purple.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #673AB7;
-  border-bottom-color: #673AB7;
-  border-left-color: transparent;
-}
-.material-card.Deep-Purple.mc-active h2:after {
-  border-top-color: #311B92;
-  border-right-color: #311B92;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Deep-Purple .mc-btn-action {
-  background-color: #673AB7;
-}
-.material-card.Deep-Purple .mc-btn-action:hover {
-  background-color: #311B92;
-}
-.material-card.Deep-Purple .mc-footer h4 {
-  color: #311B92;
-}
-.material-card.Deep-Purple .mc-footer a {
-  background-color: #311B92;
-}
-.material-card.Deep-Purple.mc-active .mc-content {
-  background-color: #EDE7F6;
-}
-.material-card.Deep-Purple.mc-active .mc-footer {
-  background-color: #D1C4E9;
-}
-.material-card.Deep-Purple.mc-active .mc-btn-action {
-  border-color: #EDE7F6;
-}
-.material-card.Indigo h2 {
-  background-color: #3F51B5;
-}
-.material-card.Indigo h2:after {
-  border-top-color: #3F51B5;
-  border-right-color: #3F51B5;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Indigo h2:before {
-  border-top-color: transparent;
-  border-right-color: #1A237E;
-  border-bottom-color: #1A237E;
-  border-left-color: transparent;
-}
-.material-card.Indigo.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #3F51B5;
-  border-bottom-color: #3F51B5;
-  border-left-color: transparent;
-}
-.material-card.Indigo.mc-active h2:after {
-  border-top-color: #1A237E;
-  border-right-color: #1A237E;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Indigo .mc-btn-action {
-  background-color: #3F51B5;
-}
-.material-card.Indigo .mc-btn-action:hover {
-  background-color: #1A237E;
-}
-.material-card.Indigo .mc-footer h4 {
-  color: #1A237E;
-}
-.material-card.Indigo .mc-footer a {
-  background-color: #1A237E;
-}
-.material-card.Indigo.mc-active .mc-content {
-  background-color: #E8EAF6;
-}
-.material-card.Indigo.mc-active .mc-footer {
-  background-color: #C5CAE9;
-}
-.material-card.Indigo.mc-active .mc-btn-action {
-  border-color: #E8EAF6;
-}
-.material-card.Blue h2 {
-  background-color: #2196F3;
-}
-.material-card.Blue h2:after {
-  border-top-color: #2196F3;
-  border-right-color: #2196F3;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Blue h2:before {
-  border-top-color: transparent;
-  border-right-color: #0D47A1;
-  border-bottom-color: #0D47A1;
-  border-left-color: transparent;
-}
-.material-card.Blue.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #2196F3;
-  border-bottom-color: #2196F3;
-  border-left-color: transparent;
-}
-.material-card.Blue.mc-active h2:after {
-  border-top-color: #0D47A1;
-  border-right-color: #0D47A1;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Blue .mc-btn-action {
-  background-color: #2196F3;
-}
-.material-card.Blue .mc-btn-action:hover {
-  background-color: #0D47A1;
-}
-.material-card.Blue .mc-footer h4 {
-  color: #0D47A1;
-}
-.material-card.Blue .mc-footer a {
-  background-color: #0D47A1;
-}
-.material-card.Blue.mc-active .mc-content {
-  background-color: #E3F2FD;
-}
-.material-card.Blue.mc-active .mc-footer {
-  background-color: #BBDEFB;
-}
-.material-card.Blue.mc-active .mc-btn-action {
-  border-color: #E3F2FD;
-}
-.material-card.Light-Blue h2 {
-  background-color: #03A9F4;
-}
-.material-card.Light-Blue h2:after {
-  border-top-color: #03A9F4;
-  border-right-color: #03A9F4;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Light-Blue h2:before {
-  border-top-color: transparent;
-  border-right-color: #01579B;
-  border-bottom-color: #01579B;
-  border-left-color: transparent;
-}
-.material-card.Light-Blue.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #03A9F4;
-  border-bottom-color: #03A9F4;
-  border-left-color: transparent;
-}
-.material-card.Light-Blue.mc-active h2:after {
-  border-top-color: #01579B;
-  border-right-color: #01579B;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Light-Blue .mc-btn-action {
-  background-color: #03A9F4;
-}
-.material-card.Light-Blue .mc-btn-action:hover {
-  background-color: #01579B;
-}
-.material-card.Light-Blue .mc-footer h4 {
-  color: #01579B;
-}
-.material-card.Light-Blue .mc-footer a {
-  background-color: #01579B;
-}
-.material-card.Light-Blue.mc-active .mc-content {
-  background-color: #E1F5FE;
-}
-.material-card.Light-Blue.mc-active .mc-footer {
-  background-color: #B3E5FC;
-}
-.material-card.Light-Blue.mc-active .mc-btn-action {
-  border-color: #E1F5FE;
-}
-.material-card.Cyan h2 {
-  background-color: #00BCD4;
-}
-.material-card.Cyan h2:after {
-  border-top-color: #00BCD4;
-  border-right-color: #00BCD4;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Cyan h2:before {
-  border-top-color: transparent;
-  border-right-color: #006064;
-  border-bottom-color: #006064;
-  border-left-color: transparent;
-}
-.material-card.Cyan.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #00BCD4;
-  border-bottom-color: #00BCD4;
-  border-left-color: transparent;
-}
-.material-card.Cyan.mc-active h2:after {
-  border-top-color: #006064;
-  border-right-color: #006064;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Cyan .mc-btn-action {
-  background-color: #00BCD4;
-}
-.material-card.Cyan .mc-btn-action:hover {
-  background-color: #006064;
-}
-.material-card.Cyan .mc-footer h4 {
-  color: #006064;
-}
-.material-card.Cyan .mc-footer a {
-  background-color: #006064;
-}
-.material-card.Cyan.mc-active .mc-content {
-  background-color: #E0F7FA;
-}
-.material-card.Cyan.mc-active .mc-footer {
-  background-color: #B2EBF2;
-}
-.material-card.Cyan.mc-active .mc-btn-action {
-  border-color: #E0F7FA;
-}
-.material-card.Teal h2 {
-  background-color: #009688;
-}
-.material-card.Teal h2:after {
-  border-top-color: #009688;
-  border-right-color: #009688;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Teal h2:before {
-  border-top-color: transparent;
-  border-right-color: #004D40;
-  border-bottom-color: #004D40;
-  border-left-color: transparent;
-}
-.material-card.Teal.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #009688;
-  border-bottom-color: #009688;
-  border-left-color: transparent;
-}
-.material-card.Teal.mc-active h2:after {
-  border-top-color: #004D40;
-  border-right-color: #004D40;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Teal .mc-btn-action {
-  background-color: #009688;
-}
-.material-card.Teal .mc-btn-action:hover {
-  background-color: #004D40;
-}
-.material-card.Teal .mc-footer h4 {
-  color: #004D40;
-}
-.material-card.Teal .mc-footer a {
-  background-color: #004D40;
-}
-.material-card.Teal.mc-active .mc-content {
-  background-color: #E0F2F1;
-}
-.material-card.Teal.mc-active .mc-footer {
-  background-color: #B2DFDB;
-}
-.material-card.Teal.mc-active .mc-btn-action {
-  border-color: #E0F2F1;
-}
-.material-card.Green h2 {
-  background-color: #4CAF50;
-}
-.material-card.Green h2:after {
-  border-top-color: #4CAF50;
-  border-right-color: #4CAF50;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Green h2:before {
-  border-top-color: transparent;
-  border-right-color: #1B5E20;
-  border-bottom-color: #1B5E20;
-  border-left-color: transparent;
-}
-.material-card.Green.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #4CAF50;
-  border-bottom-color: #4CAF50;
-  border-left-color: transparent;
-}
-.material-card.Green.mc-active h2:after {
-  border-top-color: #1B5E20;
-  border-right-color: #1B5E20;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Green .mc-btn-action {
-  background-color: #4CAF50;
-}
-.material-card.Green .mc-btn-action:hover {
-  background-color: #1B5E20;
-}
-.material-card.Green .mc-footer h4 {
-  color: #1B5E20;
-}
-.material-card.Green .mc-footer a {
-  background-color: #1B5E20;
-}
-.material-card.Green.mc-active .mc-content {
-  background-color: #E8F5E9;
-}
-.material-card.Green.mc-active .mc-footer {
-  background-color: #C8E6C9;
-}
-.material-card.Green.mc-active .mc-btn-action {
-  border-color: #E8F5E9;
-}
+
 .material-card.Light-Green h2 {
   background-color: #255e61;
 }
@@ -883,390 +356,6 @@ article.material-card.Light-Green.mc-active h2:before {
 .material-card.Light-Green.mc-active .mc-btn-action {
   border-color: #F1F8E9;
 }
-.material-card.Lime h2 {
-  background-color: #CDDC39;
-}
-.material-card.Lime h2:after {
-  border-top-color: #CDDC39;
-  border-right-color: #CDDC39;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Lime h2:before {
-  border-top-color: transparent;
-  border-right-color: #827717;
-  border-bottom-color: #827717;
-  border-left-color: transparent;
-}
-.material-card.Lime.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #CDDC39;
-  border-bottom-color: #CDDC39;
-  border-left-color: transparent;
-}
-.material-card.Lime.mc-active h2:after {
-  border-top-color: #827717;
-  border-right-color: #827717;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Lime .mc-btn-action {
-  background-color: #CDDC39;
-}
-.material-card.Lime .mc-btn-action:hover {
-  background-color: #827717;
-}
-.material-card.Lime .mc-footer h4 {
-  color: #827717;
-}
-.material-card.Lime .mc-footer a {
-  background-color: #827717;
-}
-.material-card.Lime.mc-active .mc-content {
-  background-color: #F9FBE7;
-}
-.material-card.Lime.mc-active .mc-footer {
-  background-color: #F0F4C3;
-}
-.material-card.Lime.mc-active .mc-btn-action {
-  border-color: #F9FBE7;
-}
-.material-card.Yellow h2 {
-  background-color: #FFEB3B;
-}
-.material-card.Yellow h2:after {
-  border-top-color: #FFEB3B;
-  border-right-color: #FFEB3B;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Yellow h2:before {
-  border-top-color: transparent;
-  border-right-color: #F57F17;
-  border-bottom-color: #F57F17;
-  border-left-color: transparent;
-}
-.material-card.Yellow.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #FFEB3B;
-  border-bottom-color: #FFEB3B;
-  border-left-color: transparent;
-}
-.material-card.Yellow.mc-active h2:after {
-  border-top-color: #F57F17;
-  border-right-color: #F57F17;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Yellow .mc-btn-action {
-  background-color: #FFEB3B;
-}
-.material-card.Yellow .mc-btn-action:hover {
-  background-color: #F57F17;
-}
-.material-card.Yellow .mc-footer h4 {
-  color: #F57F17;
-}
-.material-card.Yellow .mc-footer a {
-  background-color: #F57F17;
-}
-.material-card.Yellow.mc-active .mc-content {
-  background-color: #FFFDE7;
-}
-.material-card.Yellow.mc-active .mc-footer {
-  background-color: #FFF9C4;
-}
-.material-card.Yellow.mc-active .mc-btn-action {
-  border-color: #FFFDE7;
-}
-.material-card.Amber h2 {
-  background-color: #FFC107;
-}
-.material-card.Amber h2:after {
-  border-top-color: #FFC107;
-  border-right-color: #FFC107;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Amber h2:before {
-  border-top-color: transparent;
-  border-right-color: #FF6F00;
-  border-bottom-color: #FF6F00;
-  border-left-color: transparent;
-}
-.material-card.Amber.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #FFC107;
-  border-bottom-color: #FFC107;
-  border-left-color: transparent;
-}
-.material-card.Amber.mc-active h2:after {
-  border-top-color: #FF6F00;
-  border-right-color: #FF6F00;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Amber .mc-btn-action {
-  background-color: #FFC107;
-}
-.material-card.Amber .mc-btn-action:hover {
-  background-color: #FF6F00;
-}
-.material-card.Amber .mc-footer h4 {
-  color: #FF6F00;
-}
-.material-card.Amber .mc-footer a {
-  background-color: #FF6F00;
-}
-.material-card.Amber.mc-active .mc-content {
-  background-color: #FFF8E1;
-}
-.material-card.Amber.mc-active .mc-footer {
-  background-color: #FFECB3;
-}
-.material-card.Amber.mc-active .mc-btn-action {
-  border-color: #FFF8E1;
-}
-.material-card.Orange h2 {
-  background-color: #FF9800;
-}
-.material-card.Orange h2:after {
-  border-top-color: #FF9800;
-  border-right-color: #FF9800;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Orange h2:before {
-  border-top-color: transparent;
-  border-right-color: #E65100;
-  border-bottom-color: #E65100;
-  border-left-color: transparent;
-}
-.material-card.Orange.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #FF9800;
-  border-bottom-color: #FF9800;
-  border-left-color: transparent;
-}
-.material-card.Orange.mc-active h2:after {
-  border-top-color: #E65100;
-  border-right-color: #E65100;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Orange .mc-btn-action {
-  background-color: #FF9800;
-}
-.material-card.Orange .mc-btn-action:hover {
-  background-color: #E65100;
-}
-.material-card.Orange .mc-footer h4 {
-  color: #E65100;
-}
-.material-card.Orange .mc-footer a {
-  background-color: #E65100;
-}
-.material-card.Orange.mc-active .mc-content {
-  background-color: #FFF3E0;
-}
-.material-card.Orange.mc-active .mc-footer {
-  background-color: #FFE0B2;
-}
-.material-card.Orange.mc-active .mc-btn-action {
-  border-color: #FFF3E0;
-}
-.material-card.Deep-Orange h2 {
-  background-color: #FF5722;
-}
-.material-card.Deep-Orange h2:after {
-  border-top-color: #FF5722;
-  border-right-color: #FF5722;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Deep-Orange h2:before {
-  border-top-color: transparent;
-  border-right-color: #BF360C;
-  border-bottom-color: #BF360C;
-  border-left-color: transparent;
-}
-.material-card.Deep-Orange.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #FF5722;
-  border-bottom-color: #FF5722;
-  border-left-color: transparent;
-}
-.material-card.Deep-Orange.mc-active h2:after {
-  border-top-color: #BF360C;
-  border-right-color: #BF360C;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Deep-Orange .mc-btn-action {
-  background-color: #FF5722;
-}
-.material-card.Deep-Orange .mc-btn-action:hover {
-  background-color: #BF360C;
-}
-.material-card.Deep-Orange .mc-footer h4 {
-  color: #BF360C;
-}
-.material-card.Deep-Orange .mc-footer a {
-  background-color: #BF360C;
-}
-.material-card.Deep-Orange.mc-active .mc-content {
-  background-color: #FBE9E7;
-}
-.material-card.Deep-Orange.mc-active .mc-footer {
-  background-color: #FFCCBC;
-}
-.material-card.Deep-Orange.mc-active .mc-btn-action {
-  border-color: #FBE9E7;
-}
-.material-card.Brown h2 {
-  background-color: #795548;
-}
-.material-card.Brown h2:after {
-  border-top-color: #795548;
-  border-right-color: #795548;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Brown h2:before {
-  border-top-color: transparent;
-  border-right-color: #3E2723;
-  border-bottom-color: #3E2723;
-  border-left-color: transparent;
-}
-.material-card.Brown.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #795548;
-  border-bottom-color: #795548;
-  border-left-color: transparent;
-}
-.material-card.Brown.mc-active h2:after {
-  border-top-color: #3E2723;
-  border-right-color: #3E2723;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Brown .mc-btn-action {
-  background-color: #795548;
-}
-.material-card.Brown .mc-btn-action:hover {
-  background-color: #3E2723;
-}
-.material-card.Brown .mc-footer h4 {
-  color: #3E2723;
-}
-.material-card.Brown .mc-footer a {
-  background-color: #3E2723;
-}
-.material-card.Brown.mc-active .mc-content {
-  background-color: #EFEBE9;
-}
-.material-card.Brown.mc-active .mc-footer {
-  background-color: #D7CCC8;
-}
-.material-card.Brown.mc-active .mc-btn-action {
-  border-color: #EFEBE9;
-}
-.material-card.Grey h2 {
-  background-color: #9E9E9E;
-}
-.material-card.Grey h2:after {
-  border-top-color: #9E9E9E;
-  border-right-color: #9E9E9E;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Grey h2:before {
-  border-top-color: transparent;
-  border-right-color: #212121;
-  border-bottom-color: #212121;
-  border-left-color: transparent;
-}
-.material-card.Grey.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #9E9E9E;
-  border-bottom-color: #9E9E9E;
-  border-left-color: transparent;
-}
-.material-card.Grey.mc-active h2:after {
-  border-top-color: #212121;
-  border-right-color: #212121;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Grey .mc-btn-action {
-  background-color: #9E9E9E;
-}
-.material-card.Grey .mc-btn-action:hover {
-  background-color: #212121;
-}
-.material-card.Grey .mc-footer h4 {
-  color: #212121;
-}
-.material-card.Grey .mc-footer a {
-  background-color: #212121;
-}
-.material-card.Grey.mc-active .mc-content {
-  background-color: #FAFAFA;
-}
-.material-card.Grey.mc-active .mc-footer {
-  background-color: #F5F5F5;
-}
-.material-card.Grey.mc-active .mc-btn-action {
-  border-color: #FAFAFA;
-}
-.material-card.Blue-Grey h2 {
-  background-color: #607D8B;
-}
-.material-card.Blue-Grey h2:after {
-  border-top-color: #607D8B;
-  border-right-color: #607D8B;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Blue-Grey h2:before {
-  border-top-color: transparent;
-  border-right-color: #263238;
-  border-bottom-color: #263238;
-  border-left-color: transparent;
-}
-.material-card.Blue-Grey.mc-active h2:before {
-  border-top-color: transparent;
-  border-right-color: #607D8B;
-  border-bottom-color: #607D8B;
-  border-left-color: transparent;
-}
-.material-card.Blue-Grey.mc-active h2:after {
-  border-top-color: #263238;
-  border-right-color: #263238;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-}
-.material-card.Blue-Grey .mc-btn-action {
-  background-color: #607D8B;
-}
-.material-card.Blue-Grey .mc-btn-action:hover {
-  background-color: #263238;
-}
-.material-card.Blue-Grey .mc-footer h4 {
-  color: #263238;
-}
-.material-card.Blue-Grey .mc-footer a {
-  background-color: #263238;
-}
-.material-card.Blue-Grey.mc-active .mc-content {
-  background-color: #ECEFF1;
-}
-.material-card.Blue-Grey.mc-active .mc-footer {
-  background-color: #CFD8DC;
-}
-.material-card.Blue-Grey.mc-active .mc-btn-action {
-  border-color: #ECEFF1;
-}
 
 h1,
 h2,
@@ -1317,58 +406,56 @@ h3 {
             <div class="col-md-6">
                 <div id="bar-1">
                 </div>
-            </div>
-            
+            </div>  
             <!-- Search at a glance -->
             <div class="col-lg-12">
                 <legend>
                     Search
                 </legend>
             </div>
-    </div> 
-        <form method='post' id='srchFrm'>
-          <input type="hidden" name="take" id="take">
-          <input type="hidden" name="skip" id="skip">
-          <input type="hidden" id="position" value="1">
-          <input type="hidden" id="noOfPages" value="0">
-            <div class="row">
-                <div class="col-lg-4 mt-2">
-                    <input type="text" name="req_id" id="req_id" class="form-control" placeholder="Request ID">
-                </div>
-                <div class="col-lg-4 pt-2">
-                    <select name="module_id" id="module_id" class="form-control select2bs4" data-placeholder='Select Module'>
-                        <option value=""></option>   
-                    @foreach($modules as $each)
-                            <option value="{{ $each['id'] }}">{{ $each['name'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-lg-4 pt-2">
-                    <select name="tcode_id" id="tcode_id" class="form-control select2bs4" placeholder='Select TCode'>
-                        <option value="">--SELECT MODULE FIRST--</option>
-                    </select>
-                </div>
-                <div class="col-lg-4 mt-2">
-                    <input type="text" name="user_id" class="form-control" placeholder="User">
-                </div>
-                <div class="col-lg-4 mt-2">
-                    <input type="text" name="fromDate" id="from" class="form-control" placeholder="From Date">
-                </div>
-                <div class="col-lg-4 mt-2">
-                    <input type="text" name="toDate" id="to" class="form-control" placeholder="To Date">
-                </div>
-                
-                <div class="col-lg-4 mt-2">
-                    <button name="search_btn" id="searchBtn" class="btn btn-primary">Search</button>
-                    &nbsp;<button name="reset-btn" id="reset-btn" type="button" class="btn btn-primary">Reset</button>
-                </div>
-            </div>
-        </form>
+            <form method='post' id='srchFrm'>
+                <input type="hidden" name="take" id="take">
+                <input type="hidden" name="skip" id="skip">
+                <input type="hidden" id="position" value="1">
+                <input type="hidden" id="noOfPages" value="0">
+                  <div class="row">
+                      <div class="col-lg-4 mt-2">
+                          <input type="text" name="req_id" id="req_id" class="form-control" placeholder="Request ID">
+                      </div>
+                      <div class="col-lg-4 pt-2">
+                          <select name="module_id" id="module_id" class="form-control select2bs4" data-placeholder='Select Module'>
+                              <option value=""></option>   
+                          @foreach($modules as $each)
+                                  <option value="{{ $each['id'] }}">{{ $each['name'] }}</option>
+                              @endforeach
+                          </select>
+                      </div>
+                      <div class="col-lg-4 pt-2">
+                          <select name="tcode_id" id="tcode_id" class="form-control select2bs4" placeholder='Select TCode'>
+                              <option value="">--SELECT MODULE FIRST--</option>
+                          </select>
+                      </div>
+                      <div class="col-lg-4 mt-2">
+                          <input type="text" name="user_id" class="form-control" placeholder="User">
+                      </div>
+                      <div class="col-lg-4 mt-2">
+                          <input type="text" name="fromDate" id="from" class="form-control" placeholder="From Date">
+                      </div>
+                      <div class="col-lg-4 mt-2">
+                          <input type="text" name="toDate" id="to" class="form-control" placeholder="To Date">
+                      </div>
+                      
+                      <div class="col-lg-4 mt-2">
+                          <button name="search_btn" id="searchBtn" class="btn btn-primary">Search</button>
+                          &nbsp;<button name="reset-btn" id="reset-btn" type="button" class="btn btn-primary">Reset</button>
+                      </div>
+                  </div>
+            </form>
+        </div> 
+       
         <div class="row">
             <div class='col-lg-12'>
-             
                 <div class="row active-with-click" id="view-result">
-                  
                 </div>
                
            </div>
@@ -1417,32 +504,36 @@ $("#take").val(3);
 /** Search Form */
 $("#searchBtn").on('click', (e) => {
     e.preventDefault();
-        loadRequests();
+      loadRequests();
 });
-
+/** Date Picker */
 $("#from").datepicker({ maxDate: 0, changeMonth:true, changeYear:true, dateFormat: 'yy-mm-dd'});
 $("#to").datepicker({ maxDate: 0, changeMonth:true, changeYear:true, dateFormat: 'yy-mm-dd'});
+
+/** Load Charts and Requests */
 loadPieChart1();
 loadBarChart2();
 loadRequests();
+
+
 /* Load Stages Bar chart */
 function loadBarChart2() {
 
-$.ajax({
-    url:route('fetch.stage.bar'),
-    data:null,
-    type:"GET",
-    error:(r) => {
-        toastr.error("Error");
-    },
-    success: (r) => {
+  $.ajax({
+      url:route('fetch.stage.bar'),
+      data:null,
+      type:"GET",
+      error:(r) => {
+          toastr.error("Error");
+      },
+      success: (r) => {
 
-        if(r.data) {
-            console.log(r.data)
-            renderStagesBarChart(r.data);
-        }
-    }
-})
+          if(r.data) {
+              console.log(r.data)
+              renderStagesBarChart(r.data);
+          }
+      }
+  })
 }
 
 /* Load Pie 1 */
@@ -1464,8 +555,7 @@ function loadPieChart1() {
     })
 }
 
-
-// Create the chart
+/** Render Pic Chart */
 function renderPieChart(dataset, drilleddata) {
         Highcharts.chart('pie-1', {
                 chart: {
@@ -1520,86 +610,86 @@ function renderPieChart(dataset, drilleddata) {
 
 /** Load Stages Chart */
 function renderStagesBarChart(dataset) {
-    Highcharts.chart('bar-1', {
-  chart: {
-    type: 'column'
-  },
-  exporting: {
-    enabled: false
-  },
-  title: {
-    text: 'Overall Stage wise Request'
-  },
-  subtitle: {
-    text: ''
-  },
-  xAxis: {
-    categories: [
-      'REQUIREMENT',
-      'APPROVER',
-      'DEVELOPMENT',
-      'UAT',
-      'PRODUCTION'
-    ],
-    crosshair: true
-  },
-  yAxis: {
-    min: 0,
-    title: {
-      text: 'Count'
-    }
-  },
-  tooltip: {
-    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-      '<td style="padding:0"><b>{point.y}</b></td></tr>',
-    footerFormat: '</table>',
-    shared: true,
-    useHTML: true
-  },
-  plotOptions: {
-    column: {
-      pointPadding: 0,
-      borderWidth: 1
-    }
-  },
-  series: [{
-    name: 'Requests',
-    data: dataset
 
-  }]
-});
+        Highcharts.chart('bar-1', {
+          chart: {
+            type: 'column'
+          },
+          exporting: {
+            enabled: false
+          },
+          title: {
+            text: 'Overall Stage wise Request'
+          },
+          subtitle: {
+            text: ''
+          },
+          xAxis: {
+          categories: [
+            'REQUIREMENT',
+            'APPROVER',
+            'DEVELOPMENT',
+            'UAT',
+            'PRODUCTION'
+          ],
+          crosshair: true
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'Count'
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0,
+            borderWidth: 1
+          }
+        },
+        series: [{
+          name: 'Requests',
+          data: dataset
+
+        }]
+    });
 }
 
-
+/** Load the dev requests */
 function loadRequests() {
 
     $.ajax({
-    url:route('fetch.dev.dashboard.requests'),
-    data:$("#srchFrm").serialize(),
-    type:"GET",
-    error:(r) => {
-        toastr.error("Error");
-    },
-    success: (r) => {
-        if(r.data) {
-            console.log(r)
-            var html = ``;
-            const take = $("#take").val();
-            html = renderHTML(r.data, r.totalCount, take)
-            $("#view-result").html(html)
-        } else {
-          toastr.error('Something went wrong');
-        }
-    }
-})
+      url:route('fetch.dev.dashboard.requests'),
+      data:$("#srchFrm").serialize(),
+      type:"GET",
+      error:(r) => {
+          toastr.error("Error");
+      },
+      success: (r) => {
+          if(r.data) {
+              console.log(r)
+              var html = ``;
+              const take = $("#take").val();
+              html = renderHTML(r.data, r.totalCount, take)
+              $("#view-result").html(html)
+          } else {
+            toastr.error('Something went wrong');
+          }
+      }
+    })
 }
 
 function renderHTML(data, totalCount, take) {
-let html = ``;
-let logs = '';
+  let html = ``;
+  let logs = '';
 
-      
         $.each(data, (i) => {
             $.each(data[i].logs, (j) => {
               logs += `<p class='shadow-sm' style='padding-top:15px; font-size:13px !important;'><i class='fas fa-angle-double-right'></i> <strong>${data[i].logs[j].creator.first_name}</strong> has moved this task from <strong>${data[i].logs[j].from_stage.name}</strong> to <strong>${data[i].logs[j].to_stage.name}</strong> as on <strong>${data[i].logs[j].created_at}</strong></p>`;
@@ -1674,7 +764,7 @@ let logs = '';
                     </div>`;
 
                   });
-                      pages = 
+
                       html += `<div class='col-lg-12'><nav aria-label="Page navigation">
                           <ul class="pagination">
                             <li class="page-item">
@@ -1718,10 +808,6 @@ function generatePagination(count, take) {
   $("#noOfPages").val(pages)
   return html;
 }
-</script>
-
-<script>
-    
 
     function trig(obj) {
    
@@ -1752,7 +838,7 @@ function generatePagination(count, take) {
 
                 }, 800);
             }
-        };
+    };
 
 
         function navigate(position) {
@@ -1778,7 +864,6 @@ function generatePagination(count, take) {
 
         function moveLeft() {
           var currentPos = parseInt($("#position").val());
-          console.log(currentPos)
           if(currentPos>1){
             navigate(--currentPos)
           }

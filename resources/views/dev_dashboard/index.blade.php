@@ -1708,9 +1708,7 @@ function generatePagination(count, take) {
   if(count % take == 0) {
     pages = count / take;
   } else {
-    // 5 or 7 or 8 or 10
-    pages = Math.round(pages);
-    pages += 1;
+    pages = Math.ceil(pages);
   }
 
   let html = ``;

@@ -1710,6 +1710,7 @@ function generatePagination(count, take) {
   } else {
     // 5 or 7 or 8 or 10
     pages = Math.round(pages);
+    pages += 1;
   }
 
   let html = ``;

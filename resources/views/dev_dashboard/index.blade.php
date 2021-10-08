@@ -557,7 +557,8 @@ $("#to").datepicker({ maxDate: 0, changeMonth:true, changeYear:true, dateFormat:
 
 /** Load Charts and Requests */
 loadPieChart1();
-loadBarChart2();
+var range = $("#reportrange").html();
+//loadBarChart2(range);
 loadRequests();
 
 

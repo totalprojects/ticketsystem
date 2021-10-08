@@ -380,15 +380,28 @@ class SapChangeManagementController extends Controller
 
 
     public function fetchStagesBar(Request $request) {
-
-
+            if(!empty($request->range)) {
+                $range = explode('-', $request->range);
+                $to = date('Y-m-d', strtotime(trim($range[1])));
+                $from = date('Y-m-d', strtotime(trim($range[0])));
+            } else {
+                $to =  date('Y-m-d');
+                $from =  date('Y-m-d');
+            }
+           
             
-            $req = DevStages::with('grouped_requests')->orderBy('id','asc')->get();
+           // return $from. ' --- '.$to;
+            $req = DevStages::with('grouped_requests')->whereHas('requests', function($Q) use($from, $to) {
+                    $Q->whereBetween(\DB::raw('DATE(created_at)'), [$from, $to]);
+            })->with('requests')->orderBy('id','asc')->get();
             $reqArr = [];
+           // return $req;
             foreach($req as $each) {
                 $total = 0;
                 if(count($each->grouped_requests)>0) {
-                    $total = $each->grouped_requests[0]->total_request;
+                    foreach($each->grouped_requests as $eachReq) {
+                        $total += $eachReq->total_request;
+                    }
                 }
                 $reqArr[] = $total; 
             }

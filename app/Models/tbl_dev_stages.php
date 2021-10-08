@@ -15,6 +15,6 @@ class tbl_dev_stages extends Model
     }
 
     public function grouped_requests() {
-        return $this->hasMany(DevRequests::class, 'current_stage', 'id')->selectRaw('count(id) as total_request, current_stage')->groupBy(\DB::raw('current_stage'));
+        return $this->hasMany(DevRequests::class, 'current_stage', 'id')->selectRaw('current_stage, count(id) as total_request')->groupBy(\DB::raw('current_stage'));
     }
 }

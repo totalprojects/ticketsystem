@@ -554,8 +554,8 @@ aside.main-sidebar.sidebar-custom ul.nav.nav-treeview a.nav-link.active {
     border-radius: 30px;
 }
 .search-body input {
-    flex: 0 0 31%;
-    max-width: 31%;
+/*    flex: 0 0 31%;
+    max-width: 31%;*/
     margin-right: 10px;
 }
 form#srch-frm {

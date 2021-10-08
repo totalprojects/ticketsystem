@@ -23,7 +23,31 @@
                        <button id="request_btn" class='custom-theme-btn'><i class='fas fa-fist-raised'></i> Raise Request for Team Member</button>
                     </div>
                 </div>
-                <div class="container">
+                
+                
+                <div class="search-form-wrap p-2">
+                    <form id="srch-frm">
+                        <div class="row">
+                            <div class="search-body d-none">
+                                <button type="button" class="close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                <input type="text" name="requestID" class="form-control" placeholder="Request ID">
+                                <input type="text" name="username" class="form-control" placeholder="Username">
+                                <input type="text" name="date" id='date' class="form-control" placeholder="Creation Date">
+                                <button type="submit" id="srch-btn" class="btn btn-primary  mr-2"><i class='fa fa-search'></i> Search</button>
+                                <button id="clear-filter" class="btn btn-primary"><i class='fa fa-sync'></i> Clear</button>
+                                
+                            </div>
+                            <div class="col-lg-12 text-right">
+                                <div class="search-icon"><label class="mr-2">Search </label><i class="fa fa-search" aria-hidden="true"></i></div> 
+
+                               </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="container d-none">
                   <form id="srch-frm">
                     <div class="row">
                         <div class="col-lg-12">
@@ -44,7 +68,7 @@
                             <button id="clear-filter" class="btn btn-primary"><i class='fa fa-sync'></i> Clear</button>
                         </div>
                     </div>
-                </form>
+                  </form>
                 </div>
                 <div id="request-list-div" style="height:600px"></div>
             </div>

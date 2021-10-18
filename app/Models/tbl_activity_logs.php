@@ -9,8 +9,6 @@ use Users;
 class tbl_activity_logs extends Model {
     use HasFactory;
 
-    public $timestamps = false;
-
     protected $casts = [
         'created_at' => 'datetime:d-m-Y h:i a'
     ];

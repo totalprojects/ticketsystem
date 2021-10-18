@@ -584,9 +584,20 @@ a.empl-name {
     color: #000ca2 !important;
     text-decoration: underline;
 }
-
-
-
+.dev-dashboard-wrap {
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 0 10px #ccc;
+    border-radius: 10px;
+}
+.dev-db-heading h2 {
+    color: #255e61;
+    font-style: normal;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    background: #fff;
+}
 
 
 /** SAP Request Page CSS */

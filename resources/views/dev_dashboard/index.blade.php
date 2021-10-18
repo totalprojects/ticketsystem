@@ -395,8 +395,8 @@ h3 {
 </style>
 
     @if(\Auth::user()->id == 1)
-        <div class="approval-time-wrap row">
-            <div class="col-lg-12">
+        <div class="dev-dashboard-wrap row m-0">
+            <div class="col-lg-12 dev-db-heading">
                 <h2>SAP Change Request Dashboard</h2>
             </div>
             <div class="col-md-6">

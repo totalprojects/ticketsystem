@@ -47,26 +47,26 @@ class EmployeeController extends Controller {
     }
 
     public function profile(Request $request) {
-        
+
         $data['page_title'] = "Employee Profile";
 
         $id = base64_decode($request->id);
 
         $empData = Employees::where('id', $id)->with(
-         'departments',
-         'designation',
-         'state',
-         'district',
-         'company',
-         'report_to.report_employee',
-         'assets.asset.type',
-        //  'user.alloted_permissions.permission.allowed_tcodes.tcode',
-        //  'user.alloted_permissions.permission.allowed_tcodes.access_action_details',
-        //  'user.alloted_permissions.permission.allowed_tcodes.critical'
-        'email_access.provider',
-        'software_access.software'
-         )->get()->toArray();
-       // return $empData;
+            'departments',
+            'designation',
+            'state',
+            'district',
+            'company',
+            'report_to.report_employee',
+            'assets.asset.type',
+            //  'user.alloted_permissions.permission.allowed_tcodes.tcode',
+            //  'user.alloted_permissions.permission.allowed_tcodes.access_action_details',
+            //  'user.alloted_permissions.permission.allowed_tcodes.critical'
+            'email_access.provider',
+            'software_access.software'
+        )->get()->toArray();
+        // return $empData;
         return view('employees.profile.index')->with(['data' => $empData]);
     }
 
@@ -76,6 +76,7 @@ class EmployeeController extends Controller {
 
         return view('user_sap_access_report.index')->with($data);
     }
+
     public function fetchEmployeeSAPReport(Request $request) {
 
         $empData = Employees::with(
@@ -90,60 +91,58 @@ class EmployeeController extends Controller {
             'user.alloted_permissions.permission.module_head.user_details',
             'email_access.provider',
             'software_access.software'
-            )->where('id', '!=', 1)->get();
+        )->where('id', '!=', 1)->get();
 
-            $dataArray = [];
-            $subData = [];
-          //  return $empData;
-            foreach($empData as $each) {
+        $dataArray = [];
+        $subData   = [];
+        //  return $empData;
+        foreach ($empData as $each) {
 
-                $dataArray[] = [
-                    'id' => $each->id,
-                    'first_name' => $each->first_name,
-                    'last_name' => $each->last_name,
-                    'sap_code' => $each->sap_code,
-                    'department' => $each->departments->department_name,
-                    'company' => $each->company->company_name,
-                    'designation' => $each->designation->designation_name ?? '-',
-                    'report_to' => !is_null($each->report_to) ? $each->report_to->report_employee->first_name.' '.$each->report_to->report_employee->last_name : '-'
-                ];
-                $index = 0;
-                if(isset($each->user->alloted_permissions)>0) 
-                    {
-                foreach($each->user->alloted_permissions as $permission) {
+            $dataArray[] = [
+                'id'          => $each->id,
+                'first_name'  => $each->first_name,
+                'last_name'   => $each->last_name,
+                'sap_code'    => $each->sap_code,
+                'department'  => $each->departments->department_name,
+                'company'     => $each->company->company_name,
+                'designation' => $each->designation->designation_name ?? '-',
+                'report_to'   => !is_null($each->report_to) ? $each->report_to->report_employee->first_name . ' ' . $each->report_to->report_employee->last_name : '-'
+            ];
+
+            $index = 0;
+            if (isset($each->user->alloted_permissions) > 0) {
+                foreach ($each->user->alloted_permissions as $permission) {
 
                     $module_name = $permission->permission->name;
                     $module_head = $permission->permission->module_head;
-                    $tcodes1 = [];
-                    if(count($permission->permission->allowed_tcodes)>0) 
-                    {
-                        foreach($permission->permission->allowed_tcodes as $tcodes) {
-                            $actions1 = [];
+                    $tcodes1     = [];
+                    if (count($permission->permission->allowed_tcodes) > 0) {
+                        foreach ($permission->permission->allowed_tcodes as $tcodes) {
+                            $actions1        = [];
                             $tcodes1[$index] = ['tcode' => $tcodes->tcode->t_code, 'actions' => []];
-                            if(isset($tcodes->access_action_details)) {
-                                foreach($tcodes->access_action_details as $actions) {
+                            if (isset($tcodes->access_action_details)) {
+                                foreach ($tcodes->access_action_details as $actions) {
                                     $actions1[] = $actions->name;
                                 }
-                                $tcodes1[$index]['actions'] = $actions1; 
+                                $tcodes1[$index]['actions'] = $actions1;
                             }
-                            
+
                             $index++;
                         }
-                        
+
                         $subData[] = [
-                            'id'        => $each->id,
-                            'module'    => $module_name,
+                            'id'          => $each->id,
+                            'module'      => $module_name,
                             'module_head' => $module_head,
-                            'tcodes'    => $tcodes1,
+                            'tcodes'      => $tcodes1
                         ];
                     }
-                
 
                 }
             }
-            }
+        }
 
-            return response(['data' => $dataArray, 'subData' => $subData, 'totalCount' => count($dataArray)]);
+        return response(['data' => $dataArray, 'subData' => $subData, 'totalCount' => count($dataArray)]);
     }
 
     // fetch employees
@@ -222,12 +221,12 @@ class EmployeeController extends Controller {
             try {
 
                 $employee = Employees::create($employeeArray);
-                if($employee) {
+                if ($employee) {
 
-                    $eid      = Employees::where('email', $request->email)->first();
-                    $id       = $eid->id;
+                    $eid = Employees::where('email', $request->email)->first();
+                    $id  = $eid->id;
                     //return $id;
-                    if($id==0) {
+                    if ($id == 0) {
                         return response(['message' => 'Something went wrong id could not be retrived', 'status' => 500], 500);
                     }
                     if (!empty($request->reporting_to)) {
@@ -305,10 +304,9 @@ class EmployeeController extends Controller {
                 $id = $request->id1;
 
                 $update = \Users::where('employee_id', $id)->update([
-                    'name' => $request->first_name1. ' '.$request->last_name1,
+                    'name'  => $request->first_name1 . ' ' . $request->last_name1,
                     'email' => $request->email1
                 ]);
-                
 
                 //$user->syncRoles($request->role1);
                 // $permissions  = RolePermissions::where('role_id', $request->role1)->get();

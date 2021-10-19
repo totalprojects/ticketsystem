@@ -357,7 +357,7 @@
                             }
                             flag = false
                             if(all_menus[i].parent_id > 0) {
-                                html_form += `</ul><ul><li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'> ${all_menus[i].menu_name} &nbsp;</li></ul>`;
+                                html_form += `<li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'> ${all_menus[i].menu_name} &nbsp;</li></ul><ul class='menu_bar'>`;
                             } else {
                                 html_form += `<li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'> ${all_menus[i].menu_name} &nbsp;`;
                             }

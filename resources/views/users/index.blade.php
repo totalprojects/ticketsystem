@@ -54,6 +54,93 @@
             margin:0;
             padding:0;
         } */
+
+/* .accordion-toggle:after {
+  font-family: 'FontAwesome';
+  content: "\f078";    
+  float: right;
+} */
+
+/* .accordion {
+    background-color: antiquewhite !important;
+    padding:5px;
+    box-shadow: 0 0 2px 3px rgba(0,0,0,0.19);
+}
+.accordion-heading {
+    background-color: cadetblue !important;
+    padding: 5px;
+}
+.accordion-heading a {
+    font-weight: 500 !important;
+    color:cornsilk !important;
+}
+.accordion-body {
+    background-color: cornsilk !important;
+    padding: 5px;
+}
+.accordion-opened .accordion-toggle:after {    
+    content: "\f054";    
+} */
+    .acc-container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 30px auto;
+        background: #ffffff;
+        border-radius: 1rem;
+    }
+    .accordion-heading {
+      background-color: #fff;
+      color: #000000;
+      cursor: pointer;
+      padding: 1rem;
+      text-align: left;
+      outline: none;
+      font-size: 1rem;
+      transition: all 0.4s ease-out;
+      box-shadow: 0px 0px 34px -8px rgba(0, 0, 0, 0.75);
+      display: block;
+    }
+    .accordion-body:first-child .accordion-heading {
+      border-radius: 1rem 1rem 0 0;
+    }
+    .accordion-body:last-child .accordion-heading {
+      border-radius: 0 0 1rem 1rem;
+    }
+    .accordion-heading.active,
+    .accordion-heading:hover {
+      background-color: #255e61;
+      color: #fff;
+    }
+    .accordion-heading.has-child:after {
+      content: "\002B";
+      color: #6e6e6e;
+      font-weight: bold;
+      float: right;
+      margin-left: 0.5rem;
+    }
+    .accordion-heading.has-child.active:after {
+      content: "\2212";
+      color: #fff;
+    }
+    .accordion-content {
+      padding: 0 1rem;
+      background-color: #fff;
+      color: #6c6c6c;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+    .accordion-content ul {
+      list-style-type: none;
+      margin: 1rem 0;
+      padding: 0.2rem;
+    }
+    .accordion-content ul li {
+      padding: 0.2rem 0;
+    }
+    span.accordion-heading.has-child:hover:after {
+      color: #fff;
+    }
 </style>
 <div class="tab-content p-1">
   <div class="tab-pane active dx-viewport" id="users">
@@ -279,7 +366,6 @@
           caption: 'Created At',
           dataType: 'date',
         },
-
         {
           dataField: 'Action',
           caption: 'Action',
@@ -288,115 +374,126 @@
           width: 85,
           alignment: 'left',
           cssClass: '__Action',
-          cellTemplate: function (container, options) {
-            var data = options.data;
+          cellTemplate: function(container, options) {
+        var data = options.data;
 
-            var link = $(`<a class="" href="javascript:void(0)" title="edit">`)
-              .html("<i class='fas fa-cog'></i> Action")
-              .attr('href', 'javascript:void(0)');
+        var link = $(`<a class="" href="javascript:void(0)" title="edit">`)
+            .html("<i class='fas fa-cog'></i> Action")
+            .attr('href', 'javascript:void(0)');
 
-            link.on('click', function () {
-              $('#settings-modal').modal('show');
-              console.log(data);
-              $('#user-details-block').html(
-                `<h5>User Name: ${data.name}</h5><hr>`
-              );
-              var permissions = data.all_permissions;
-              var his_permissions = JSON.parse(data.his_permissions);
-              var all_menus = data.all_menus;
-              var his_menus = JSON.parse(data.his_menus);
-              var his_roles = JSON.parse(data.his_roles);
-              var roles = data.all_roles;
-              // console.log(his_permissions)
-              var html_form = `<h5><strong>User Roles</strong></h5><form method='post' id='user-role-frm' method='post'>
+        link.on('click', function() {
+                   
+                    $('#settings-modal').modal('show');
+                    $('#user-details-block').html(
+                        `<h5>User Name: ${data.name}</h5><hr>`
+                    );
+                    var permissions = data.all_permissions;
+                    var his_permissions = JSON.parse(data.his_permissions);
+                    var all_menus = data.all_menus;
+                    var his_menus = JSON.parse(data.his_menus);
+                    var his_roles = JSON.parse(data.his_roles);
+                    var roles = data.all_roles;
+                    // console.log(his_permissions)
+                    var html_form = `<h5><strong>User Roles</strong></h5><form method='post' id='user-role-frm' method='post'>
                         @csrf
                         <select name='roles' id='roles_1' class='form-control select2bs4'>
                         `;
-              var is_checked;
-              var flag = false;
-              $.each(roles, (i) => {
-                is_checked = '';
-                is_checked = '';
-                flag = his_roles.findIndex(function (his_roles) {
-                  return his_roles.id === roles[i].id;
-                });
-                if (flag != -1) {
-                  is_checked = 'selected';
-                }
-                flag = false;
-                html_form += `<option value='${roles[i].id}' ${is_checked}>${roles[i].name}</option>`;
-              });
-              //console.log(html_form);
+                    var is_checked;
+                    var flag = false;
+                    $.each(roles, (i) => {
+                        is_checked = '';
+                        is_checked = '';
+                        flag = his_roles.findIndex(function(his_roles) {
+                            return his_roles.id === roles[i].id;
+                        });
+                        if (flag != -1) {
+                            is_checked = 'selected';
+                        }
+                        flag = false;
+                        html_form += `<option value='${roles[i].id}' ${is_checked}>${roles[i].name}</option>`;
+                    });
 
-              html_form += `</select><hr><input type='hidden' id='user_id_r' name='user_id_p' value="${data.id}">
+                    html_form += `</select><hr><input type='hidden' id='user_id_r' name='user_id_p' value="${data.id}">
                         <p align='right'><button type='submit' id='role-btn' class='btn btn-primary'>Update Roles</button></p></form><br>`;
-              $('#roles-block').html(html_form);
-              // permissions with parent system module info
+                    $('#roles-block').html(html_form);
 
-              var html_form = `<h5><strong>User Permissions</strong></h5><form method='post' id='user-permission-frm' method='post'>
+                    // permissions with parent system module info
+                    var html_form = `<h5><strong>User Permissions</strong></h5><form method='post' id='user-permission-frm' method='post'>
                               <div class='wrapper'> 
                         @csrf
                         `;
-              var is_checked;
-              var flag = false;
-              $.each(permissions, (j) => {
-                html_form += `<div class="card-header p-1 mb-2 mt-2">
-                                             <label>${permissions[j].system_type}</label>
-                                          </div><div class='checkboxes-wrapper row shadow p-1 mt-1 mb-1'>`;
+                    var is_checked;
+                    var flag = false;
+                    $.each(permissions, (j) => {
+                        html_form += `<div class="card-header p-1 mb-2 mt-2">
+                                              <label>${permissions[j].system_type}</label>
+                                            </div><div class='checkboxes-wrapper row shadow p-1 mt-1 mb-1'>`;
+                        let pp = permissions[j].permissions;
+                        // permissions
+                        $.each(pp, (i) => {
+                            is_checked = '';
+                            flag = his_permissions.findIndex(function(his_permissions) {
+                                return his_permissions.id === pp[i].id;
+                            });
+                            if (flag != -1) {
+                                is_checked = 'checked';
+                            }
+                            flag = false;
+                            html_form += `<div class='col-lg-3'><input type='checkbox' name='permissions' ${is_checked} value='${pp[i].id}'> <label>${pp[i].name}</label>&nbsp; </div>`;
+                        });
 
-                let pp = permissions[j].permissions;
-                // permissions
-                $.each(pp, (i) => {
-                  is_checked = '';
-                  is_checked = '';
-                  flag = his_permissions.findIndex(function (his_permissions) {
-                    return his_permissions.id === pp[i].id;
-                  });
-                  if (flag != -1) {
-                    is_checked = 'checked';
-                  }
-                  flag = false;
+                        html_form += `</div>`;
+                    });
 
-                  html_form += `<div class='col-lg-3'><input type='checkbox' name='permissions' ${is_checked} value='${pp[i].id}'> <label>${pp[i].name}</label>&nbsp; </div>`;
-                });
+                    html_form += `</div><hr><input type='hidden' id='user_id_p' name='user_id_p' value="${data.id}">
+                          <p align='right'><button type='submit' id='permission-btn' class='btn btn-primary'>Update Permissions</button></p></form><br>`;
+                    $('#permissions-block').html(html_form);
 
-                html_form += `</div>`;
-              });
+                    html_form = `<h5><strong>User Menus</strong></h5>
+                                <form id='user-menu-mapping-frm' method='post'>
+                                          @csrf
+                  <div class="acc-container">`;
 
-              //console.log(html_form);
-              html_form += `</div><hr><input type='hidden' id='user_id_p' name='user_id_p' value="${data.id}">
-                        <p align='right'><button type='submit' id='permission-btn' class='btn btn-primary'>Update Permissions</button></p></form><br>`;
-              $('#permissions-block').html(html_form);
+                    $.each(all_menus, (i) => {
+                        is_checked = '';
+                        flag = his_menus.findIndex(function(his_menus) {
+                            return his_menus.menu_id === all_menus[i].id;
+                        });
+                        if (flag != -1) {
+                            is_checked = 'checked';
+                        }
+                        flag = false;
+                        html_form += `<div class="accordion-body"><span class="accordion-heading">
+                                      <input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'>
 
-              html_form = `<h5><strong>User Menus</strong></h5><form id='user-menu-mapping-frm' method='post'>
-                        @csrf
-                        <ul class='menu_bar'>
-                        `;
 
-              $.each(all_menus, (i) => {
-                is_checked = '';
-                flag = his_menus.findIndex(function (his_menus) {
-                  return his_menus.menu_id === all_menus[i].id;
-                });
-                if (flag != -1) {
-                  is_checked = 'checked';
-                }
-                flag = false;
-                if (all_menus[i].parent_id > 0) {
-                  html_form += `<li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'> ${all_menus[i].menu_name} &nbsp;</li></ul><ul class='menu_bar'>`;
-                } else {
-                  html_form += `<li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'> ${all_menus[i].menu_name} &nbsp;`;
-                }
-              });
-              //console.log(html_form);
-              html_form += `<hr><input type='hidden' id='user_id_m' name='user_id_m' value="${data.id}">
-                        <p align='right'><button type='submit' id='menu-btn' class='btn btn-primary'>Update Menu Access</button></p></ul></form><hr>`;
-              $('#menus-block').html(html_form);
-            });
-            //container.append(html)
-            return link;
+                    ${all_menus[i].menu_name} &nbsp;</span>`;
+
+                        if (all_menus[i].children.length > 0) {
+                            html_form += `
+                              <div class="accordion-content"><ul>`;
+                            $.each(all_menus[i].children, (j) => {
+                                html_form += ` <li><input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].children[j].id}'> ${all_menus[i].children[j].menu_name} &nbsp;</li>`;
+                            });
+                            html_form += `</ul></div>`;
+
+                        }
+
+                        html_form += "</div>";
+                    });
+
+
+                    html_form += `</div>`;
+                    html_form += `<hr><input type='hidden' id='user_id_m' name='user_id_m' value="${data.id}">
+                          <p align='right'><button type='submit' id='menu-btn' class='btn btn-primary'>Update Menu Access</button></p></form><hr>`;
+                    $('#menus-block').html(html_form);
+                    accordion()
+                   
+                }) // link
+               
+                return link;
+            }, // cell template
           },
-        },
       ],
     });
   }
@@ -535,5 +632,31 @@
 
     $('#showpermissions').modal('show');
   }
+
+  /** Accordian Code */
+function accordion() {
+  let acc = document.querySelectorAll(".accordion-heading");
+  for (let i = 0; i < acc.length; i++) {
+      console.log('innnnnn')
+    let panelChild = acc[i].nextElementSibling;
+    if(panelChild){
+      acc[i].classList.add('has-child');
+    }
+    acc[i].addEventListener("click", function () {
+    this.classList.toggle("active");
+    let panel = this.nextElementSibling;
+    if(panel){
+      if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+      } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+      }   
+    }
+    });
+  }
+}
+
+
+
 </script>
 @stop

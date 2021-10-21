@@ -46,7 +46,32 @@ class UserController extends Controller {
         //return $all_permissions;
         $all_roles       = Role::all();
         $all_menus       = MenuMaster::orderBy('menu_order', 'asc')->get();
+        $reorderedMenu = [];
+        foreach ($all_menus as $each) {
+            $index = $each->id - 1;
+            if ($each->parent_id > 0 && !empty($reorderedMenu)) {
+                # submenu
+                foreach ($reorderedMenu as $k => $r) {
+                    if ($r['id'] == $each->parent_id) {
+                        // echo $r['id'] . '<br>';
+                        $reorderedMenu[$k]['children'][] = [
+                            'id'        => $each->id,
+                            'menu_name' => $each->menu_name,
+                            'slug'      => $each->menu_slug
+                        ];
+                    }
+                }
+            }
+            if ($each->parent_id == 0) {
+                $reorderedMenu[] = [
+                    'id'        => $each->id,
+                    'menu_name' => $each->menu_name,
+                    'slug'      => $each->menu_slug,
+                    'children'  => []
+                ];
+            }
 
+        }
         $dataArray = [];
         foreach ($modeled as $model) {
             $permissions    = '';
@@ -82,7 +107,7 @@ class UserController extends Controller {
                 'email'           => $model->email,
                 'created'         => date('d-m-Y', strtotime($model->created)),
                 'all_permissions' => $all_permissions,
-                'all_menus'       => $all_menus,
+                'all_menus'       => $reorderedMenu,
                 'his_menus'       => json_encode($model->assigned_menus),
                 'his_roles'       => json_encode($model->roles),
                 'his_permissions' => json_encode($model->permissions),

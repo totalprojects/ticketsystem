@@ -32,7 +32,7 @@ class MenuController extends Controller {
         $parent_id        = $request->parent_id ?? 0;
         $latest_order     = MenuMaster::orderBy('menu_order', 'desc')->select('menu_order')->get();
         $latest_order     = $latest_order[0]->menu_order;
-        $latest_order_inc = $latest_order + 1;
+        $latest_order_inc = ($request->parent_id > 0) ? $latest_order + 0.1 : $latest_order + 1;
         $status           = $request->status;
 
         $checkDup = MenuMaster::where('menu_name', 'like', $menu_name . '%')->get();

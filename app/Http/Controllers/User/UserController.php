@@ -44,8 +44,34 @@ class UserController extends Controller {
         $totalCount      = count($modeled);
         $all_permissions = \SystemModules::with('permissions')->get();
         //return $all_permissions;
-        $all_roles       = Role::all();
-        $all_menus       = MenuMaster::orderBy('menu_order', 'asc')->get();
+        $all_roles     = Role::all();
+        $all_menus     = MenuMaster::orderBy('menu_order', 'asc')->get();
+        $reorderedMenu = [];
+        foreach ($all_menus as $each) {
+            $index = $each->id - 1;
+            if ($each->parent_id > 0 && !empty($reorderedMenu)) {
+                # submenu
+                foreach ($reorderedMenu as $k => $r) {
+                    if ($r['id'] == $each->parent_id) {
+                        // echo $r['id'] . '<br>';
+                        $reorderedMenu[$k]['children'][] = [
+                            'id'        => $each->id,
+                            'menu_name' => $each->menu_name,
+                            'slug'      => $each->menu_slug
+                        ];
+                    }
+                }
+            }
+            if ($each->parent_id == 0) {
+                $reorderedMenu[] = [
+                    'id'        => $each->id,
+                    'menu_name' => $each->menu_name,
+                    'slug'      => $each->menu_slug,
+                    'children'  => []
+                ];
+            }
+
+        }
 
         $dataArray = [];
         foreach ($modeled as $model) {
@@ -82,7 +108,7 @@ class UserController extends Controller {
                 'email'           => $model->email,
                 'created'         => date('d-m-Y', strtotime($model->created)),
                 'all_permissions' => $all_permissions,
-                'all_menus'       => $all_menus,
+                'all_menus'       => $reorderedMenu,
                 'his_menus'       => json_encode($model->assigned_menus),
                 'his_roles'       => json_encode($model->roles),
                 'his_permissions' => json_encode($model->permissions),
@@ -150,36 +176,35 @@ class UserController extends Controller {
 
     }
 
-    public function changePassword(Request $request) 
-    {
-        $new_password = $request->new_password;
-        $current_password = $request->current_password;
-        $user_id = Auth::user()->id;
+    public function changePassword(Request $request) {
+        $new_password           = $request->new_password;
+        $current_password       = $request->current_password;
+        $user_id                = Auth::user()->id;
         $check_current_password = Auth::user()->password;
-     
+
         try {
             # verify old password
             $isVerified = \Hash::check($current_password, $check_current_password);
-          //return dd($isVerified);
-            if($isVerified == 1) {
+            //return dd($isVerified);
+            if ($isVerified == 1) {
 
                 # change password
                 $changePwd = Users::where('id', $user_id)->update([
                     'password' => \Hash::make($new_password)
                 ]);
-                
-                return response(['status' =>  200, 'data' => [], 'message' => 'Password has been changed successfully'], 200);
+
+                return response(['status' => 200, 'data' => [], 'message' => 'Password has been changed successfully'], 200);
 
             } else {
-                return response(['status' =>  400, 'data' => [], 'message' => 'Invalid Current Password'], 200);
+                return response(['status' => 400, 'data' => [], 'message' => 'Invalid Current Password'], 200);
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response(['message' => $e->getMessage(), 'data' => []], 500);
         }
     }
 
     public function importUsers(Request $request) {
 
-        return Excel::import(new UsersImport, $request->file('file'));
+        return Excel::import(new UsersImport(), $request->file('file'));
     }
 }

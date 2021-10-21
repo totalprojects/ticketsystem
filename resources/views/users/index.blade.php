@@ -316,7 +316,7 @@
               var flag = false;
               $.each(roles, (i) => {
                 is_checked = '';
-                is_checked = '';
+               
                 flag = his_roles.findIndex(function (his_roles) {
                   return his_roles.id === roles[i].id;
                 });
@@ -332,7 +332,6 @@
                         <p align='right'><button type='submit' id='role-btn' class='btn btn-primary'>Update Roles</button></p></form><br>`;
               $('#roles-block').html(html_form);
               // permissions with parent system module info
-
               var html_form = `<h5><strong>User Permissions</strong></h5><form method='post' id='user-permission-frm' method='post'>
                               <div class='wrapper'> 
                         @csrf
@@ -348,7 +347,7 @@
                 // permissions
                 $.each(pp, (i) => {
                   is_checked = '';
-                  is_checked = '';
+       
                   flag = his_permissions.findIndex(function (his_permissions) {
                     return his_permissions.id === pp[i].id;
                   });

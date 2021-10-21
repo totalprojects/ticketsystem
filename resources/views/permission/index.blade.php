@@ -10,35 +10,9 @@
 @stop
 
 @section('content')
-<style>
-    .accordion-toggle:after {
-    font-family: 'FontAwesome';
-    content: "\f078";    
-    float: right;
-}
 
-.accordion {
-    background-color: antiquewhite !important;
-    padding:5px;
-    box-shadow: 0 0 2px 3px rgba(0,0,0,0.19);
-}
-.accordion-heading {
-    background-color: cadetblue !important;
-    padding: 5px;
-}
-.accordion-heading a {
-    font-weight: 500 !important;
-    color:cornsilk !important;
-}
-.accordion-body {
-    background-color: cornsilk !important;
-    padding: 5px;
-}
-.accordion-opened .accordion-toggle:after {    
-    content: "\f054";    
-}
-</style>
     <div class="tab-content p-1">
+         
         <div class="tab-pane active dx-viewport" id="users">
             <div class="demo-container">
                 <div class="top-info">
@@ -365,7 +339,9 @@
             </div>
             </div>
         </div>
-    
+      
+
+
 @stop
 
 @section('css')
@@ -1035,4 +1011,5 @@ function showTcodes(permission_id, tcode = '', desc = '') {
 
     
     </script>
+   
 @stop

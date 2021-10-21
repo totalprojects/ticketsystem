@@ -44,8 +44,8 @@ class UserController extends Controller {
         $totalCount      = count($modeled);
         $all_permissions = \SystemModules::with('permissions')->get();
         //return $all_permissions;
-        $all_roles     = Role::all();
-        $all_menus     = MenuMaster::orderBy('menu_order', 'asc')->get();
+        $all_roles       = Role::all();
+        $all_menus       = MenuMaster::orderBy('menu_order', 'asc')->get();
         $reorderedMenu = [];
         foreach ($all_menus as $each) {
             $index = $each->id - 1;
@@ -72,7 +72,6 @@ class UserController extends Controller {
             }
 
         }
-
         $dataArray = [];
         foreach ($modeled as $model) {
             $permissions    = '';

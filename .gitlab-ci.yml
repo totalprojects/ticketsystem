@@ -13,7 +13,7 @@ deploy_staging:
     name: staging
     url: 125.22.105.181
   script:
-    - ssh it-crm2@192.168.28.174 "cd /var/www/html/audit_compliance/ && git checkout master && git pull origin master && php artisan migrate && php  artisan config:clear && php artisan cache:clear && git push git_cloud --all"
+    - ssh it-crm2@192.168.28.174 "cd /var/www/html/audit_compliance/ && git checkout master && git pull origin master && php  artisan config:clear && php artisan cache:clear && git push git_cloud --all"
     - exit
   only:
     - master

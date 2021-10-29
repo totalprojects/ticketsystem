@@ -337,7 +337,7 @@ img.brand-image.img-circle.elevation-3 {
 }
 
 aside.main-sidebar.sidebar-custom a.nav-link p {
-    margin-left: 15px !important;
+    margin-left: 10px !important;
     /* font-weight: 600; */
     opacity: 1 !important;
 }
@@ -598,7 +598,15 @@ a.empl-name {
     margin-bottom: 20px;
     background: #fff;
 }
-
+p.shadow-sm i {
+    background: #255e61;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    line-height: 22px;
+    color: #fff;
+    border-radius: 50%;
+}
 
 /** SAP Request Page CSS */
 div#review_selections table {

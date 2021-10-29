@@ -392,6 +392,15 @@ h3 {
     color:#fff;
     padding:8px;
 }
+div#view-result ul.pagination {
+    justify-content: center;
+}
+
+div#view-result ul.pagination li a {
+    background: #255e61;
+    color: #e4ff55 !important;
+    font-weight: 600;
+}
 </style>
 
     @if(\Auth::user()->id == 1)

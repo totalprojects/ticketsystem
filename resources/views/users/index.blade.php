@@ -89,17 +89,25 @@
         border-radius: 1rem;
     }
     .accordion-heading {
-      background-color: #fff;
-      color: #000000;
-      cursor: pointer;
-      padding: 1rem;
-      text-align: left;
-      outline: none;
-      font-size: 1rem;
-      transition: all 0.4s ease-out;
-      box-shadow: 0px 0px 34px -8px rgba(0, 0, 0, 0.75);
-      display: block;
-    }
+    background-color: #fff;
+    color: #000000;
+    cursor: pointer;
+    padding: 10px 15px 10px 52px;
+    text-align: left;
+    outline: none;
+    font-size: 14px;
+    transition: all 0.4s ease-out;
+    box-shadow: 0px 0px 34px -8px rgb(0 0 0 / 75%);
+    display: block;
+}
+    .heading-sec-wrap > input {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.heading-sec-wrap {
+    position: relative;
+}
     .accordion-body:first-child .accordion-heading {
       border-radius: 1rem 1rem 0 0;
     }
@@ -117,6 +125,7 @@
       font-weight: bold;
       float: right;
       margin-left: 0.5rem;
+      font-size: 18px;
     }
     .accordion-heading.has-child.active:after {
       content: "\2212";
@@ -135,9 +144,15 @@
       margin: 1rem 0;
       padding: 0.2rem;
     }
-    .accordion-content ul li {
-      padding: 0.2rem 0;
-    }
+    .accordion-content ul li input {
+    margin-right: 10px;
+}
+
+.accordion-content ul li {
+    padding: 0.2rem 0;
+    display: flex;
+    font-size: 14px;
+}
     span.accordion-heading.has-child:hover:after {
       color: #fff;
     }
@@ -462,8 +477,11 @@
                             is_checked = 'checked';
                         }
                         flag = false;
-                        html_form += `<div class="accordion-body"><span class="accordion-heading">
-                                      <input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'>
+                        html_form += `<div class="accordion-body">
+                        <div class="heading-sec-wrap">
+                        <input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'>
+                        <span class="accordion-heading">
+                                      
 
 
                     ${all_menus[i].menu_name} &nbsp;</span>`;
@@ -478,7 +496,7 @@
 
                         }
 
-                        html_form += "</div>";
+                        html_form += "</div></div>";
                     });
 
 

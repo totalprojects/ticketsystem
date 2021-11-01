@@ -57,7 +57,7 @@
 
 /* .accordion-toggle:after {
   font-family: 'FontAwesome';
-  content: "\f078";    
+  content: "\f078";
   float: right;
 } */
 
@@ -78,8 +78,8 @@
     background-color: cornsilk !important;
     padding: 5px;
 }
-.accordion-opened .accordion-toggle:after {    
-    content: "\f054";    
+.accordion-opened .accordion-toggle:after {
+    content: "\f054";
 } */
     .acc-container {
         width: 100%;
@@ -183,8 +183,7 @@
         <div id="user-details-block"></div>
         <div id="roles-block"></div>
         <div id="permissions-block"></div>
-        <div id="menus-block" @if(\Auth::user()->
-          id !== 1 ) class="d-none" @endif>
+        <div id="menus-block" @if(\Auth::user()->id !== 1 ) class="d-none" @endif>
         </div>
       </div>
       <div class="modal-footer">
@@ -382,7 +381,7 @@
             .attr('href', 'javascript:void(0)');
 
         link.on('click', function() {
-                   
+
                     $('#settings-modal').modal('show');
                     $('#user-details-block').html(
                         `<h5>User Name: ${data.name}</h5><hr>`
@@ -419,7 +418,7 @@
 
                     // permissions with parent system module info
                     var html_form = `<h5><strong>User Permissions</strong></h5><form method='post' id='user-permission-frm' method='post'>
-                              <div class='wrapper'> 
+                              <div class='wrapper'>
                         @csrf
                         `;
                     var is_checked;
@@ -488,9 +487,9 @@
                           <p align='right'><button type='submit' id='menu-btn' class='btn btn-primary'>Update Menu Access</button></p></form><hr>`;
                     $('#menus-block').html(html_form);
                     accordion()
-                   
+
                 }) // link
-               
+
                 return link;
             }, // cell template
           },
@@ -650,7 +649,7 @@ function accordion() {
           panel.style.maxHeight = null;
       } else {
           panel.style.maxHeight = panel.scrollHeight + "px";
-      }   
+      }
     }
     });
   }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Menu;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use MenuMaster;
+use Auth;
 
 class MenuController extends Controller {
     //
@@ -12,9 +13,8 @@ class MenuController extends Controller {
      * @return view of users
      */
     public function index() {
-
+        $uid   = Auth::user()->id;
         $menus = MenuMaster::orderBy('menu_order', 'asc')->get();
-        //return $menus;
         return view('menus.index')->with(['menus' => $menus]);
     }
 

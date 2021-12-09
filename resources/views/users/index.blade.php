@@ -180,6 +180,7 @@
   role="dialog"
   aria-labelledby="exampleModalLabel"
   aria-hidden="true"
+  data-backdrop="static"
 >
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -481,7 +482,7 @@
                         <div class="heading-sec-wrap">
                         <input type='checkbox' name='menus' ${is_checked} value='${all_menus[i].id}'>
                         <span class="accordion-heading">
-                                      
+
 
 
                     ${all_menus[i].menu_name} &nbsp;</span>`;

@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use MenuMapping;
+use MenuMaster;
 
-class tbl_menu_master extends Model
-{
+class tbl_menu_master extends Model {
     use HasFactory;
     protected $guarded = [];
 
-    public function menu_mappings(){
-        return $this->hasMany(MenuMapping::class,'menu_id');
+    public function menu_mappings() {
+        return $this->hasMany(MenuMapping::class, 'menu_id');
     }
+
 }
